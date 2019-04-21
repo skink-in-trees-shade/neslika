@@ -23,6 +23,7 @@ typedef struct {
 } cpu_t;
 
 cpu_t *cpu_new(void);
+void cpu_load(cpu_t *cpu, uint8_t *rom);
 void cpu_run(cpu_t *cpu);
 void cpu_destroy(cpu_t *cpu);
 
