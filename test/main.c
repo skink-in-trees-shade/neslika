@@ -19,7 +19,7 @@ static void test_debug_addressing(void) {
 	};
 
 	cpu_t *cpu = cpu_new();
-	cpu_load(cpu, rom);
+	cpu_load(cpu, rom, sizeof(rom));
 	cpu_run(cpu);
 	cpu_destroy(cpu);
 }

@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include "table.h"
 
 opcode_t table[] = {
