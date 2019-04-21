@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -pedantic -I../lib
+CFLAGS = -Wall -Wextra -pedantic --std=c99 -I../lib
 
 SRC = $(wildcard *.c */*.c)
 OBJ = $(SRC:%.c=%.o)
