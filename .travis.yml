@@ -1,0 +1,10 @@
+language: c
+
+compiler:
+- gcc
+
+script: 
+- cd ${TRAVIS_BUILD_DIR}
+- make -C lib
+- make -C test
+- ./test/test.exe

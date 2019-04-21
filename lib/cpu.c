@@ -10,9 +10,9 @@ cpu_t *cpu_new(void) {
 	return cpu;
 }
 
-void cpu_load(cpu_t *cpu, uint8_t *rom) {
+void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size) {
 	cpu->program_counter = 0x8000;
-	memcpy(&cpu->memory[0x8000], rom, sizeof(uint8_t) * 0x4000);
+	memcpy(&cpu->memory[0x8000], rom, size);
 }
 
 void cpu_run(cpu_t *cpu) {

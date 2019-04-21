@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 typedef struct {
 	uint16_t program_counter;
@@ -23,7 +24,7 @@ typedef struct {
 } cpu_t;
 
 cpu_t *cpu_new(void);
-void cpu_load(cpu_t *cpu, uint8_t *rom);
+void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size);
 void cpu_run(cpu_t *cpu);
 void cpu_destroy(cpu_t *cpu);
 
