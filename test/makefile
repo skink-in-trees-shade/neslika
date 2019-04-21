@@ -1,13 +1,13 @@
-CFLAGS = -Wall -Wextra -pedantic -I../lib -L../lib
-LDFLAGS = -l6502
+CFLAGS = -Wall -Wextra -pedantic -I../lib
 
 SRC = $(wildcard *.c */*.c)
 OBJ = $(SRC:%.c=%.o)
 DEP = $(SRC:%.c=%.d)
+LIB = ../lib/lib6502.a
 BIN = test.exe
 
-$(BIN): $(OBJ)
-	gcc $(CFLAGS) -o $@ $^ $(LDFLAGS)
+$(BIN): $(OBJ) $(LIB)
+	gcc $(CFLAGS) -o $@ $^ $(LIB)
 
 -include $(DEP)
 

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include "table.h"
 #include "cpu.h"
 
 cpu_t *cpu_new(void) {
@@ -16,9 +17,14 @@ void cpu_load(cpu_t *cpu, uint8_t *rom) {
 void cpu_run(cpu_t *cpu) {
 	while (1) {
 		uint8_t code = cpu->memory[cpu->program_counter++];
-		if (code == 0) {
+		opcode_t opcode = table[code];
+		if (opcode.addressing_mode == NULL || opcode.instruction == NULL) {
 			break;
 		}
+
+		uint16_t addr = opcode.addressing_mode(cpu);
+		uint8_t value = cpu->memory[addr];
+		opcode.instruction(cpu, value);
 	}
 }
 
