@@ -20,16 +20,17 @@ void cpu_run(cpu_t *cpu) {
 		debug_opcode(cpu);
 
 		uint8_t code = cpu->memory[cpu->program_counter++];
-		opcode_t opcode = table[code];
-		if (opcode.addressing_mode == NULL || opcode.instruction == NULL) {
+		if (code == 0xEA) {
 			break;
 		}
 
-		uint16_t addr = opcode.addressing_mode(cpu);
-		uint8_t value = cpu->memory[addr];
-		opcode.instruction(cpu, value);
+		if (table[code].addressing_mode != NULL && table[code].instruction != NULL) {
+			uint16_t addr = table[code].addressing_mode(cpu);
+			uint8_t value = cpu->memory[addr];
+			table[code].instruction(cpu, value);
 
-		debug_state(cpu);
+			debug_state(cpu);
+		}
 	}
 }
 
