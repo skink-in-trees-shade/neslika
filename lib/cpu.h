@@ -25,6 +25,8 @@ typedef struct {
 
 cpu_t *cpu_new(void);
 void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size);
+void cpu_negative(cpu_t *cpu, uint8_t value);
+void cpu_zero(cpu_t *cpu, uint8_t value);
 void cpu_run(cpu_t *cpu);
 void cpu_destroy(cpu_t *cpu);
 
