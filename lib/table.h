@@ -9,6 +9,6 @@ typedef struct {
 	void (*instruction)(cpu_t *, uint8_t);
 } opcode_t;
 
-opcode_t table[0x100];
+extern opcode_t table[0x100];
 
 #endif
