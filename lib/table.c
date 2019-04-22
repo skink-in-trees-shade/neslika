@@ -8,6 +8,7 @@
 #include "addressing/absolute_y.h"
 #include "addressing/indirect_x.h"
 #include "addressing/indirect_y.h"
+#include "instruction/nop.h"
 #include "table.h"
 
 opcode_t table[] = {
@@ -69,7 +70,7 @@ opcode_t table[] = {
 /* 0xDC */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
 /* 0xE0 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
 /* 0xE4 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
-/* 0xE8 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
+/* 0xE8 */	{ NULL, NULL },        { NULL, NULL },        { implicit, nop },     { NULL, NULL },
 /* 0xEC */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
 /* 0xF0 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
 /* 0xF4 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
