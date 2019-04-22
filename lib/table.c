@@ -1,4 +1,13 @@
 #include <stddef.h>
+#include "addressing/implicit.h"
+#include "addressing/immediate.h"
+#include "addressing/zero_page.h"
+#include "addressing/zero_page_x.h"
+#include "addressing/absolute.h"
+#include "addressing/absolute_x.h"
+#include "addressing/absolute_y.h"
+#include "addressing/indirect_x.h"
+#include "addressing/indirect_y.h"
 #include "table.h"
 
 opcode_t table[] = {
