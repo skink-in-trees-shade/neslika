@@ -1,5 +1,12 @@
 language: c
 
+git:
+  depth: false
+
+branches:
+  only:
+  - trunk
+
 compiler:
 - gcc
 
