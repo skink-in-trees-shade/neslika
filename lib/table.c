@@ -11,6 +11,7 @@
 #include "addressing/indirect_y.h"
 #include "instruction/lda.h"
 #include "instruction/ldx.h"
+#include "instruction/ldy.h"
 #include "instruction/nop.h"
 #include "table.h"
 
@@ -55,14 +56,14 @@ opcode_t table[] = {
 /* 0x94 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
 /* 0x98 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
 /* 0x9C */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
-/* 0xA0 */	{ NULL, NULL },        { indirect_x, lda },   { immediate, ldx },    { NULL, NULL },
-/* 0xA4 */	{ NULL, NULL },        { zero_page, lda },    { zero_page, ldx },    { NULL, NULL },
+/* 0xA0 */	{ immediate, ldy },    { indirect_x, lda },   { immediate, ldx },    { NULL, NULL },
+/* 0xA4 */	{ zero_page, ldy },    { zero_page, lda },    { zero_page, ldx },    { NULL, NULL },
 /* 0xA8 */	{ NULL, NULL },        { immediate, lda },    { NULL, NULL },        { NULL, NULL },
-/* 0xAC */	{ NULL, NULL },        { absolute, lda },     { absolute, ldx },     { NULL, NULL },
+/* 0xAC */	{ absolute, ldy },     { absolute, lda },     { absolute, ldx },     { NULL, NULL },
 /* 0xB0 */	{ NULL, NULL },        { indirect_y, lda },   { NULL, NULL },        { NULL, NULL },
-/* 0xB4 */	{ NULL, NULL },        { zero_page_x, lda },  { zero_page_y, ldx },  { NULL, NULL },
+/* 0xB4 */	{ zero_page_x, ldy },  { zero_page_x, lda },  { zero_page_y, ldx },  { NULL, NULL },
 /* 0xB8 */	{ NULL, NULL },        { absolute_y, lda },   { NULL, NULL },        { NULL, NULL },
-/* 0xBC */	{ NULL, NULL },        { absolute_x, lda },   { absolute_y, ldx },   { NULL, NULL },
+/* 0xBC */	{ absolute_x, ldy },   { absolute_x, lda },   { absolute_y, ldx },   { NULL, NULL },
 /* 0xC0 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
 /* 0xC4 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
 /* 0xC8 */	{ NULL, NULL },        { NULL, NULL },        { NULL, NULL },        { NULL, NULL },
