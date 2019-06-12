@@ -3,6 +3,7 @@
 #include "addressing/immediate.h"
 #include "addressing/zero_page.h"
 #include "addressing/zero_page_x.h"
+#include "addressing/zero_page_y.h"
 #include "addressing/absolute.h"
 #include "addressing/absolute_x.h"
 #include "addressing/absolute_y.h"
