@@ -1,7 +1,7 @@
 #include "ldx.h"
 
-void ldx(cpu_t *cpu, uint8_t value) {
-	cpu->x = value;
-	cpu_zero(cpu, cpu->x);
-	cpu_negative(cpu, cpu->x);
+void ldx(cpu_t *cpu) {
+	cpu->x = cpu->operand;
+	cpu->zero = cpu->x == 0;
+	cpu->negative = cpu->x & 0x80;
 }

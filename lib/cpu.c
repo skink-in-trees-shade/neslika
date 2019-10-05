@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
-#include "debug.h"
-#include "table.h"
+#include "instructions.h"
+#include "addressings.h"
 #include "cpu.h"
 
 cpu_t *cpu_new(void) {
@@ -15,31 +15,16 @@ void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size) {
 	memcpy(&cpu->memory[0x8000], rom, size);
 }
 
-void cpu_negative(cpu_t *cpu, uint8_t value) {
-	cpu->negative = value & 0x80;
+void cpu_fetch(cpu_t *cpu) {
+	cpu->instruction = cpu->memory[cpu->program_counter++];
 }
 
-void cpu_zero(cpu_t *cpu, uint8_t value) {
-	cpu->zero = value == 0;
+void cpu_decode(cpu_t *cpu) {
+	cpu->operand = addressings[cpu->instruction](cpu);
 }
 
-void cpu_run(cpu_t *cpu) {
-	while (1) {
-		debug_opcode(cpu);
-
-		uint8_t code = cpu->memory[cpu->program_counter++];
-		if (code == 0xEA) {
-			break;
-		}
-
-		if (table[code].addressing_mode != NULL && table[code].instruction != NULL) {
-			uint16_t addr = table[code].addressing_mode(cpu);
-			uint8_t value = cpu->memory[addr];
-			table[code].instruction(cpu, value);
-
-			debug_state(cpu);
-		}
-	}
+void cpu_execute(cpu_t *cpu) {
+	instructions[cpu->instruction](cpu);
 }
 
 void cpu_destroy(cpu_t *cpu) {

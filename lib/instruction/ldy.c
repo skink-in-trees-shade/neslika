@@ -1,7 +1,7 @@
 #include "ldy.h"
 
-void ldy(cpu_t *cpu, uint8_t value) {
-	cpu->y = value;
-	cpu_zero(cpu, cpu->y);
-	cpu_negative(cpu, cpu->y);
+void ldy(cpu_t *cpu) {
+	cpu->y = cpu->operand;
+	cpu->zero = cpu->y == 0;
+	cpu->negative = cpu->y & 0x80;
 }

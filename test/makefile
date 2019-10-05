@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -pedantic --std=c99 -I../lib
+CFLAGS = -Wall -Wextra -pedantic --std=c99 -I../lib -g
 
 SRC = $(wildcard *.c */*.c)
 OBJ = $(SRC:%.c=%.o)
@@ -15,6 +15,6 @@ $(BIN): $(OBJ) $(LIB)
 	gcc $(CFLAGS) -MMD -c -o $@ $<
 
 clean:
-	-del $(subst /,\,$(OBJ)) $(subst /,\,$(DEP)) $(subst /,\,$(BIN))
+	rm $(subst /,\,$(OBJ)) $(subst /,\,$(DEP)) $(subst /,\,$(BIN))
 
 .PHONY: clean
