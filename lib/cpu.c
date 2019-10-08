@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "debug.h"
-#include "table.h"
+#include "addressing_table.h"
+#include "instruction_table.h"
 #include "cpu.h"
 
 cpu_t *cpu_new(void) {
@@ -32,10 +33,10 @@ void cpu_run(cpu_t *cpu) {
 			break;
 		}
 
-		if (table[code].addressing_mode != NULL && table[code].instruction != NULL) {
-			uint16_t addr = table[code].addressing_mode(cpu);
+		if (addressing_table[code] != NULL && instruction_table[code] != NULL) {
+			uint16_t addr = addressing_table[code](cpu);
 			uint8_t value = cpu->memory[addr];
-			table[code].instruction(cpu, value);
+			instruction_table[code](cpu, value);
 
 			debug_state(cpu);
 		}
