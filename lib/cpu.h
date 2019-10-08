@@ -20,6 +20,10 @@ typedef struct {
 	bool overflow;
 	bool negative;
 
+	bool powered;
+	uint8_t instruction;
+	uint16_t operand;
+
 	uint8_t *memory;
 } cpu_t;
 
@@ -27,7 +31,9 @@ cpu_t *cpu_new(void);
 void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size);
 void cpu_negative(cpu_t *cpu, uint8_t value);
 void cpu_zero(cpu_t *cpu, uint8_t value);
-void cpu_run(cpu_t *cpu);
+void cpu_fetch(cpu_t *cpu);
+void cpu_decode(cpu_t *cpu);
+void cpu_execute(cpu_t *cpu);
 void cpu_destroy(cpu_t *cpu);
 
 #endif
