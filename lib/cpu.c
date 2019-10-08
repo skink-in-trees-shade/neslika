@@ -12,8 +12,8 @@ cpu_t *cpu_new(void) {
 
 void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size) {
 	cpu->program_counter = 0x8000;
-	cpu->powered = true;
-	memcpy(&cpu->memory[0x8000], rom, size);
+	cpu->program_end = cpu->program_counter + size - 1;
+	memcpy(&cpu->memory[cpu->program_counter], rom, size);
 }
 
 void cpu_negative(cpu_t *cpu, uint8_t value) {
@@ -24,11 +24,12 @@ void cpu_zero(cpu_t *cpu, uint8_t value) {
 	cpu->zero = value == 0;
 }
 
+bool cpu_running(cpu_t *cpu) {
+	return cpu->program_counter < cpu->program_end;
+}
+
 void cpu_fetch(cpu_t *cpu) {
 	cpu->instruction = cpu->memory[cpu->program_counter++];
-	if (cpu->instruction == 0xEA) {
-		cpu->powered = false;
-	}
 }
 
 void cpu_decode(cpu_t *cpu) {
