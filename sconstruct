@@ -1,0 +1,8 @@
+coverage = ARGUMENTS.get('coverage', False)
+
+env = Environment(CPPPATH='lib', CCFLAGS=['-Wall', '-Wextra', '-pedantic', '-std=c99'])
+if coverage:
+    env.Append(CCFLAGS=['-g', '-O0', '--coverage'], LINKFLAGS=['--coverage'])
+
+env.Library('6502', [Glob('lib/*.c'), Glob('lib/*/*.c')])
+env.Program('tests', [Glob('test/*.c'), Glob('test/*/*.c')], LIBS='6502', LIBPATH='.')
