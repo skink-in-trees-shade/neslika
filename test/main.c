@@ -21,7 +21,7 @@ static void test_debug_addressing(void) {
 	cpu_t *cpu = cpu_new();
 	cpu_load(cpu, rom, sizeof(rom));
 
-	while (cpu->powered) {
+	while (cpu_running(cpu)) {
 		cpu_fetch(cpu);
 		cpu_decode(cpu);
 		cpu_execute(cpu);
