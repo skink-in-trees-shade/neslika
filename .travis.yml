@@ -14,4 +14,4 @@ script:
 - cd ${TRAVIS_BUILD_DIR}
 - make -C lib
 - make -C test
-- ./test/test.exe
+- ./test/test6502
