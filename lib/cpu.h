@@ -20,7 +20,7 @@ typedef struct {
 	bool overflow;
 	bool negative;
 
-	bool powered;
+	uint16_t program_end;
 	uint8_t instruction;
 	uint8_t operand;
 
@@ -31,6 +31,7 @@ cpu_t *cpu_new(void);
 void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size);
 void cpu_negative(cpu_t *cpu, uint8_t value);
 void cpu_zero(cpu_t *cpu, uint8_t value);
+bool cpu_running(cpu_t *cpu);
 void cpu_fetch(cpu_t *cpu);
 void cpu_decode(cpu_t *cpu);
 void cpu_execute(cpu_t *cpu);
