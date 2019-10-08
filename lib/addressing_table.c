@@ -1,13 +1,13 @@
-#include "addressing/absolute_x.h"
-#include "addressing/absolute_y.h"
-#include "addressing/absolute.h"
-#include "addressing/immediate.h"
-#include "addressing/implicit.h"
-#include "addressing/indirect_x.h"
-#include "addressing/indirect_y.h"
-#include "addressing/zero_page_x.h"
-#include "addressing/zero_page_y.h"
-#include "addressing/zero_page.h"
+#include "addressing/abo.h"
+#include "addressing/abx.h"
+#include "addressing/aby.h"
+#include "addressing/imm.h"
+#include "addressing/imp.h"
+#include "addressing/inx.h"
+#include "addressing/iny.h"
+#include "addressing/zpa.h"
+#include "addressing/zpx.h"
+#include "addressing/zpy.h"
 #include "addressing_table.h"
 
 addressing_t addressing_table[0x100] = {
@@ -22,10 +22,10 @@ addressing_t addressing_table[0x100] = {
 /* 0x70 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x80 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x90 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0xA0 */  immediate, indirect_x, immediate, NULL, zero_page, zero_page, zero_page, NULL, NULL, immediate, NULL, NULL, absolute, absolute, absolute, NULL,
-/* 0xB0 */  NULL, indirect_y, NULL, NULL, zero_page_x, zero_page_x, zero_page_y, NULL, NULL, absolute_y, NULL, NULL, absolute_x, absolute_x, absolute_y, NULL,
+/* 0xA0 */  imm,  inx,  imm,  NULL, zpa,  zpa,  zpa,  NULL, NULL, imm,  NULL, NULL, abo,  abo,  abo, NULL,
+/* 0xB0 */  NULL, iny,  NULL, NULL, zpx,  zpx,  zpy,  NULL, NULL, aby,  NULL, NULL, abx,  abx,  aby, NULL,
 /* 0xC0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0xD0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0xE0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, implicit, NULL, NULL, NULL, NULL, NULL,
+/* 0xE0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, imp,  NULL, NULL, NULL, NULL, NULL,
 /* 0xF0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
