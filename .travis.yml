@@ -10,8 +10,14 @@ branches:
 compiler:
 - gcc
 
+before_install:
+- sudo pip install scons cpp-coveralls
+
 script: 
 - cd ${TRAVIS_BUILD_DIR}
-- make -C lib
-- make -C test
-- ./test/test6502
+- scons coverage=yes
+- ./tests
+- gcov $(find . -type f -name "*.c")
+
+after_success:
+- coveralls --exclude test
