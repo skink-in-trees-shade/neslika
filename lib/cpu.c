@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include "debug.h"
 #include "addressing_table.h"
 #include "instruction_table.h"
 #include "cpu.h"
@@ -26,8 +25,6 @@ void cpu_zero(cpu_t *cpu, uint8_t value) {
 
 void cpu_run(cpu_t *cpu) {
 	while (1) {
-		debug_opcode(cpu);
-
 		uint8_t code = cpu->memory[cpu->program_counter++];
 		if (code == 0xEA) {
 			break;
@@ -37,8 +34,6 @@ void cpu_run(cpu_t *cpu) {
 			uint16_t addr = addressing_table[code](cpu);
 			uint8_t value = cpu->memory[addr];
 			instruction_table[code](cpu, value);
-
-			debug_state(cpu);
 		}
 	}
 }
