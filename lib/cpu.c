@@ -33,14 +33,14 @@ void cpu_fetch(cpu_t *cpu) {
 
 void cpu_decode(cpu_t *cpu) {
 	if (addressing_table[cpu->instruction] != NULL) {
-		cpu->operand = addressing_table[cpu->instruction](cpu);
+		uint16_t address = addressing_table[cpu->instruction](cpu);
+		cpu->operand = cpu->memory[address];
 	}
 }
 
 void cpu_execute(cpu_t *cpu) {
 	if (instruction_table[cpu->instruction] != NULL) {
-		uint8_t value = cpu->memory[cpu->operand];
-		instruction_table[cpu->instruction](cpu, value);
+		instruction_table[cpu->instruction](cpu);
 	}
 }
 

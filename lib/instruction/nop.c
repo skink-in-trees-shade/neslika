@@ -1,6 +1,5 @@
 #include "nop.h"
 
-void nop(cpu_t *cpu, uint8_t value) {
+void nop(cpu_t *cpu) {
 	cpu = cpu;
-	value = value;
 }

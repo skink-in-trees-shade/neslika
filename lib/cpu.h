@@ -22,7 +22,7 @@ typedef struct {
 
 	bool powered;
 	uint8_t instruction;
-	uint16_t operand;
+	uint8_t operand;
 
 	uint8_t *memory;
 } cpu_t;

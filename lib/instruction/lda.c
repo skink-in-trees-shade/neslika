@@ -1,7 +1,7 @@
 #include "lda.h"
 
-void lda(cpu_t *cpu, uint8_t value) {
-	cpu->accumulator = value;
+void lda(cpu_t *cpu) {
+	cpu->accumulator = cpu->operand;
 	cpu_zero(cpu, cpu->accumulator);
 	cpu_negative(cpu, cpu->accumulator);
 }
