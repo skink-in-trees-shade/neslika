@@ -14,6 +14,6 @@ $(BIN): $(OBJ)
 	gcc $(CFLAGS) -MMD -c -o $@ $<
 
 clean:
-	-del $(subst /,\,$(OBJ)) $(subst /,\,$(DEP)) $(subst /,\,$(BIN))
+	-rm $(OBJ) $(DEP) $(BIN)
 
 .PHONY: clean
