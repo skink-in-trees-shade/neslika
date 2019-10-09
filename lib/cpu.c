@@ -25,7 +25,7 @@ void cpu_zero(cpu_t *cpu, uint8_t value) {
 }
 
 bool cpu_running(cpu_t *cpu) {
-	return cpu->program_counter < cpu->program_end;
+	return cpu->program_counter < cpu->program_end + 1;
 }
 
 void cpu_fetch(cpu_t *cpu) {
