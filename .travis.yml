@@ -20,4 +20,4 @@ script:
 - gcov $(find . -type f -name "*.c")
 
 after_success:
-- coveralls --exclude test
+- 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then coveralls --exclude test; fi'
