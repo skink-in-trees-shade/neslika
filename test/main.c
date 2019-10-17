@@ -1,4 +1,5 @@
 #include "instruction/lda.test.h"
+#include "instruction/ldx.test.h"
 #include "instruction/nop.test.h"
 #include "runner.h"
 
@@ -8,6 +9,10 @@ int main(void) {
 	runner_test(test_lda);
 	runner_test(test_lda_zero);
 	runner_test(test_lda_negative);
+
+	runner_test(test_ldx);
+	runner_test(test_ldx_zero);
+	runner_test(test_ldx_negative);
 
 	runner_test(test_nop);
 
