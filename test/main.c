@@ -4,6 +4,7 @@
 #include "addressing/imm.test.h"
 #include "addressing/imp.test.h"
 #include "addressing/inx.test.h"
+#include "addressing/iny.test.h"
 #include "addressing/zpa.test.h"
 #include "addressing/zpx.test.h"
 #include "addressing/zpy.test.h"
@@ -32,6 +33,9 @@ int main(void) {
 
 	runner_test(test_inx);
 	runner_test(test_inx_program_counter);
+
+	runner_test(test_iny);
+	runner_test(test_iny_program_counter);
 
 	runner_test(test_zpa);
 	runner_test(test_zpa_program_counter);
