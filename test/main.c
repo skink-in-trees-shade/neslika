@@ -1,5 +1,6 @@
 #include "addressing/abo.test.h"
 #include "addressing/abx.test.h"
+#include "addressing/aby.test.h"
 #include "addressing/imm.test.h"
 #include "addressing/imp.test.h"
 #include "instruction/lda.test.h"
@@ -16,6 +17,9 @@ int main(void) {
 
 	runner_test(test_abx);
 	runner_test(test_abx_program_counter);
+
+	runner_test(test_aby);
+	runner_test(test_aby_program_counter);
 
 	runner_test(test_imm);
 	runner_test(test_imm_program_counter);
