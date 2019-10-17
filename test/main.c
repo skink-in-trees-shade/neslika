@@ -1,3 +1,4 @@
+#include "addressing/imp.test.h"
 #include "instruction/lda.test.h"
 #include "instruction/ldx.test.h"
 #include "instruction/ldy.test.h"
@@ -6,6 +7,8 @@
 
 int main(void) {
 	runner_init();
+
+	runner_test(test_imp);
 
 	runner_test(test_lda);
 	runner_test(test_lda_zero);
