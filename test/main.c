@@ -16,6 +16,7 @@
 #include "instruction/ldx.test.h"
 #include "instruction/ldy.test.h"
 #include "instruction/nop.test.h"
+#include "instruction/sec.test.h"
 #include "runner.h"
 
 int main(void) {
@@ -71,6 +72,8 @@ int main(void) {
 	runner_test(test_ldy_negative);
 
 	runner_test(test_nop);
+
+	runner_test(test_sec);
 
 	return 0;
 }
