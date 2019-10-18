@@ -9,6 +9,7 @@
 #include "addressing/zpa.test.h"
 #include "addressing/zpx.test.h"
 #include "addressing/zpy.test.h"
+#include "instruction/and.test.h"
 #include "instruction/brk.test.h"
 #include "instruction/clc.test.h"
 #include "instruction/cld.test.h"
@@ -66,6 +67,10 @@ int main(void) {
 
 	runner_test(test_zpy);
 	runner_test(test_zpy_program_counter);
+
+	runner_test(test_and);
+	runner_test(test_and_zero);
+	runner_test(test_and_negative);
 
 	runner_test(test_brk);
 
