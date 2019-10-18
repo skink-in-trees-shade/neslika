@@ -1,4 +1,5 @@
 #include "instruction/clc.h"
+#include "instruction/cld.h"
 #include "instruction/lda.h"
 #include "instruction/ldx.h"
 #include "instruction/ldy.h"
@@ -20,7 +21,7 @@ instruction_t instruction_table[0x100] = {
 /* 0xA0 */  ldy,  lda,  ldx,  NULL, ldy,  lda,  ldx,  NULL, NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL,
 /* 0xB0 */  NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL,
 /* 0xC0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0xD0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+/* 0xD0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, cld,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0xE0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, nop,  NULL, NULL, NULL, NULL, NULL,
 /* 0xF0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
