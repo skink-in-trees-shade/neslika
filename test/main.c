@@ -97,5 +97,5 @@ int main(void) {
 
 	runner_test(test_sei);
 
-	return 0;
+	return runner_report();
 }
