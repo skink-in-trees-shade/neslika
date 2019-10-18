@@ -10,6 +10,7 @@
 #include "addressing/zpy.test.h"
 #include "instruction/clc.test.h"
 #include "instruction/cld.test.h"
+#include "instruction/cli.test.h"
 #include "instruction/lda.test.h"
 #include "instruction/ldx.test.h"
 #include "instruction/ldy.test.h"
@@ -51,6 +52,8 @@ int main(void) {
 	runner_test(test_clc);
 
 	runner_test(test_cld);
+
+	runner_test(test_cli);
 
 	runner_test(test_lda);
 	runner_test(test_lda_zero);
