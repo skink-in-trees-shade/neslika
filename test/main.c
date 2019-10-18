@@ -18,6 +18,7 @@
 #include "instruction/nop.test.h"
 #include "instruction/sec.test.h"
 #include "instruction/sed.test.h"
+#include "instruction/sei.test.h"
 #include "runner.h"
 
 int main(void) {
@@ -77,6 +78,8 @@ int main(void) {
 	runner_test(test_sec);
 
 	runner_test(test_sed);
+
+	runner_test(test_sei);
 
 	return 0;
 }
