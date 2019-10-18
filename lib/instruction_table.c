@@ -7,6 +7,7 @@
 #include "instruction/ldy.h"
 #include "instruction/nop.h"
 #include "instruction/sec.h"
+#include "instruction/sed.h"
 #include "instruction_table.h"
 
 instruction_t instruction_table[0x100] = {
@@ -26,5 +27,5 @@ instruction_t instruction_table[0x100] = {
 /* 0xC0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0xD0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, cld,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0xE0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, nop,  NULL, NULL, NULL, NULL, NULL,
-/* 0xF0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+/* 0xF0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, sed,  NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
