@@ -6,6 +6,7 @@
 #include "instruction/ldx.h"
 #include "instruction/ldy.h"
 #include "instruction/nop.h"
+#include "instruction/sec.h"
 #include "instruction_table.h"
 
 instruction_t instruction_table[0x100] = {
@@ -13,7 +14,7 @@ instruction_t instruction_table[0x100] = {
 /* 0x00 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x10 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, clc,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x20 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0x30 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+/* 0x30 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, sec,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x40 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x50 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, cli,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x60 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
