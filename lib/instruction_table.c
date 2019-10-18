@@ -1,3 +1,4 @@
+#include "instruction/and.h"
 #include "instruction/brk.h"
 #include "instruction/clc.h"
 #include "instruction/cld.h"
@@ -16,8 +17,8 @@ instruction_t instruction_table[0x100] = {
 /*          0x00  0x01  0x02  0x03  0x04  0x05  0x06  0x07  0x08  0x09  0x0A  0x0B  0x0C  0x0D  0x0E  0x0F */
 /* 0x00 */  brk,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x10 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, clc,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0x20 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0x30 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, sec,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+/* 0x20 */  NULL, and,  NULL, NULL, NULL, and,  NULL, NULL, NULL, and,  NULL, NULL, NULL, and,  NULL, NULL,
+/* 0x30 */  NULL, and,  NULL, NULL, NULL, and,  NULL, NULL, sec,  and,  NULL, NULL, NULL, and,  NULL, NULL,
 /* 0x40 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x50 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, cli,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x60 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
