@@ -5,5 +5,6 @@
 
 void runner_init(void);
 void runner_run(const char *name, void (*test)(void));
+int runner_report(void);
 
 #endif

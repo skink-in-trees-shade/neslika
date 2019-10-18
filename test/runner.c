@@ -8,6 +8,7 @@
 
 static jmp_buf env;
 static char error[BUFSIZ];
+static int failed;
 
 static void handle_sigabrt(int signum) {
 	(void)signum;
@@ -35,7 +36,17 @@ void runner_run(const char *name, void (*test)(void)) {
 		printf("\033[1;32m+ %s\033[0m\n", name);
 	} else {
 		printf("\033[1;31m- %s\n    %s\033[0m", name, error);
+		failed++;
 	}
 
     memset(error, 0, BUFSIZ);
+}
+
+int runner_report(void) {
+	if (failed) {
+		printf("\033[1;31m  FAILED\033[0m\n");
+	} else {
+		printf("\033[1;32m  PASSED\033[0m\n");
+	}
+	return failed;
 }
