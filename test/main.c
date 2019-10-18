@@ -19,6 +19,7 @@
 #include "instruction/ldx.test.h"
 #include "instruction/ldy.test.h"
 #include "instruction/nop.test.h"
+#include "instruction/ora.test.h"
 #include "instruction/sec.test.h"
 #include "instruction/sed.test.h"
 #include "instruction/sei.test.h"
@@ -95,6 +96,10 @@ int main(void) {
 	runner_test(test_ldy_negative);
 
 	runner_test(test_nop);
+
+	runner_test(test_ora);
+	runner_test(test_ora_zero);
+	runner_test(test_ora_negative);
 
 	runner_test(test_sec);
 
