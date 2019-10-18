@@ -8,6 +8,7 @@
 #include "addressing/zpa.test.h"
 #include "addressing/zpx.test.h"
 #include "addressing/zpy.test.h"
+#include "instruction/brk.test.h"
 #include "instruction/clc.test.h"
 #include "instruction/cld.test.h"
 #include "instruction/cli.test.h"
@@ -52,6 +53,8 @@ int main(void) {
 
 	runner_test(test_zpy);
 	runner_test(test_zpy_program_counter);
+
+	runner_test(test_brk);
 
 	runner_test(test_clc);
 
