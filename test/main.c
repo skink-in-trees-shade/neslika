@@ -1,3 +1,4 @@
+#include "cpu.test.h"
 #include "addressing/abo.test.h"
 #include "addressing/abx.test.h"
 #include "addressing/aby.test.h"
@@ -24,6 +25,18 @@
 
 int main(void) {
 	runner_init();
+
+	runner_test(test_cpu_new);
+	runner_test(test_cpu_load);
+	runner_test(test_cpu_fetch);
+	runner_test(test_cpu_decode);
+	runner_test(test_cpu_execute);
+	runner_test(test_cpu_negative_yes);
+	runner_test(test_cpu_negative_no);
+	runner_test(test_cpu_zero_yes);
+	runner_test(test_cpu_zero_no);
+	runner_test(test_cpu_running_yes);
+	runner_test(test_cpu_running_no);
 
 	runner_test(test_abo);
 	runner_test(test_abo_program_counter);
