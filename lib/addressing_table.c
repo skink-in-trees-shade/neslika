@@ -24,8 +24,8 @@ addressing_t addressing_table[0x100] = {
 /* 0x90 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0xA0 */  imm,  inx,  imm,  NULL, zpa,  zpa,  zpa,  NULL, NULL, imm,  NULL, NULL, abo,  abo,  abo,  NULL,
 /* 0xB0 */  NULL, iny,  NULL, NULL, zpx,  zpx,  zpy,  NULL, imp,  aby,  NULL, NULL, abx,  abx,  aby,  NULL,
-/* 0xC0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0xD0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, imp,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+/* 0xC0 */  NULL, inx,  NULL, NULL, NULL, zpa,  NULL, NULL, NULL, imm,  NULL, NULL, NULL, abo,  NULL, NULL,
+/* 0xD0 */  NULL, iny,  NULL, NULL, NULL, zpx,  NULL, NULL, imp,  aby,  NULL, NULL, NULL, abx,  NULL, NULL,
 /* 0xE0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, imp,  NULL, NULL, NULL, NULL, NULL,
 /* 0xF0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, imp,  NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
