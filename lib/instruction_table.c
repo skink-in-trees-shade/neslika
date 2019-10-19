@@ -13,6 +13,7 @@
 #include "instruction/eor.h"
 #include "instruction/inc.h"
 #include "instruction/inx.h"
+#include "instruction/iny.h"
 #include "instruction/lda.h"
 #include "instruction/ldx.h"
 #include "instruction/ldy.h"
@@ -37,7 +38,7 @@ instruction_t instruction_table[0x100] = {
 /* 0x90 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0xA0 */  ldy,  lda,  ldx,  NULL, ldy,  lda,  ldx,  NULL, NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL,
 /* 0xB0 */  NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  NULL, NULL, ldy,  lda,  ldx,  NULL,
-/* 0xC0 */  cpy,  cmp,  NULL, NULL, cpy,  cmp,  dec,  NULL, NULL, cmp,  dex,  NULL, cpy,  cmp,  dec,  NULL,
+/* 0xC0 */  cpy,  cmp,  NULL, NULL, cpy,  cmp,  dec,  NULL, iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  NULL,
 /* 0xD0 */  NULL, cmp,  NULL, NULL, NULL, cmp,  dec,  NULL, cld,  cmp,  NULL, NULL, NULL, cmp,  dec,  NULL,
 /* 0xE0 */  cpx,  NULL, NULL, NULL, cpx,  NULL, inc,  NULL, inx,  NULL, nop,  NULL, cpx,  NULL, inc,  NULL,
 /* 0xF0 */  NULL, NULL, NULL, NULL, NULL, NULL, inc,  NULL, sed,  NULL, NULL, NULL, NULL, NULL, inc,  NULL
