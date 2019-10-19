@@ -23,6 +23,7 @@ typedef struct {
 	uint16_t program_end;
 	uint8_t instruction;
 	uint8_t operand;
+	uint16_t operand_address;
 
 	uint8_t *memory;
 } cpu_t;

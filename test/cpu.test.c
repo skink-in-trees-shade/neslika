@@ -49,13 +49,15 @@ void test_cpu_fetch(void) {
 }
 
 void test_cpu_decode(void) {
-	uint8_t rom[] = { 0xA0, 0x63 };
+	uint8_t rom[] = { 0xA4, 0x24 };
 	cpu_t *actual = cpu_new();
 	cpu_load(actual, rom, sizeof(rom));
+	actual->memory[rom[1]] = 0x1E;
 	cpu_fetch(actual);
 
 	cpu_t *expected = cpu_clone(actual);
-	expected->operand = rom[1];
+	expected->operand = actual->memory[rom[1]];
+	expected->operand_address = rom[1];
 	expected->program_counter = actual->program_counter + 1;
 
 	cpu_decode(actual);
