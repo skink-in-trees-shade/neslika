@@ -22,6 +22,7 @@
 #include "instruction/dex.test.h"
 #include "instruction/dey.test.h"
 #include "instruction/eor.test.h"
+#include "instruction/inc.test.h"
 #include "instruction/lda.test.h"
 #include "instruction/ldx.test.h"
 #include "instruction/ldy.test.h"
@@ -117,6 +118,10 @@ int main(void) {
 	runner_test(test_eor);
 	runner_test(test_eor_zero);
 	runner_test(test_eor_negative);
+
+	runner_test(test_inc);
+	runner_test(test_inc_zero);
+	runner_test(test_inc_negative);
 
 	runner_test(test_lda);
 	runner_test(test_lda_zero);
