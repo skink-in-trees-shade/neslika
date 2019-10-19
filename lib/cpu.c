@@ -33,8 +33,8 @@ void cpu_fetch(cpu_t *cpu) {
 }
 
 void cpu_decode(cpu_t *cpu) {
-	uint16_t address = addressing_table[cpu->instruction](cpu);
-	cpu->operand = cpu->memory[address];
+	cpu->operand_address = addressing_table[cpu->instruction](cpu);
+	cpu->operand = cpu->memory[cpu->operand_address];
 }
 
 void cpu_execute(cpu_t *cpu) {
