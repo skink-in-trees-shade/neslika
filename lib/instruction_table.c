@@ -9,6 +9,7 @@
 #include "instruction/cpy.h"
 #include "instruction/dec.h"
 #include "instruction/dex.h"
+#include "instruction/dey.h"
 #include "instruction/eor.h"
 #include "instruction/lda.h"
 #include "instruction/ldx.h"
@@ -30,7 +31,7 @@ instruction_t instruction_table[0x100] = {
 /* 0x50 */  NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL, cli,  eor,  NULL, NULL, NULL, eor,  NULL, NULL,
 /* 0x60 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x70 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, sei,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0x80 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+/* 0x80 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, dey,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x90 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0xA0 */  ldy,  lda,  ldx,  NULL, ldy,  lda,  ldx,  NULL, NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL,
 /* 0xB0 */  NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  NULL, NULL, ldy,  lda,  ldx,  NULL,
