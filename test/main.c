@@ -18,6 +18,7 @@
 #include "instruction/cmp.test.h"
 #include "instruction/cpx.test.h"
 #include "instruction/cpy.test.h"
+#include "instruction/dec.test.h"
 #include "instruction/eor.test.h"
 #include "instruction/lda.test.h"
 #include "instruction/ldx.test.h"
@@ -98,6 +99,10 @@ int main(void) {
 	runner_test(test_cpy_carry);
 	runner_test(test_cpy_zero);
 	runner_test(test_cpy_negative);
+
+	runner_test(test_dec);
+	runner_test(test_dec_zero);
+	runner_test(test_dec_negative);
 
 	runner_test(test_eor);
 	runner_test(test_eor_zero);
