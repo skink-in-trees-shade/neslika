@@ -5,6 +5,7 @@
 #include "instruction/cli.h"
 #include "instruction/clv.h"
 #include "instruction/cmp.h"
+#include "instruction/cpx.h"
 #include "instruction/eor.h"
 #include "instruction/lda.h"
 #include "instruction/ldx.h"
@@ -32,6 +33,6 @@ instruction_t instruction_table[0x100] = {
 /* 0xB0 */  NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  NULL, NULL, ldy,  lda,  ldx,  NULL,
 /* 0xC0 */  NULL, cmp,  NULL, NULL, NULL, cmp,  NULL, NULL, NULL, cmp,  NULL, NULL, NULL, cmp,  NULL, NULL,
 /* 0xD0 */  NULL, cmp,  NULL, NULL, NULL, cmp,  NULL, NULL, cld,  cmp,  NULL, NULL, NULL, cmp,  NULL, NULL,
-/* 0xE0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, nop,  NULL, NULL, NULL, NULL, NULL,
+/* 0xE0 */  cpx,  NULL, NULL, NULL, cpx,  NULL, NULL, NULL, NULL, NULL, nop,  NULL, cpx,  NULL, NULL, NULL,
 /* 0xF0 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, sed,  NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
