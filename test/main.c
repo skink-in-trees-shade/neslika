@@ -15,6 +15,7 @@
 #include "instruction/cld.test.h"
 #include "instruction/cli.test.h"
 #include "instruction/clv.test.h"
+#include "instruction/cmp.test.h"
 #include "instruction/eor.test.h"
 #include "instruction/lda.test.h"
 #include "instruction/ldx.test.h"
@@ -83,6 +84,10 @@ int main(void) {
 	runner_test(test_cli);
 
 	runner_test(test_clv);
+
+	runner_test(test_cmp_carry);
+	runner_test(test_cmp_zero);
+	runner_test(test_cmp_negative);
 
 	runner_test(test_eor);
 	runner_test(test_eor_zero);
