@@ -24,6 +24,7 @@
 #include "instruction/eor.test.h"
 #include "instruction/inc.test.h"
 #include "instruction/inx.test.h"
+#include "instruction/iny.test.h"
 #include "instruction/lda.test.h"
 #include "instruction/ldx.test.h"
 #include "instruction/ldy.test.h"
@@ -127,6 +128,10 @@ int main(void) {
 	runner_test(test_inx);
 	runner_test(test_inx_zero);
 	runner_test(test_inx_negative);
+
+	runner_test(test_iny);
+	runner_test(test_iny_zero);
+	runner_test(test_iny_negative);
 
 	runner_test(test_lda);
 	runner_test(test_lda_zero);
