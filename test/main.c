@@ -3,9 +3,9 @@
 #include "addressing/abx.test.h"
 #include "addressing/aby.test.h"
 #include "addressing/iix.test.h"
+#include "addressing/iiy.test.h"
 #include "addressing/imm.test.h"
 #include "addressing/imp.test.h"
-#include "addressing/iny.test.h"
 #include "addressing/zpa.test.h"
 #include "addressing/zpx.test.h"
 #include "addressing/zpy.test.h"
@@ -56,13 +56,13 @@ int main(void) {
 	runner_test(test_iix);
 	runner_test(test_iix_program_counter);
 
+	runner_test(test_iiy);
+	runner_test(test_iiy_program_counter);
+
 	runner_test(test_imm);
 	runner_test(test_imm_program_counter);
 
 	runner_test(test_imp);
-
-	runner_test(test_iny);
-	runner_test(test_iny_program_counter);
 
 	runner_test(test_zpa);
 	runner_test(test_zpa_program_counter);
