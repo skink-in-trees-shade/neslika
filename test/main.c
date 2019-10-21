@@ -37,6 +37,7 @@
 #include "instruction/tay.test.h"
 #include "instruction/tsx.test.h"
 #include "instruction/txa.test.h"
+#include "instruction/txs.test.h"
 #include "instruction/tya.test.h"
 #include "runner.h"
 
@@ -177,6 +178,10 @@ int main(void) {
 	runner_test(test_txa);
 	runner_test(test_txa_zero);
 	runner_test(test_txa_negative);
+
+	runner_test(test_txs);
+	runner_test(test_txs_zero);
+	runner_test(test_txs_negative);
 
 	runner_test(test_tya);
 	runner_test(test_tya_zero);
