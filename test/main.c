@@ -34,6 +34,7 @@
 #include "instruction/sed.test.h"
 #include "instruction/sei.test.h"
 #include "instruction/tax.test.h"
+#include "instruction/tay.test.h"
 #include "runner.h"
 
 int main(void) {
@@ -161,6 +162,10 @@ int main(void) {
 	runner_test(test_tax);
 	runner_test(test_tax_zero);
 	runner_test(test_tax_negative);
+
+	runner_test(test_tay);
+	runner_test(test_tay_zero);
+	runner_test(test_tay_negative);
 
 	return runner_report();
 }
