@@ -35,6 +35,7 @@
 #include "instruction/sei.test.h"
 #include "instruction/tax.test.h"
 #include "instruction/tay.test.h"
+#include "instruction/tsx.test.h"
 #include "instruction/txa.test.h"
 #include "instruction/tya.test.h"
 #include "runner.h"
@@ -168,6 +169,10 @@ int main(void) {
 	runner_test(test_tay);
 	runner_test(test_tay_zero);
 	runner_test(test_tay_negative);
+
+	runner_test(test_tsx);
+	runner_test(test_tsx_zero);
+	runner_test(test_tsx_negative);
 
 	runner_test(test_txa);
 	runner_test(test_txa_zero);
