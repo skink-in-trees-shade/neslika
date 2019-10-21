@@ -36,6 +36,7 @@
 #include "instruction/tax.test.h"
 #include "instruction/tay.test.h"
 #include "instruction/txa.test.h"
+#include "instruction/tya.test.h"
 #include "runner.h"
 
 int main(void) {
@@ -171,6 +172,10 @@ int main(void) {
 	runner_test(test_txa);
 	runner_test(test_txa_zero);
 	runner_test(test_txa_negative);
+
+	runner_test(test_tya);
+	runner_test(test_tya_zero);
+	runner_test(test_tya_negative);
 
 	return runner_report();
 }
