@@ -28,8 +28,8 @@ void runner_init(void) {
 }
 
 void runner_run(const char *name, void (*test)(void)) {
-    signal(SIGABRT, handle_sigabrt);
-    signal(SIGSEGV, handle_sigsegv);
+	signal(SIGABRT, handle_sigabrt);
+	signal(SIGSEGV, handle_sigsegv);
 
 	if (!setjmp(env)) {
 		test();
@@ -39,7 +39,7 @@ void runner_run(const char *name, void (*test)(void)) {
 		failed++;
 	}
 
-    memset(error, 0, BUFSIZ);
+	memset(error, 0, BUFSIZ);
 }
 
 int runner_report(void) {

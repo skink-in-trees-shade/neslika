@@ -5,24 +5,24 @@
 #include "zpy.test.h"
 
 void test_zpy(void) {
-    cpu_t *cpu = cpu_random();
-    cpu->memory[cpu->program_counter] = 0x24;
-    uint16_t expected = 0x24 + cpu->y;
+	cpu_t *cpu = cpu_random();
+	cpu->memory[cpu->program_counter] = 0x24;
+	uint16_t expected = 0x24 + cpu->y;
 
-    uint16_t actual = zpy(cpu);
+	uint16_t actual = zpy(cpu);
 
-    assert(expected == actual);
+	assert(expected == actual);
 
-    cpu_destroy(cpu);
+	cpu_destroy(cpu);
 }
 
 void test_zpy_program_counter(void) {
-    cpu_t *cpu = cpu_random();
-    uint16_t expected = cpu->program_counter + 1;
+	cpu_t *cpu = cpu_random();
+	uint16_t expected = cpu->program_counter + 1;
 
-    zpy(cpu);
+	zpy(cpu);
 
-    assert(cpu->program_counter == expected);
+	assert(cpu->program_counter == expected);
 
-    cpu_destroy(cpu);
+	cpu_destroy(cpu);
 }

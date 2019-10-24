@@ -3,13 +3,13 @@
 #include "nop.test.h"
 
 void test_nop(void) {
-    cpu_t *actual = cpu_random();
-    cpu_t *expected = cpu_clone(actual);
+	cpu_t *actual = cpu_random();
+	cpu_t *expected = cpu_clone(actual);
 
-    nop(actual);
+	nop(actual);
 
-    cpu_compare(expected, actual);
+	cpu_compare(expected, actual);
 
-    cpu_destroy(expected);
-    cpu_destroy(actual);
+	cpu_destroy(expected);
+	cpu_destroy(actual);
 }

@@ -5,23 +5,23 @@
 #include "imm.test.h"
 
 void test_imm(void) {
-    cpu_t *cpu = cpu_random();
-    uint16_t expected = cpu->program_counter;
+	cpu_t *cpu = cpu_random();
+	uint16_t expected = cpu->program_counter;
 
-    uint16_t actual = imm(cpu);
+	uint16_t actual = imm(cpu);
 
-    assert(expected == actual);
+	assert(expected == actual);
 
-    cpu_destroy(cpu);
+	cpu_destroy(cpu);
 }
 
 void test_imm_program_counter(void) {
-    cpu_t *cpu = cpu_random();
-    uint16_t expected = cpu->program_counter + 1;
+	cpu_t *cpu = cpu_random();
+	uint16_t expected = cpu->program_counter + 1;
 
-    imm(cpu);
+	imm(cpu);
 
-    assert(cpu->program_counter == expected);
+	assert(cpu->program_counter == expected);
 
-    cpu_destroy(cpu);
+	cpu_destroy(cpu);
 }
