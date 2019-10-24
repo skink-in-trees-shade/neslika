@@ -99,12 +99,25 @@ void test_cpu_negative_yes(void) {
 	cpu_destroy(actual);
 }
 
-void test_cpu_negative_no(void) {
+void test_cpu_carry_yes(void) {
 	cpu_t *actual = cpu_random();
 	cpu_t *expected = cpu_clone(actual);
-	expected->negative = false;
+	expected->carry = true;
 
-	cpu_negative(actual, 0x48);
+	cpu_carry(actual, 0x24);
+
+	cpu_compare(expected, actual);
+
+	cpu_destroy(expected);
+	cpu_destroy(actual);
+}
+
+void test_cpu_carry_no(void) {
+	cpu_t *actual = cpu_random();
+	cpu_t *expected = cpu_clone(actual);
+	expected->carry = false;
+
+	cpu_carry(actual, 0x82);
 
 	cpu_compare(expected, actual);
 
@@ -131,6 +144,19 @@ void test_cpu_zero_no(void) {
 	expected->zero = false;
 
 	cpu_zero(actual, 0xA4);
+
+	cpu_compare(expected, actual);
+
+	cpu_destroy(expected);
+	cpu_destroy(actual);
+}
+
+void test_cpu_negative_no(void) {
+	cpu_t *actual = cpu_random();
+	cpu_t *expected = cpu_clone(actual);
+	expected->negative = false;
+
+	cpu_negative(actual, 0x48);
 
 	cpu_compare(expected, actual);
 
