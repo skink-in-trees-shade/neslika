@@ -16,12 +16,16 @@ void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size) {
 	memcpy(&cpu->memory[cpu->program_counter], rom, size);
 }
 
-void cpu_negative(cpu_t *cpu, uint8_t value) {
-	cpu->negative = value & 0x80;
+void cpu_carry(cpu_t *cpu, uint8_t value) {
+	cpu->carry = (int8_t)value >= 0x00;
 }
 
 void cpu_zero(cpu_t *cpu, uint8_t value) {
-	cpu->zero = value == 0;
+	cpu->zero = value == 0x00;
+}
+
+void cpu_negative(cpu_t *cpu, uint8_t value) {
+	cpu->negative = value & 0x80;
 }
 
 bool cpu_running(cpu_t *cpu) {
