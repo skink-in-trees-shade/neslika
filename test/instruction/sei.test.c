@@ -4,14 +4,14 @@
 #include "sei.test.h"
 
 void test_sei(void) {
-    cpu_t *actual = cpu_random();
-    cpu_t *expected = cpu_clone(actual);
-    expected->interrupt_disable = true;
+	cpu_t *actual = cpu_random();
+	cpu_t *expected = cpu_clone(actual);
+	expected->interrupt_disable = true;
 
-    sei(actual);
+	sei(actual);
 
-    cpu_compare(expected, actual);
+	cpu_compare(expected, actual);
 
-    cpu_destroy(expected);
-    cpu_destroy(actual);
+	cpu_destroy(expected);
+	cpu_destroy(actual);
 }

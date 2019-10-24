@@ -4,14 +4,14 @@
 #include "clv.test.h"
 
 void test_clv(void) {
-    cpu_t *actual = cpu_random();
-    cpu_t *expected = cpu_clone(actual);
-    expected->overflow = false;
+	cpu_t *actual = cpu_random();
+	cpu_t *expected = cpu_clone(actual);
+	expected->overflow = false;
 
-    clv(actual);
+	clv(actual);
 
-    cpu_compare(expected, actual);
+	cpu_compare(expected, actual);
 
-    cpu_destroy(expected);
-    cpu_destroy(actual);
+	cpu_destroy(expected);
+	cpu_destroy(actual);
 }
