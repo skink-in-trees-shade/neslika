@@ -30,8 +30,9 @@ typedef struct {
 
 cpu_t *cpu_new(void);
 void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size);
-void cpu_negative(cpu_t *cpu, uint8_t value);
+void cpu_carry(cpu_t *cpu, uint8_t value);
 void cpu_zero(cpu_t *cpu, uint8_t value);
+void cpu_negative(cpu_t *cpu, uint8_t value);
 bool cpu_running(cpu_t *cpu);
 void cpu_fetch(cpu_t *cpu);
 void cpu_decode(cpu_t *cpu);
