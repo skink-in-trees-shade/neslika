@@ -4,14 +4,14 @@
 #include "clc.test.h"
 
 void test_clc(void) {
-    cpu_t *actual = cpu_random();
-    cpu_t *expected = cpu_clone(actual);
-    expected->carry = false;
+	cpu_t *actual = cpu_random();
+	cpu_t *expected = cpu_clone(actual);
+	expected->carry = false;
 
-    clc(actual);
+	clc(actual);
 
-    cpu_compare(expected, actual);
+	cpu_compare(expected, actual);
 
-    cpu_destroy(expected);
-    cpu_destroy(actual);
+	cpu_destroy(expected);
+	cpu_destroy(actual);
 }

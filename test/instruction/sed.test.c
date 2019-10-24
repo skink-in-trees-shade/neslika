@@ -4,14 +4,14 @@
 #include "sed.test.h"
 
 void test_sed(void) {
-    cpu_t *actual = cpu_random();
-    cpu_t *expected = cpu_clone(actual);
-    expected->decimal_mode = true;
+	cpu_t *actual = cpu_random();
+	cpu_t *expected = cpu_clone(actual);
+	expected->decimal_mode = true;
 
-    sed(actual);
+	sed(actual);
 
-    cpu_compare(expected, actual);
+	cpu_compare(expected, actual);
 
-    cpu_destroy(expected);
-    cpu_destroy(actual);
+	cpu_destroy(expected);
+	cpu_destroy(actual);
 }

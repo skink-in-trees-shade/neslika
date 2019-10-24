@@ -1,23 +1,23 @@
 language: c
 
 git:
-  depth: false
+	depth: false
 
 branches:
-  only:
-  - trunk
+	only:
+		- trunk
 
 compiler:
-- gcc
+	- gcc
 
 before_install:
-- sudo pip install scons cpp-coveralls
+	- sudo pip install scons cpp-coveralls
 
-script: 
-- cd ${TRAVIS_BUILD_DIR}
-- scons coverage=yes
-- ./tests
-- gcov $(find . -type f -name "*.c")
+script:
+	- cd ${TRAVIS_BUILD_DIR}
+	- scons coverage=yes
+	- ./tests
+	- gcov $(find . -type f -name "*.c")
 
 after_success:
-- 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then coveralls --exclude test; fi'
+	- 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then coveralls --exclude test; fi'
