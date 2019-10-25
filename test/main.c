@@ -15,6 +15,7 @@
 #include "instruction/beq.test.h"
 #include "instruction/bmi.test.h"
 #include "instruction/bne.test.h"
+#include "instruction/bpl.test.h"
 #include "instruction/brk.test.h"
 #include "instruction/clc.test.h"
 #include "instruction/cld.test.h"
@@ -110,6 +111,9 @@ int main(void) {
 
 	runner_test(test_bne_zero_yes);
 	runner_test(test_bne_zero_no);
+
+	runner_test(test_bpl_negative_yes);
+	runner_test(test_bpl_negative_no);
 
 	runner_test(test_brk);
 
