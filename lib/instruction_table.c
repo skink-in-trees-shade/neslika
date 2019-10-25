@@ -6,6 +6,7 @@
 #include "instruction/bne.h"
 #include "instruction/bpl.h"
 #include "instruction/brk.h"
+#include "instruction/bvc.h"
 #include "instruction/clc.h"
 #include "instruction/cld.h"
 #include "instruction/cli.h"
@@ -43,7 +44,7 @@ instruction_t instruction_table[0x100] = {
 /* 0x20 */  NULL, and,  NULL, NULL, NULL, and,  NULL, NULL, NULL, and,  NULL, NULL, NULL, and,  NULL, NULL,
 /* 0x30 */  bmi,  and,  NULL, NULL, NULL, and,  NULL, NULL, sec,  and,  NULL, NULL, NULL, and,  NULL, NULL,
 /* 0x40 */  NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL,
-/* 0x50 */  NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL, cli,  eor,  NULL, NULL, NULL, eor,  NULL, NULL,
+/* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  NULL, NULL, cli,  eor,  NULL, NULL, NULL, eor,  NULL, NULL,
 /* 0x60 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x70 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, sei,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x80 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, dey,  NULL, txa,  NULL, NULL, NULL, NULL, NULL,
