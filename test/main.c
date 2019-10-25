@@ -12,6 +12,7 @@
 #include "instruction/and.test.h"
 #include "instruction/bcc.test.h"
 #include "instruction/bcs.test.h"
+#include "instruction/beq.test.h"
 #include "instruction/brk.test.h"
 #include "instruction/clc.test.h"
 #include "instruction/cld.test.h"
@@ -98,6 +99,9 @@ int main(void) {
 
 	runner_test(test_bcs_carry_yes);
 	runner_test(test_bcs_carry_no);
+
+	runner_test(test_beq_zero_yes);
+	runner_test(test_beq_zero_no);
 
 	runner_test(test_brk);
 
