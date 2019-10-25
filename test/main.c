@@ -18,6 +18,7 @@
 #include "instruction/bpl.test.h"
 #include "instruction/brk.test.h"
 #include "instruction/bvc.test.h"
+#include "instruction/bvs.test.h"
 #include "instruction/clc.test.h"
 #include "instruction/cld.test.h"
 #include "instruction/cli.test.h"
@@ -120,6 +121,9 @@ int main(void) {
 
 	runner_test(test_bvc_overflow_yes);
 	runner_test(test_bvc_overflow_no);
+
+	runner_test(test_bvs_overflow_yes);
+	runner_test(test_bvs_overflow_no);
 
 	runner_test(test_clc);
 
