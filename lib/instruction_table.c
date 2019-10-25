@@ -1,6 +1,7 @@
 #include "instruction/and.h"
 #include "instruction/bcc.h"
 #include "instruction/bcs.h"
+#include "instruction/beq.h"
 #include "instruction/brk.h"
 #include "instruction/clc.h"
 #include "instruction/cld.h"
@@ -49,5 +50,5 @@ instruction_t instruction_table[0x100] = {
 /* 0xC0 */  cpy,  cmp,  NULL, NULL, cpy,  cmp,  dec,  NULL, iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  NULL,
 /* 0xD0 */  NULL, cmp,  NULL, NULL, NULL, cmp,  dec,  NULL, cld,  cmp,  NULL, NULL, NULL, cmp,  dec,  NULL,
 /* 0xE0 */  cpx,  NULL, NULL, NULL, cpx,  NULL, inc,  NULL, inx,  NULL, nop,  NULL, cpx,  NULL, inc,  NULL,
-/* 0xF0 */  NULL, NULL, NULL, NULL, NULL, NULL, inc,  NULL, sed,  NULL, NULL, NULL, NULL, NULL, inc,  NULL
+/* 0xF0 */  beq,  NULL, NULL, NULL, NULL, NULL, inc,  NULL, sed,  NULL, NULL, NULL, NULL, NULL, inc,  NULL
 };
