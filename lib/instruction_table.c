@@ -1,5 +1,6 @@
 #include "instruction/and.h"
 #include "instruction/bcc.h"
+#include "instruction/bcs.h"
 #include "instruction/brk.h"
 #include "instruction/clc.h"
 #include "instruction/cld.h"
@@ -44,7 +45,7 @@ instruction_t instruction_table[0x100] = {
 /* 0x80 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, dey,  NULL, txa,  NULL, NULL, NULL, NULL, NULL,
 /* 0x90 */  bcc,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, tya,  NULL, txs,  NULL, NULL, NULL, NULL, NULL,
 /* 0xA0 */  ldy,  lda,  ldx,  NULL, ldy,  lda,  ldx,  NULL, tay,  lda,  tax,  NULL, ldy,  lda,  ldx,  NULL,
-/* 0xB0 */  NULL, lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  tsx,  NULL, ldy,  lda,  ldx,  NULL,
+/* 0xB0 */  bcs,  lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  tsx,  NULL, ldy,  lda,  ldx,  NULL,
 /* 0xC0 */  cpy,  cmp,  NULL, NULL, cpy,  cmp,  dec,  NULL, iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  NULL,
 /* 0xD0 */  NULL, cmp,  NULL, NULL, NULL, cmp,  dec,  NULL, cld,  cmp,  NULL, NULL, NULL, cmp,  dec,  NULL,
 /* 0xE0 */  cpx,  NULL, NULL, NULL, cpx,  NULL, inc,  NULL, inx,  NULL, nop,  NULL, cpx,  NULL, inc,  NULL,
