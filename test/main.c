@@ -10,6 +10,7 @@
 #include "addressing/zpx.test.h"
 #include "addressing/zpy.test.h"
 #include "instruction/and.test.h"
+#include "instruction/bcc.test.h"
 #include "instruction/brk.test.h"
 #include "instruction/clc.test.h"
 #include "instruction/cld.test.h"
@@ -90,6 +91,9 @@ int main(void) {
 	runner_test(test_and);
 	runner_test(test_and_zero);
 	runner_test(test_and_negative);
+
+	runner_test(test_bcc_carry_yes);
+	runner_test(test_bcc_carry_no);
 
 	runner_test(test_brk);
 
