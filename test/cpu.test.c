@@ -17,6 +17,7 @@ void test_cpu_load(void) {
 	uint8_t rom[] = { 0xA9, 0xC4, 0xEA };
 	cpu_t *actual = cpu_random();
 	cpu_t *expected = cpu_clone(actual);
+	expected->stack_pointer = 0xFF;
 	expected->program_counter = 0x8000;
 	expected->program_end = 0x8002;
 
@@ -159,6 +160,37 @@ void test_cpu_negative_no(void) {
 	cpu_negative(actual, 0x48);
 
 	cpu_compare(expected, actual);
+
+	cpu_destroy(expected);
+	cpu_destroy(actual);
+}
+
+void test_cpu_push(void) {
+	cpu_t *actual = cpu_random();
+	actual->stack_pointer = 0x47;
+	cpu_t *expected = cpu_clone(actual);
+	expected->stack_pointer = 0x46;
+
+	cpu_push(actual, 0xF8);
+
+	cpu_compare(expected, actual);
+	assert(actual->memory[0x0147] == 0xF8);
+
+	cpu_destroy(expected);
+	cpu_destroy(actual);
+}
+
+void test_cpu_pull(void) {
+	cpu_t *actual = cpu_random();
+	actual->stack_pointer = 0x47;
+	actual->memory[0x0147] = 0xF8;
+	cpu_t *expected = cpu_clone(actual);
+	expected->stack_pointer = 0x48;
+
+	uint8_t result = cpu_pull(actual);
+
+	cpu_compare(expected, actual);
+	assert(result == 0xF8);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
