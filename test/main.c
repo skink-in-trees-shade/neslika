@@ -42,6 +42,7 @@
 #include "instruction/sed.test.h"
 #include "instruction/sei.test.h"
 #include "instruction/sta.test.h"
+#include "instruction/stx.test.h"
 #include "instruction/tax.test.h"
 #include "instruction/tay.test.h"
 #include "instruction/tsx.test.h"
@@ -199,6 +200,8 @@ int main(void) {
 	runner_test(test_sei);
 
 	runner_test(test_sta);
+
+	runner_test(test_stx);
 
 	runner_test(test_tax);
 	runner_test(test_tax_zero);
