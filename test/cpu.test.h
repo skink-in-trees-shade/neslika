@@ -19,6 +19,9 @@ void test_cpu_zero_no(void);
 void test_cpu_negative_yes(void);
 void test_cpu_negative_no(void);
 
+void test_cpu_push(void);
+void test_cpu_pull(void);
+
 void test_cpu_running_yes(void);
 void test_cpu_running_no(void);
 

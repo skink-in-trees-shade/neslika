@@ -11,6 +11,7 @@ cpu_t *cpu_new(void) {
 }
 
 void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size) {
+	cpu->stack_pointer = 0xFF;
 	cpu->program_counter = 0x8000;
 	cpu->program_end = cpu->program_counter + size - 1;
 	memcpy(&cpu->memory[cpu->program_counter], rom, size);
@@ -26,6 +27,14 @@ void cpu_zero(cpu_t *cpu, uint8_t value) {
 
 void cpu_negative(cpu_t *cpu, uint8_t value) {
 	cpu->negative = value & 0x80;
+}
+
+void cpu_push(cpu_t *cpu, uint8_t value) {
+	cpu->memory[0x0100 + cpu->stack_pointer--] = value;
+}
+
+uint8_t cpu_pull(cpu_t *cpu) {
+	return cpu->memory[0x0100 + cpu->stack_pointer++];
 }
 
 bool cpu_running(cpu_t *cpu) {
