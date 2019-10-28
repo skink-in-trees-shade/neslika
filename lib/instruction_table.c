@@ -31,6 +31,7 @@
 #include "instruction/sed.h"
 #include "instruction/sei.h"
 #include "instruction/sta.h"
+#include "instruction/stx.h"
 #include "instruction/tax.h"
 #include "instruction/tay.h"
 #include "instruction/tsx.h"
@@ -49,8 +50,8 @@ instruction_t instruction_table[0x100] = {
 /* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  NULL, NULL, cli,  eor,  NULL, NULL, NULL, eor,  NULL, NULL,
 /* 0x60 */  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x70 */  bvs,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, sei,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-/* 0x80 */  NULL, sta,  NULL, NULL, NULL, sta,  NULL, NULL, dey,  NULL, txa,  NULL, NULL, sta,  NULL, NULL,
-/* 0x90 */  bcc,  sta,  NULL, NULL, NULL, sta,  NULL, NULL, tya,  sta,  txs,  NULL, NULL, sta,  NULL, NULL,
+/* 0x80 */  NULL, sta,  NULL, NULL, NULL, sta,  stx,  NULL, dey,  NULL, txa,  NULL, NULL, sta,  stx,  NULL,
+/* 0x90 */  bcc,  sta,  NULL, NULL, NULL, sta,  stx,  NULL, tya,  sta,  txs,  NULL, NULL, sta,  NULL, NULL,
 /* 0xA0 */  ldy,  lda,  ldx,  NULL, ldy,  lda,  ldx,  NULL, tay,  lda,  tax,  NULL, ldy,  lda,  ldx,  NULL,
 /* 0xB0 */  bcs,  lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  tsx,  NULL, ldy,  lda,  ldx,  NULL,
 /* 0xC0 */  cpy,  cmp,  NULL, NULL, cpy,  cmp,  dec,  NULL, iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  NULL,
