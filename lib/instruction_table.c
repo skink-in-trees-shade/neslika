@@ -23,6 +23,7 @@
 #include "instruction/inx.h"
 #include "instruction/iny.h"
 #include "instruction/jmp.h"
+#include "instruction/jsr.h"
 #include "instruction/lda.h"
 #include "instruction/ldx.h"
 #include "instruction/ldy.h"
@@ -46,7 +47,7 @@ instruction_t instruction_table[0x100] = {
 /*          0x00  0x01  0x02  0x03  0x04  0x05  0x06  0x07  0x08  0x09  0x0A  0x0B  0x0C  0x0D  0x0E  0x0F */
 /* 0x00 */  brk,  ora,  NULL, NULL, NULL, ora,  NULL, NULL, NULL, ora,  NULL, NULL, NULL, ora,  NULL, NULL,
 /* 0x10 */  bpl,  ora,  NULL, NULL, NULL, ora,  NULL, NULL, clc,  ora,  NULL, NULL, NULL, ora,  NULL, NULL,
-/* 0x20 */  NULL, and,  NULL, NULL, NULL, and,  NULL, NULL, NULL, and,  NULL, NULL, NULL, and,  NULL, NULL,
+/* 0x20 */  jsr,  and,  NULL, NULL, NULL, and,  NULL, NULL, NULL, and,  NULL, NULL, NULL, and,  NULL, NULL,
 /* 0x30 */  bmi,  and,  NULL, NULL, NULL, and,  NULL, NULL, sec,  and,  NULL, NULL, NULL, and,  NULL, NULL,
 /* 0x40 */  NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL, jmp,  eor,  NULL, NULL,
 /* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  NULL, NULL, cli,  eor,  NULL, NULL, NULL, eor,  NULL, NULL,
