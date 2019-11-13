@@ -34,7 +34,7 @@ void cpu_push(cpu_t *cpu, uint8_t value) {
 }
 
 uint8_t cpu_pull(cpu_t *cpu) {
-	return cpu->memory[0x0100 + cpu->stack_pointer++];
+	return cpu->memory[0x0100 + ++cpu->stack_pointer];
 }
 
 bool cpu_running(cpu_t *cpu) {

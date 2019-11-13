@@ -183,7 +183,7 @@ void test_cpu_push(void) {
 void test_cpu_pull(void) {
 	cpu_t *actual = cpu_random();
 	actual->stack_pointer = 0x47;
-	actual->memory[0x0147] = 0xF8;
+	actual->memory[0x0148] = 0xF8;
 	cpu_t *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x48;
 
