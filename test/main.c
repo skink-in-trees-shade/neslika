@@ -34,6 +34,7 @@
 #include "instruction/inx.test.h"
 #include "instruction/iny.test.h"
 #include "instruction/jmp.test.h"
+#include "instruction/jsr.test.h"
 #include "instruction/lda.test.h"
 #include "instruction/ldx.test.h"
 #include "instruction/ldy.test.h"
@@ -180,6 +181,8 @@ int main(void) {
 	runner_test(test_iny_negative);
 
 	runner_test(test_jmp);
+
+	runner_test(test_jsr);
 
 	runner_test(test_lda);
 	runner_test(test_lda_zero);
