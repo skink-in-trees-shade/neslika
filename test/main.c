@@ -13,6 +13,7 @@
 #include "instruction/bcc.test.h"
 #include "instruction/bcs.test.h"
 #include "instruction/beq.test.h"
+#include "instruction/bit.test.h"
 #include "instruction/bmi.test.h"
 #include "instruction/bne.test.h"
 #include "instruction/bpl.test.h"
@@ -115,6 +116,10 @@ int main(void) {
 
 	runner_test(test_beq_zero_yes);
 	runner_test(test_beq_zero_no);
+
+	runner_test(test_bit_zero);
+	runner_test(test_bit_overflow);
+	runner_test(test_bit_negative);
 
 	runner_test(test_bmi_negative_yes);
 	runner_test(test_bmi_negative_no);
