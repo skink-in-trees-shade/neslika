@@ -14,7 +14,7 @@ addressing_t addressing_table[0x100] = {
 /*          0x00  0x01  0x02  0x03  0x04  0x05  0x06  0x07  0x08  0x09  0x0A  0x0B  0x0C  0x0D  0x0E  0x0F */
 /* 0x00 */  imp,  iix,  NULL, NULL, NULL, zpa,  NULL, NULL, imp,  imm,  NULL, NULL, NULL, abo,  NULL, NULL,
 /* 0x10 */  imm,  iiy,  NULL, NULL, NULL, zpx,  NULL, NULL, imp,  aby,  NULL, NULL, NULL, abx,  NULL, NULL,
-/* 0x20 */  abo,  iix,  NULL, NULL, zpa,  zpa,  NULL, NULL, NULL, imm,  NULL, NULL, abo,  abo,  NULL, NULL,
+/* 0x20 */  abo,  iix,  NULL, NULL, zpa,  zpa,  NULL, NULL, imp,  imm,  NULL, NULL, abo,  abo,  NULL, NULL,
 /* 0x30 */  imm,  iiy,  NULL, NULL, NULL, zpx,  NULL, NULL, imp,  aby,  NULL, NULL, NULL, abx,  NULL, NULL,
 /* 0x40 */  NULL, iix,  NULL, NULL, NULL, zpa,  NULL, NULL, imp,  imm,  NULL, NULL, abo,  abo,  NULL, NULL,
 /* 0x50 */  imm,  iiy,  NULL, NULL, NULL, zpx,  NULL, NULL, imp,  aby,  NULL, NULL, NULL, abx,  NULL, NULL,
