@@ -31,6 +31,7 @@
 #include "instruction/nop.h"
 #include "instruction/ora.h"
 #include "instruction/pha.h"
+#include "instruction/pla.h"
 #include "instruction/rts.h"
 #include "instruction/sec.h"
 #include "instruction/sed.h"
@@ -54,7 +55,7 @@ instruction_t instruction_table[0x100] = {
 /* 0x30 */  bmi,  and,  NULL, NULL, NULL, and,  NULL, NULL, sec,  and,  NULL, NULL, NULL, and,  NULL, NULL,
 /* 0x40 */  NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL, pha,  eor,  NULL, NULL, jmp,  eor,  NULL, NULL,
 /* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  NULL, NULL, cli,  eor,  NULL, NULL, NULL, eor,  NULL, NULL,
-/* 0x60 */  rts,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, jmp,  NULL, NULL, NULL,
+/* 0x60 */  rts,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, pla,  NULL, NULL, NULL, jmp,  NULL, NULL, NULL,
 /* 0x70 */  bvs,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, sei,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 /* 0x80 */  NULL, sta,  NULL, NULL, sty,  sta,  stx,  NULL, dey,  NULL, txa,  NULL, sty,  sta,  stx,  NULL,
 /* 0x90 */  bcc,  sta,  NULL, NULL, sty,  sta,  stx,  NULL, tya,  sta,  txs,  NULL, NULL, sta,  NULL, NULL,
