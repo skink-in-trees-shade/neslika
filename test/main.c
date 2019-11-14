@@ -42,6 +42,7 @@
 #include "instruction/nop.test.h"
 #include "instruction/ora.test.h"
 #include "instruction/pha.test.h"
+#include "instruction/php.test.h"
 #include "instruction/pla.test.h"
 #include "instruction/rts.test.h"
 #include "instruction/sec.test.h"
@@ -211,6 +212,13 @@ int main(void) {
 	runner_test(test_ora_negative);
 
 	runner_test(test_pha);
+
+	runner_test(test_php_carry);
+	runner_test(test_php_zero);
+	runner_test(test_php_interrupt_disable);
+	runner_test(test_php_decimal_mode);
+	runner_test(test_php_overflow);
+	runner_test(test_php_negative);
 
 	runner_test(test_pla);
 	runner_test(test_pla_zero);
