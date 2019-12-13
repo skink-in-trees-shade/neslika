@@ -9,6 +9,7 @@
 #include "addressing/zpa.test.h"
 #include "addressing/zpx.test.h"
 #include "addressing/zpy.test.h"
+#include "instruction/adc.test.h"
 #include "instruction/and.test.h"
 #include "instruction/asl.test.h"
 #include "instruction/bcc.test.h"
@@ -132,6 +133,14 @@ int main(void) {
 	runner_test(test_zpy_operand_address);
 	runner_test(test_zpy_address_mode);
 	runner_test(test_zpy_program_counter);
+
+	runner_test(test_adc_no_carry_no_overflow);
+	runner_test(test_adc_carry_overflow);
+	runner_test(test_adc_carry_no_overflow);
+	runner_test(test_adc_no_carry_overflow);
+	runner_test(test_adc_carry);
+	runner_test(test_adc_zero);
+	runner_test(test_adc_negative);
 
 	runner_test(test_and);
 	runner_test(test_and_zero);
