@@ -153,6 +153,8 @@ int main(void) {
 	runner_test(test_bpl_negative_no);
 
 	runner_test(test_brk);
+	runner_test(test_brk_status);
+	runner_test(test_brk_program_counter);
 
 	runner_test(test_bvc_overflow_yes);
 	runner_test(test_bvc_overflow_no);

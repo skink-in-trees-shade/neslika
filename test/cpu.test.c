@@ -70,14 +70,14 @@ void test_cpu_decode(void) {
 }
 
 void test_cpu_execute(void) {
-	uint8_t rom[] = { 0x00 };
+	uint8_t rom[] = { 0xD8 };
 	cpu_t *actual = cpu_new();
 	cpu_load(actual, rom, sizeof(rom));
 	cpu_fetch(actual);
 	cpu_decode(actual);
 
 	cpu_t *expected = cpu_clone(actual);
-	expected->break_command = true;
+	expected->decimal_mode = false;
 
 	cpu_execute(actual);
 
