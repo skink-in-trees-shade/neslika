@@ -79,33 +79,51 @@ int main(void) {
 	runner_test(test_cpu_running_yes);
 	runner_test(test_cpu_running_no);
 
-	runner_test(test_abo);
+	runner_test(test_abo_operand);
+	runner_test(test_abo_operand_address);
+	runner_test(test_abo_address_mode);
 	runner_test(test_abo_program_counter);
 
-	runner_test(test_abx);
+	runner_test(test_abx_operand);
+	runner_test(test_abx_operand_address);
+	runner_test(test_abx_address_mode);
 	runner_test(test_abx_program_counter);
 
-	runner_test(test_aby);
+	runner_test(test_aby_operand);
+	runner_test(test_aby_operand_address);
+	runner_test(test_aby_address_mode);
 	runner_test(test_aby_program_counter);
 
-	runner_test(test_iix);
+	runner_test(test_iix_operand);
+	runner_test(test_iix_operand_address);
+	runner_test(test_iix_address_mode);
 	runner_test(test_iix_program_counter);
 
-	runner_test(test_iiy);
+	runner_test(test_iiy_operand);
+	runner_test(test_iiy_operand_address);
+	runner_test(test_iiy_address_mode);
 	runner_test(test_iiy_program_counter);
 
-	runner_test(test_imm);
+	runner_test(test_imm_operand);
+	runner_test(test_imm_operand_address);
+	runner_test(test_imm_address_mode);
 	runner_test(test_imm_program_counter);
 
-	runner_test(test_imp);
+	runner_test(test_imp_address_mode);
 
-	runner_test(test_zpa);
+	runner_test(test_zpa_operand);
+	runner_test(test_zpa_operand_address);
+	runner_test(test_zpa_address_mode);
 	runner_test(test_zpa_program_counter);
 
-	runner_test(test_zpx);
+	runner_test(test_zpx_operand);
+	runner_test(test_zpx_operand_address);
+	runner_test(test_zpx_address_mode);
 	runner_test(test_zpx_program_counter);
 
-	runner_test(test_zpy);
+	runner_test(test_zpy_operand);
+	runner_test(test_zpy_operand_address);
+	runner_test(test_zpy_address_mode);
 	runner_test(test_zpy_program_counter);
 
 	runner_test(test_and);

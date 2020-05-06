@@ -1,8 +1,10 @@
 #include "iix.h"
 
-uint16_t iix(cpu_t *cpu) {
+void iix(cpu_t *cpu) {
 	uint8_t sub = cpu->memory[cpu->program_counter++];
 	uint8_t high = cpu->memory[sub + cpu->x];
 	uint8_t low = cpu->memory[sub + cpu->x + 1];
-	return (high << 8) + low;
+	cpu->operand_address = (high << 8) + low;
+	cpu->operand = cpu->memory[cpu->operand_address];
+	cpu->addressing_mode = addressing_indexed_indirect;
 }

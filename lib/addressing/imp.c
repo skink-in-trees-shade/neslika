@@ -1,6 +1,5 @@
 #include "imp.h"
 
-uint16_t imp(cpu_t *cpu) {
-	cpu = cpu;
-	return 0;
+void imp(cpu_t *cpu) {
+	cpu->addressing_mode = addressing_implicit;
 }
