@@ -45,6 +45,7 @@
 #include "instruction/php.test.h"
 #include "instruction/pla.test.h"
 #include "instruction/plp.test.h"
+#include "instruction/rti.test.h"
 #include "instruction/rts.test.h"
 #include "instruction/sec.test.h"
 #include "instruction/sed.test.h"
@@ -251,6 +252,8 @@ int main(void) {
 	runner_test(test_plp_decimal_mode);
 	runner_test(test_plp_overflow);
 	runner_test(test_plp_negative);
+
+	runner_test(test_rti);
 
 	runner_test(test_rts);
 
