@@ -1,5 +1,5 @@
 #include "sty.h"
 
-void sty(cpu_t *cpu) {
+void sty(struct cpu *cpu) {
 	cpu->memory[cpu->operand_address] = cpu->y;
 }

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void iix(cpu_t *cpu);
+void iix(struct cpu *cpu);
 
 #endif

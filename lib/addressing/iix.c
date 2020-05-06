@@ -1,6 +1,6 @@
 #include "iix.h"
 
-void iix(cpu_t *cpu) {
+void iix(struct cpu *cpu) {
 	uint8_t sub = cpu->memory[cpu->program_counter++];
 	uint8_t high = cpu->memory[sub + cpu->x];
 	uint8_t low = cpu->memory[sub + cpu->x + 1];

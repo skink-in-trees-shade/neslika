@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void clv(cpu_t *cpu);
+void clv(struct cpu *cpu);
 
 #endif

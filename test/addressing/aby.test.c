@@ -6,7 +6,7 @@
 #include "aby.test.h"
 
 void test_aby_operand(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	cpu->memory[cpu->program_counter] = 0x24;
 	cpu->memory[cpu->program_counter + 1] = 0xF1;
 	cpu->memory[0x24F1 + cpu->y] = 0xA2;
@@ -20,7 +20,7 @@ void test_aby_operand(void) {
 }
 
 void test_aby_operand_address(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	cpu->memory[cpu->program_counter] = 0x24;
 	cpu->memory[cpu->program_counter + 1] = 0xF1;
 	uint16_t expected = 0x24F1 + cpu->y;
@@ -33,8 +33,8 @@ void test_aby_operand_address(void) {
 }
 
 void test_aby_address_mode(void) {
-	cpu_t *cpu = cpu_random();
-	addressing_mode_t expected = addressing_absolute_y;
+	struct cpu *cpu = cpu_random();
+	enum addressing_mode expected = addressing_absolute_y;
 
 	aby(cpu);
 
@@ -44,7 +44,7 @@ void test_aby_address_mode(void) {
 }
 
 void test_aby_program_counter(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	uint16_t expected = cpu->program_counter + 2;
 
 	aby(cpu);

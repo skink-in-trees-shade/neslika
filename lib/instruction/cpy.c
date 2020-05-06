@@ -1,6 +1,6 @@
 #include "cpy.h"
 
-void cpy(cpu_t *cpu) {
+void cpy(struct cpu *cpu) {
 	uint8_t result = cpu->y - cpu->operand;
 	cpu_carry(cpu, result);
 	cpu_zero(cpu, result);

@@ -17,7 +17,7 @@ static bool random_bool(void) {
 	return rand() > (RAND_MAX / 2);
 }
 
-void cpu_compare(cpu_t *left, cpu_t *right) {
+void cpu_compare(struct cpu *left, struct cpu *right) {
 	assert(left->program_counter == right->program_counter);
 	assert(left->stack_pointer == right->stack_pointer);
 	assert(left->accumulator == right->accumulator);
@@ -32,8 +32,8 @@ void cpu_compare(cpu_t *left, cpu_t *right) {
 	assert(left->negative == right->negative);
 }
 
-cpu_t *cpu_random(void) {
-	cpu_t *cpu = cpu_new();
+struct cpu *cpu_random(void) {
+	struct cpu *cpu = cpu_new();
 	cpu->program_counter = random_uint16();
 	cpu->stack_pointer = random_uint8();
 	cpu->accumulator = random_uint8();
@@ -49,8 +49,8 @@ cpu_t *cpu_random(void) {
 	return cpu;
 }
 
-cpu_t *cpu_clone(cpu_t *cpu) {
-	cpu_t *clone = cpu_new();
+struct cpu *cpu_clone(struct cpu *cpu) {
+	struct cpu *clone = cpu_new();
 	clone->program_counter = cpu->program_counter;
 	clone->stack_pointer = cpu->stack_pointer;
 	clone->accumulator = cpu->accumulator;

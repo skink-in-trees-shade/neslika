@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void rts(cpu_t *cpu);
+void rts(struct cpu *cpu);
 
 #endif

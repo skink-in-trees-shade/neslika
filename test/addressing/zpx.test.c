@@ -6,7 +6,7 @@
 #include "zpx.test.h"
 
 void test_zpx_operand(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	cpu->memory[cpu->program_counter] = 0x24;
 	cpu->memory[0x24 + cpu->x] = 0xA2;
 	uint8_t expected = 0xA2;
@@ -19,7 +19,7 @@ void test_zpx_operand(void) {
 }
 
 void test_zpx_operand_address(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	cpu->memory[cpu->program_counter] = 0x24;
 	uint16_t expected = 0x24 + cpu->x;
 
@@ -31,8 +31,8 @@ void test_zpx_operand_address(void) {
 }
 
 void test_zpx_address_mode(void) {
-	cpu_t *cpu = cpu_random();
-	addressing_mode_t expected = addressing_zero_page_x;
+	struct cpu *cpu = cpu_random();
+	enum addressing_mode expected = addressing_zero_page_x;
 
 	zpx(cpu);
 
@@ -42,7 +42,7 @@ void test_zpx_address_mode(void) {
 }
 
 void test_zpx_program_counter(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	uint16_t expected = cpu->program_counter + 1;
 
 	zpx(cpu);

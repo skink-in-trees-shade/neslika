@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void sec(cpu_t *cpu);
+void sec(struct cpu *cpu);
 
 #endif

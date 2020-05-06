@@ -4,10 +4,10 @@
 #include "tya.test.h"
 
 void test_tya(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->y = 0x48;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->accumulator = actual->y;
 	expected->zero = false;
 	expected->negative = false;
@@ -21,10 +21,10 @@ void test_tya(void) {
 }
 
 void test_tya_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->y = 0x00;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->accumulator = actual->y;
 	expected->zero = true;
 	expected->negative = false;
@@ -38,10 +38,10 @@ void test_tya_zero(void) {
 }
 
 void test_tya_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->y = 0xF8;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->accumulator = actual->y;
 	expected->zero = false;
 	expected->negative = true;

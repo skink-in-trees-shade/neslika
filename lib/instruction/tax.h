@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void tax(cpu_t *cpu);
+void tax(struct cpu *cpu);
 
 #endif

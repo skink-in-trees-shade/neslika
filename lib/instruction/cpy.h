@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void cpy(cpu_t *cpu);
+void cpy(struct cpu *cpu);
 
 #endif

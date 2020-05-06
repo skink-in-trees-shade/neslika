@@ -4,11 +4,11 @@
 #include "sta.test.h"
 
 void test_sta(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->operand_address = 0xE7;
 	actual->accumulator = 0x48;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 
 	sta(actual);
 

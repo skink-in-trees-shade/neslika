@@ -3,8 +3,8 @@
 
 #include "cpu.h"
 
-typedef void (*addressing_t)(cpu_t *);
+typedef void (*addressing_fn)(struct cpu *);
 
-extern addressing_t addressing_table[0x100];
+extern addressing_fn addressing_table[0x100];
 
 #endif

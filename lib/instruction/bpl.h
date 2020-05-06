@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void bpl(cpu_t *cpu);
+void bpl(struct cpu *cpu);
 
 #endif

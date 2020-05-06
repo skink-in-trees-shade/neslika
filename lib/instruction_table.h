@@ -3,8 +3,8 @@
 
 #include "cpu.h"
 
-typedef void (*instruction_t)(cpu_t *);
+typedef void (*instruction_fn)(struct cpu *);
 
-extern instruction_t instruction_table[0x100];
+extern instruction_fn instruction_table[0x100];
 
 #endif

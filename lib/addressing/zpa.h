@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void zpa(cpu_t *cpu);
+void zpa(struct cpu *cpu);
 
 #endif

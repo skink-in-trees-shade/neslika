@@ -5,11 +5,11 @@
 #include "brk.test.h"
 
 void test_brk(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->memory[0xFFFE] = 0x31;
 	actual->memory[0xFFFF] = 0xA2;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->program_counter = 0x31A2;
 	expected->break_command = true;
 	expected->stack_pointer = actual->stack_pointer - 3;
@@ -23,7 +23,7 @@ void test_brk(void) {
 }
 
 void test_brk_status(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->carry = true;
 	actual->zero = false;
 	actual->interrupt_disable = true;
@@ -42,7 +42,7 @@ void test_brk_status(void) {
 }
 
 void test_brk_program_counter(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->program_counter = 0x254A;
 
 	uint16_t expected = 0x254A;

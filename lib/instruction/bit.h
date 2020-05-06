@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void bit(cpu_t *cpu);
+void bit(struct cpu *cpu);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void cpx(cpu_t *cpu);
+void cpx(struct cpu *cpu);
 
 #endif

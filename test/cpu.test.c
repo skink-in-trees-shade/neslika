@@ -5,7 +5,7 @@
 #include "cpu.test.h"
 
 void test_cpu_new(void) {
-	cpu_t *cpu = cpu_new();
+	struct cpu *cpu = cpu_new();
 
 	assert(cpu);
 	assert(cpu->memory);
@@ -15,8 +15,8 @@ void test_cpu_new(void) {
 
 void test_cpu_load(void) {
 	uint8_t rom[] = { 0xA9, 0xC4, 0xEA };
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0xFF;
 	expected->program_counter = 0x8000;
 	expected->program_end = 0x8002;
@@ -34,10 +34,10 @@ void test_cpu_load(void) {
 
 void test_cpu_fetch(void) {
 	uint8_t rom[] = { 0xEA };
-	cpu_t *actual = cpu_new();
+	struct cpu *actual = cpu_new();
 	cpu_load(actual, rom, sizeof(rom));
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->instruction = rom[0];
 	expected->program_counter = actual->program_counter + 1;
 
@@ -51,12 +51,12 @@ void test_cpu_fetch(void) {
 
 void test_cpu_decode(void) {
 	uint8_t rom[] = { 0xA4, 0x24 };
-	cpu_t *actual = cpu_new();
+	struct cpu *actual = cpu_new();
 	cpu_load(actual, rom, sizeof(rom));
 	actual->memory[rom[1]] = 0x1E;
 	cpu_fetch(actual);
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->operand = actual->memory[rom[1]];
 	expected->operand_address = rom[1];
 	expected->program_counter = actual->program_counter + 1;
@@ -71,12 +71,12 @@ void test_cpu_decode(void) {
 
 void test_cpu_execute(void) {
 	uint8_t rom[] = { 0xD8 };
-	cpu_t *actual = cpu_new();
+	struct cpu *actual = cpu_new();
 	cpu_load(actual, rom, sizeof(rom));
 	cpu_fetch(actual);
 	cpu_decode(actual);
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->decimal_mode = false;
 
 	cpu_execute(actual);
@@ -88,8 +88,8 @@ void test_cpu_execute(void) {
 }
 
 void test_cpu_negative_yes(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->negative = true;
 
 	cpu_negative(actual, 0xF8);
@@ -101,8 +101,8 @@ void test_cpu_negative_yes(void) {
 }
 
 void test_cpu_carry_yes(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->carry = true;
 
 	cpu_carry(actual, 0x24);
@@ -114,8 +114,8 @@ void test_cpu_carry_yes(void) {
 }
 
 void test_cpu_carry_no(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->carry = false;
 
 	cpu_carry(actual, 0x82);
@@ -127,8 +127,8 @@ void test_cpu_carry_no(void) {
 }
 
 void test_cpu_zero_yes(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->zero = true;
 
 	cpu_zero(actual, 0x00);
@@ -140,8 +140,8 @@ void test_cpu_zero_yes(void) {
 }
 
 void test_cpu_zero_no(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->zero = false;
 
 	cpu_zero(actual, 0xA4);
@@ -153,8 +153,8 @@ void test_cpu_zero_no(void) {
 }
 
 void test_cpu_negative_no(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->negative = false;
 
 	cpu_negative(actual, 0x48);
@@ -166,9 +166,9 @@ void test_cpu_negative_no(void) {
 }
 
 void test_cpu_push(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x46;
 
 	cpu_push(actual, 0xF8);
@@ -181,10 +181,10 @@ void test_cpu_push(void) {
 }
 
 void test_cpu_pull(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
 	actual->memory[0x0148] = 0xF8;
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x48;
 
 	uint8_t result = cpu_pull(actual);
@@ -198,7 +198,7 @@ void test_cpu_pull(void) {
 
 void test_cpu_running_yes(void) {
 	uint8_t rom[] = { 0xA9, 0xC4, 0xEA };
-	cpu_t *cpu = cpu_new();
+	struct cpu *cpu = cpu_new();
 	cpu_load(cpu, rom, sizeof(rom));
 
 	bool result = cpu_running(cpu);
@@ -208,7 +208,7 @@ void test_cpu_running_yes(void) {
 
 void test_cpu_running_no(void) {
 	uint8_t rom[] = { 0xEA };
-	cpu_t *cpu = cpu_new();
+	struct cpu *cpu = cpu_new();
 	cpu_load(cpu, rom, sizeof(rom));
 	cpu_fetch(cpu);
 

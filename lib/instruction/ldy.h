@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void ldy(cpu_t *cpu);
+void ldy(struct cpu *cpu);
 
 #endif

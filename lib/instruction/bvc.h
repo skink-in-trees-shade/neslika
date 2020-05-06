@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void bvc(cpu_t *cpu);
+void bvc(struct cpu *cpu);
 
 #endif

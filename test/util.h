@@ -3,8 +3,8 @@
 
 #include "cpu.h"
 
-void cpu_compare(cpu_t *left, cpu_t *right);
-cpu_t *cpu_random(void);
-cpu_t *cpu_clone(cpu_t *cpu);
+void cpu_compare(struct cpu *left, struct cpu *right);
+struct cpu *cpu_random(void);
+struct cpu *cpu_clone(struct cpu *cpu);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void eor(cpu_t *cpu);
+void eor(struct cpu *cpu);
 
 #endif

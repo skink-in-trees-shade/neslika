@@ -4,11 +4,11 @@
 #include "pha.test.h"
 
 void test_pha(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->accumulator = 0xA3;
 	actual->stack_pointer = 0x47;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x46;
 
 	pha(actual);

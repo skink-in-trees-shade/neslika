@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void php(cpu_t *cpu);
+void php(struct cpu *cpu);
 
 #endif

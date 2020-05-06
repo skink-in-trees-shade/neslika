@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void abx(cpu_t *cpu);
+void abx(struct cpu *cpu);
 
 #endif

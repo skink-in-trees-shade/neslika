@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void dec(cpu_t *cpu);
+void dec(struct cpu *cpu);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void beq(cpu_t *cpu);
+void beq(struct cpu *cpu);
 
 #endif

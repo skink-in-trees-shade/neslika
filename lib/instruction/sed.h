@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void sed(cpu_t *cpu);
+void sed(struct cpu *cpu);
 
 #endif

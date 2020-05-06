@@ -4,11 +4,11 @@
 #include "cpx.test.h"
 
 void test_cpx_carry(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->x = 0x48;
 	actual->operand = 0x1A;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->carry = true;
 	expected->zero = false;
 	expected->negative = false;
@@ -22,11 +22,11 @@ void test_cpx_carry(void) {
 }
 
 void test_cpx_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->x = 0x48;
 	actual->operand = 0x48;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->carry = true;
 	expected->zero = true;
 	expected->negative = false;
@@ -40,11 +40,11 @@ void test_cpx_zero(void) {
 }
 
 void test_cpx_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->x = 0xEA;
 	actual->operand = 0xF8;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->carry = false;
 	expected->zero = false;
 	expected->negative = true;
