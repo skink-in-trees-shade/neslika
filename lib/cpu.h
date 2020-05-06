@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include "addressing_mode.h"
 
 typedef struct {
 	uint16_t program_counter;
@@ -24,6 +25,7 @@ typedef struct {
 	uint8_t instruction;
 	uint8_t operand;
 	uint16_t operand_address;
+	addressing_mode_t addressing_mode;
 
 	uint8_t *memory;
 } cpu_t;

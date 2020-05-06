@@ -2,15 +2,16 @@
 #include <assert.h>
 #include "util.h"
 #include "addressing/imp.h"
+#include "addressing_mode.h"
 #include "imp.test.h"
 
-void test_imp(void) {
+void test_imp_address_mode(void) {
 	cpu_t *cpu = cpu_random();
-	uint16_t expected = 0;
+	addressing_mode_t expected = addressing_implicit;
 
-	uint16_t actual = imp(cpu);
+	imp(cpu);
 
-	assert(expected == actual);
+	assert(cpu->addressing_mode == addressing_implicit);
 
 	cpu_destroy(cpu);
 }
