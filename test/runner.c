@@ -21,9 +21,21 @@ static void handle_sigsegv(int signum) {
 	longjmp(env, 1);
 }
 
+static const char *null_device(void) {
+	const char *candidates[] = { "/dev/null", "NUL" };
+	for (int i = 0; i < sizeof(candidates) / sizeof(*candidates); i++) {
+		FILE *f = fopen(candidates[i], "r");
+		if (f) {
+			fclose(f);
+			return candidates[i];
+		}
+	}
+	return NULL;
+}
+
 void runner_init(void) {
 	srand(time(NULL));
-	freopen("NUL", "a", stderr);
+	freopen(null_device(), "a", stderr);
 	setbuf(stderr, error);
 }
 
