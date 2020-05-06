@@ -23,7 +23,7 @@ static void handle_sigsegv(int signum) {
 
 static const char *null_device(void) {
 	const char *candidates[] = { "/dev/null", "NUL" };
-	for (int i = 0; i < sizeof(candidates) / sizeof(*candidates); i++) {
+	for (size_t i = 0; i < sizeof(candidates) / sizeof(*candidates); i++) {
 		FILE *f = fopen(candidates[i], "r");
 		if (f) {
 			fclose(f);

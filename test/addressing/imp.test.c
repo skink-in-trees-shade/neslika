@@ -11,7 +11,7 @@ void test_imp_address_mode(void) {
 
 	imp(cpu);
 
-	assert(cpu->addressing_mode == addressing_implicit);
+	assert(cpu->addressing_mode == expected);
 
 	cpu_destroy(cpu);
 }
