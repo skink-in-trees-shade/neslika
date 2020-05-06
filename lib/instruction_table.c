@@ -34,6 +34,7 @@
 #include "instruction/php.h"
 #include "instruction/pla.h"
 #include "instruction/plp.h"
+#include "instruction/rti.h"
 #include "instruction/rts.h"
 #include "instruction/sec.h"
 #include "instruction/sed.h"
@@ -55,7 +56,7 @@ instruction_t instruction_table[0x100] = {
 /* 0x10 */  bpl,  ora,  NULL, NULL, NULL, ora,  NULL, NULL, clc,  ora,  NULL, NULL, NULL, ora,  NULL, NULL,
 /* 0x20 */  jsr,  and,  NULL, NULL, bit,  and,  NULL, NULL, plp,  and,  NULL, NULL, bit,  and,  NULL, NULL,
 /* 0x30 */  bmi,  and,  NULL, NULL, NULL, and,  NULL, NULL, sec,  and,  NULL, NULL, NULL, and,  NULL, NULL,
-/* 0x40 */  NULL, eor,  NULL, NULL, NULL, eor,  NULL, NULL, pha,  eor,  NULL, NULL, jmp,  eor,  NULL, NULL,
+/* 0x40 */  rti,  eor,  NULL, NULL, NULL, eor,  NULL, NULL, pha,  eor,  NULL, NULL, jmp,  eor,  NULL, NULL,
 /* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  NULL, NULL, cli,  eor,  NULL, NULL, NULL, eor,  NULL, NULL,
 /* 0x60 */  rts,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, pla,  NULL, NULL, NULL, jmp,  NULL, NULL, NULL,
 /* 0x70 */  bvs,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, sei,  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
