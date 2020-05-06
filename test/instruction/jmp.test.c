@@ -3,10 +3,10 @@
 #include "jmp.test.h"
 
 void test_jmp(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->operand = 0x24;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->program_counter = 0x24;
 
 	jmp(actual);

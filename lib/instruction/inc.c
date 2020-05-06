@@ -1,6 +1,6 @@
 #include "inc.h"
 
-void inc(cpu_t *cpu) {
+void inc(struct cpu *cpu) {
 	uint8_t result = cpu->operand + 1;
 	cpu->memory[cpu->operand_address] = result;
 	cpu_zero(cpu, result);

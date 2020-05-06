@@ -6,7 +6,7 @@
 #include "zpy.test.h"
 
 void test_zpy_operand(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	cpu->memory[cpu->program_counter] = 0x24;
 	cpu->memory[0x24 + cpu->y] = 0xA2;
 	uint8_t expected = 0xA2;
@@ -19,7 +19,7 @@ void test_zpy_operand(void) {
 }
 
 void test_zpy_operand_address(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	cpu->memory[cpu->program_counter] = 0x24;
 	uint16_t expected = 0x24 + cpu->y;
 
@@ -31,8 +31,8 @@ void test_zpy_operand_address(void) {
 }
 
 void test_zpy_address_mode(void) {
-	cpu_t *cpu = cpu_random();
-	addressing_mode_t expected = addressing_zero_page_y;
+	struct cpu *cpu = cpu_random();
+	enum addressing_mode expected = addressing_zero_page_y;
 
 	zpy(cpu);
 
@@ -42,7 +42,7 @@ void test_zpy_address_mode(void) {
 }
 
 void test_zpy_program_counter(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	uint16_t expected = cpu->program_counter + 1;
 
 	zpy(cpu);

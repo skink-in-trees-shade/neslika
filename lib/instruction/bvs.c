@@ -1,6 +1,6 @@
 #include "bvs.h"
 
-void bvs(cpu_t *cpu) {
+void bvs(struct cpu *cpu) {
 	if (cpu->overflow) {
 		cpu->program_counter += cpu->operand;
 	}

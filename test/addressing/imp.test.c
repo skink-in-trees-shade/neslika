@@ -6,8 +6,8 @@
 #include "imp.test.h"
 
 void test_imp_address_mode(void) {
-	cpu_t *cpu = cpu_random();
-	addressing_mode_t expected = addressing_implicit;
+	struct cpu *cpu = cpu_random();
+	enum addressing_mode expected = addressing_implicit;
 
 	imp(cpu);
 

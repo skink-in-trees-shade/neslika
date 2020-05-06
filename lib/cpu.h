@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include "addressing_mode.h"
 
-typedef struct {
+struct cpu {
 	uint16_t program_counter;
 	uint8_t stack_pointer;
 	uint8_t accumulator;
@@ -25,22 +25,22 @@ typedef struct {
 	uint8_t instruction;
 	uint8_t operand;
 	uint16_t operand_address;
-	addressing_mode_t addressing_mode;
+	enum addressing_mode addressing_mode;
 
 	uint8_t *memory;
-} cpu_t;
+};
 
-cpu_t *cpu_new(void);
-void cpu_load(cpu_t *cpu, uint8_t *rom, size_t size);
-void cpu_carry(cpu_t *cpu, uint8_t value);
-void cpu_zero(cpu_t *cpu, uint8_t value);
-void cpu_negative(cpu_t *cpu, uint8_t value);
-void cpu_push(cpu_t *cpu, uint8_t value);
-uint8_t cpu_pull(cpu_t *cpu);
-bool cpu_running(cpu_t *cpu);
-void cpu_fetch(cpu_t *cpu);
-void cpu_decode(cpu_t *cpu);
-void cpu_execute(cpu_t *cpu);
-void cpu_destroy(cpu_t *cpu);
+struct cpu *cpu_new(void);
+void cpu_load(struct cpu *cpu, uint8_t *rom, size_t size);
+void cpu_carry(struct cpu *cpu, uint8_t value);
+void cpu_zero(struct cpu *cpu, uint8_t value);
+void cpu_negative(struct cpu *cpu, uint8_t value);
+void cpu_push(struct cpu *cpu, uint8_t value);
+uint8_t cpu_pull(struct cpu *cpu);
+bool cpu_running(struct cpu *cpu);
+void cpu_fetch(struct cpu *cpu);
+void cpu_decode(struct cpu *cpu);
+void cpu_execute(struct cpu *cpu);
+void cpu_destroy(struct cpu *cpu);
 
 #endif

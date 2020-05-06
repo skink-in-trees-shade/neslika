@@ -1,6 +1,6 @@
 #include "bne.h"
 
-void bne(cpu_t *cpu) {
+void bne(struct cpu *cpu) {
 	if (!cpu->zero) {
 		cpu->program_counter += cpu->operand;
 	}

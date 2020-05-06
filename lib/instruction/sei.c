@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include "sei.h"
 
-void sei(cpu_t *cpu) {
+void sei(struct cpu *cpu) {
 	cpu->interrupt_disable = true;
 }

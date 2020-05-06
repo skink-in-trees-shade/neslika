@@ -1,6 +1,6 @@
 #include "php.h"
 
-void php(cpu_t *cpu) {
+void php(struct cpu *cpu) {
 	uint8_t status = 0
 		| (cpu->carry << 0)
 		| (cpu->zero << 1)

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void nop(cpu_t *cpu);
+void nop(struct cpu *cpu);
 
 #endif

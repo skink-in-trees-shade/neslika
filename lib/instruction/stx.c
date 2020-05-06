@@ -1,5 +1,5 @@
 #include "stx.h"
 
-void stx(cpu_t *cpu) {
+void stx(struct cpu *cpu) {
 	cpu->memory[cpu->operand_address] = cpu->x;
 }

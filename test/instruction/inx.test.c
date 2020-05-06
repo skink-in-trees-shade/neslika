@@ -5,10 +5,10 @@
 #include "inx.test.h"
 
 void test_inx(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->x = 0x24;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->x + 1;
 	expected->zero = false;
 	expected->negative = false;
@@ -22,10 +22,10 @@ void test_inx(void) {
 }
 
 void test_inx_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->x = 0xFF;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->x + 1;
 	expected->zero = true;
 	expected->negative = false;
@@ -39,10 +39,10 @@ void test_inx_zero(void) {
 }
 
 void test_inx_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->x = 0xF8;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->x + 1;
 	expected->zero = false;
 	expected->negative = true;

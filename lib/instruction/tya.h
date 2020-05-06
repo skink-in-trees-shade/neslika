@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void tya(cpu_t *cpu);
+void tya(struct cpu *cpu);
 
 #endif

@@ -1,6 +1,6 @@
 #include "plp.h"
 
-void plp(cpu_t *cpu) {
+void plp(struct cpu *cpu) {
 	uint8_t status = cpu_pull(cpu);
 	cpu->carry = status & 0x01;
 	cpu->zero = status & 0x02;

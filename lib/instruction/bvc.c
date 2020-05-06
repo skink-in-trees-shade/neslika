@@ -1,6 +1,6 @@
 #include "bvc.h"
 
-void bvc(cpu_t *cpu) {
+void bvc(struct cpu *cpu) {
 	if (!cpu->overflow) {
 		cpu->program_counter += cpu->operand;
 	}

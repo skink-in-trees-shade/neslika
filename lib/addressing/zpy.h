@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void zpy(cpu_t *cpu);
+void zpy(struct cpu *cpu);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void bne(cpu_t *cpu);
+void bne(struct cpu *cpu);
 
 #endif

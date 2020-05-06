@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void ora(cpu_t *cpu);
+void ora(struct cpu *cpu);
 
 #endif

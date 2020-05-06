@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void sei(cpu_t *cpu);
+void sei(struct cpu *cpu);
 
 #endif

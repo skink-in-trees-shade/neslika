@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void txa(cpu_t *cpu);
+void txa(struct cpu *cpu);
 
 #endif

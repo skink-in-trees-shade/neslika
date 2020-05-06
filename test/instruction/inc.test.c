@@ -5,12 +5,12 @@
 #include "inc.test.h"
 
 void test_inc(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->operand_address = 0xE7;
 	actual->operand = 0x48;
 	actual->memory[actual->operand_address] = actual->operand;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->zero = false;
 	expected->negative = false;
 
@@ -24,12 +24,12 @@ void test_inc(void) {
 }
 
 void test_inc_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->operand_address = 0xE7;
 	actual->operand = 0xFF;
 	actual->memory[actual->operand_address] = actual->operand;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->zero = true;
 	expected->negative = false;
 
@@ -43,12 +43,12 @@ void test_inc_zero(void) {
 }
 
 void test_inc_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->operand_address = 0xE7;
 	actual->operand = 0xF8;
 	actual->memory[actual->operand_address] = actual->operand;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->zero = false;
 	expected->negative = true;
 

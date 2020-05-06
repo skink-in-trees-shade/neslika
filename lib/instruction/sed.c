@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include "sed.h"
 
-void sed(cpu_t *cpu) {
+void sed(struct cpu *cpu) {
 	cpu->decimal_mode = true;
 }

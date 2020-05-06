@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void dex(cpu_t *cpu);
+void dex(struct cpu *cpu);
 
 #endif

@@ -4,12 +4,12 @@
 #include "rti.test.h"
 
 void test_rti(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	cpu_push(actual, 0x25);
 	cpu_push(actual, 0x4A);
 	cpu_push(actual, 0x75);
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->carry = true;
 	expected->zero = false;
 	expected->interrupt_disable = true;

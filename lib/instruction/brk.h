@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void brk(cpu_t *cpu);
+void brk(struct cpu *cpu);
 
 #endif

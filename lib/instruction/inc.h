@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void inc(cpu_t *cpu);
+void inc(struct cpu *cpu);
 
 #endif

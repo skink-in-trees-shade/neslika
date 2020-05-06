@@ -4,8 +4,8 @@
 #include "sed.test.h"
 
 void test_sed(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->decimal_mode = true;
 
 	sed(actual);

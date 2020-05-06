@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void pha(cpu_t *cpu);
+void pha(struct cpu *cpu);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void tay(cpu_t *cpu);
+void tay(struct cpu *cpu);
 
 #endif

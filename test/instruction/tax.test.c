@@ -4,10 +4,10 @@
 #include "tax.test.h"
 
 void test_tax(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->accumulator = 0x48;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->accumulator;
 	expected->zero = false;
 	expected->negative = false;
@@ -21,10 +21,10 @@ void test_tax(void) {
 }
 
 void test_tax_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->accumulator = 0x00;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->accumulator;
 	expected->zero = true;
 	expected->negative = false;
@@ -38,10 +38,10 @@ void test_tax_zero(void) {
 }
 
 void test_tax_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->accumulator = 0xF8;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->accumulator;
 	expected->zero = false;
 	expected->negative = true;

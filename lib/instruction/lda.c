@@ -1,6 +1,6 @@
 #include "lda.h"
 
-void lda(cpu_t *cpu) {
+void lda(struct cpu *cpu) {
 	cpu->accumulator = cpu->operand;
 	cpu_zero(cpu, cpu->accumulator);
 	cpu_negative(cpu, cpu->accumulator);

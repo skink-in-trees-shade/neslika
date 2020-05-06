@@ -1,6 +1,6 @@
 #include "bmi.h"
 
-void bmi(cpu_t *cpu) {
+void bmi(struct cpu *cpu) {
 	if (cpu->negative) {
 		cpu->program_counter += cpu->operand;
 	}

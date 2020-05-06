@@ -4,12 +4,12 @@
 #include "beq.test.h"
 
 void test_beq_zero_yes(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->program_counter = 0x54;
 	actual->operand = 0x24;
 	actual->zero = true;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->program_counter = 0x78;
 
 	beq(actual);
@@ -21,12 +21,12 @@ void test_beq_zero_yes(void) {
 }
 
 void test_beq_zero_no(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->program_counter = 0x54;
 	actual->operand = 0x24;
 	actual->zero = false;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 
 	beq(actual);
 

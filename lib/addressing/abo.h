@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void abo(cpu_t *cpu);
+void abo(struct cpu *cpu);
 
 #endif

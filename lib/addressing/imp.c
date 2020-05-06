@@ -1,5 +1,5 @@
 #include "imp.h"
 
-void imp(cpu_t *cpu) {
+void imp(struct cpu *cpu) {
 	cpu->addressing_mode = addressing_implicit;
 }

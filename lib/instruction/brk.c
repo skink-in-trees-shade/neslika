@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include "brk.h"
 
-void brk(cpu_t *cpu) {
+void brk(struct cpu *cpu) {
 	uint8_t old_high = (cpu->program_counter >> 8) & 0xFF;
 	uint8_t old_low = cpu->program_counter & 0xFF;
 	uint8_t status = 0

@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include "clv.h"
 
-void clv(cpu_t *cpu) {
+void clv(struct cpu *cpu) {
 	cpu->overflow = false;
 }

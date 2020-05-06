@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void dey(cpu_t *cpu);
+void dey(struct cpu *cpu);
 
 #endif

@@ -5,7 +5,7 @@
 #include "php.test.h"
 
 void test_php_carry(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
 	actual->carry = true;
 	actual->zero = false;
@@ -14,7 +14,7 @@ void test_php_carry(void) {
 	actual->overflow = false;
 	actual->negative = false;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x46;
 
 	php(actual);
@@ -27,7 +27,7 @@ void test_php_carry(void) {
 }
 
 void test_php_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
 	actual->carry = false;
 	actual->zero = true;
@@ -36,7 +36,7 @@ void test_php_zero(void) {
 	actual->overflow = false;
 	actual->negative = false;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x46;
 
 	php(actual);
@@ -49,7 +49,7 @@ void test_php_zero(void) {
 }
 
 void test_php_interrupt_disable(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
 	actual->carry = false;
 	actual->zero = false;
@@ -58,7 +58,7 @@ void test_php_interrupt_disable(void) {
 	actual->overflow = false;
 	actual->negative = false;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x46;
 
 	php(actual);
@@ -71,7 +71,7 @@ void test_php_interrupt_disable(void) {
 }
 
 void test_php_decimal_mode(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
 	actual->carry = false;
 	actual->zero = false;
@@ -80,7 +80,7 @@ void test_php_decimal_mode(void) {
 	actual->overflow = false;
 	actual->negative = false;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x46;
 
 	php(actual);
@@ -93,7 +93,7 @@ void test_php_decimal_mode(void) {
 }
 
 void test_php_overflow(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
 	actual->carry = false;
 	actual->zero = false;
@@ -102,7 +102,7 @@ void test_php_overflow(void) {
 	actual->overflow = true;
 	actual->negative = false;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x46;
 
 	php(actual);
@@ -115,7 +115,7 @@ void test_php_overflow(void) {
 }
 
 void test_php_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
 	actual->carry = false;
 	actual->zero = false;
@@ -124,7 +124,7 @@ void test_php_negative(void) {
 	actual->overflow = false;
 	actual->negative = true;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x46;
 
 	php(actual);

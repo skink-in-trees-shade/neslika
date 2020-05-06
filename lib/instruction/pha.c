@@ -1,5 +1,5 @@
 #include "pha.h"
 
-void pha(cpu_t *cpu) {
+void pha(struct cpu *cpu) {
 	cpu_push(cpu, cpu->accumulator);
 }

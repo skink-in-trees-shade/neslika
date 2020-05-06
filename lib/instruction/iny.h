@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void iny(cpu_t *cpu);
+void iny(struct cpu *cpu);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void aby(cpu_t *cpu);
+void aby(struct cpu *cpu);
 
 #endif
