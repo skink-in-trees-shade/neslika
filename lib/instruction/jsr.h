@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void jsr(cpu_t *cpu);
+void jsr(struct cpu *cpu);
 
 #endif

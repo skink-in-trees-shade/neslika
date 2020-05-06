@@ -6,7 +6,7 @@
 #include "iiy.test.h"
 
 void test_iiy_operand(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	cpu->memory[cpu->program_counter] = 0x84;
 	cpu->memory[0x84] = 0x24;
 	cpu->memory[0x85] = 0xF1;
@@ -21,7 +21,7 @@ void test_iiy_operand(void) {
 }
 
 void test_iiy_operand_address(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	cpu->memory[cpu->program_counter] = 0x84;
 	cpu->memory[0x84] = 0x24;
 	cpu->memory[0x85] = 0xF1;
@@ -35,8 +35,8 @@ void test_iiy_operand_address(void) {
 }
 
 void test_iiy_address_mode(void) {
-	cpu_t *cpu = cpu_random();
-	addressing_mode_t expected = addressing_indirect_indexed;
+	struct cpu *cpu = cpu_random();
+	enum addressing_mode expected = addressing_indirect_indexed;
 
 	iiy(cpu);
 
@@ -46,7 +46,7 @@ void test_iiy_address_mode(void) {
 }
 
 void test_iiy_program_counter(void) {
-	cpu_t *cpu = cpu_random();
+	struct cpu *cpu = cpu_random();
 	uint16_t expected = cpu->program_counter + 1;
 
 	iiy(cpu);

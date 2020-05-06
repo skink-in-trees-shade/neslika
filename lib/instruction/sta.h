@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void sta(cpu_t *cpu);
+void sta(struct cpu *cpu);
 
 #endif

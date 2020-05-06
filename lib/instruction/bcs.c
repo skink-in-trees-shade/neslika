@@ -1,6 +1,6 @@
 #include "bcs.h"
 
-void bcs(cpu_t *cpu) {
+void bcs(struct cpu *cpu) {
 	if (cpu->carry) {
 		cpu->program_counter += cpu->operand;
 	}

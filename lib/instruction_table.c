@@ -50,7 +50,7 @@
 #include "instruction/tya.h"
 #include "instruction_table.h"
 
-instruction_t instruction_table[0x100] = {
+instruction_fn instruction_table[0x100] = {
 /*          0x00  0x01  0x02  0x03  0x04  0x05  0x06  0x07  0x08  0x09  0x0A  0x0B  0x0C  0x0D  0x0E  0x0F */
 /* 0x00 */  brk,  ora,  NULL, NULL, NULL, ora,  NULL, NULL, php,  ora,  NULL, NULL, NULL, ora,  NULL, NULL,
 /* 0x10 */  bpl,  ora,  NULL, NULL, NULL, ora,  NULL, NULL, clc,  ora,  NULL, NULL, NULL, ora,  NULL, NULL,

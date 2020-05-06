@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void bmi(cpu_t *cpu);
+void bmi(struct cpu *cpu);
 
 #endif

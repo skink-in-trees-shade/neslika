@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void imm(cpu_t *cpu);
+void imm(struct cpu *cpu);
 
 #endif

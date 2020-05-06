@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void tsx(cpu_t *cpu);
+void tsx(struct cpu *cpu);
 
 #endif

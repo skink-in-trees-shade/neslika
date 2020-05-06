@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void ldx(cpu_t *cpu);
+void ldx(struct cpu *cpu);
 
 #endif

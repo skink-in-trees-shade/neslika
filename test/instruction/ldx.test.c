@@ -4,10 +4,10 @@
 #include "ldx.test.h"
 
 void test_ldx(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->operand = 0x48;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->operand;
 	expected->zero = false;
 	expected->negative = false;
@@ -21,10 +21,10 @@ void test_ldx(void) {
 }
 
 void test_ldx_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->operand = 0x00;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->operand;
 	expected->zero = true;
 	expected->negative = false;
@@ -38,10 +38,10 @@ void test_ldx_zero(void) {
 }
 
 void test_ldx_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->operand = 0xF8;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->x = actual->operand;
 	expected->zero = false;
 	expected->negative = true;

@@ -4,10 +4,10 @@
 #include "tay.test.h"
 
 void test_tay(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->accumulator = 0x48;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->y = actual->accumulator;
 	expected->zero = false;
 	expected->negative = false;
@@ -21,10 +21,10 @@ void test_tay(void) {
 }
 
 void test_tay_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->accumulator = 0x00;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->y = actual->accumulator;
 	expected->zero = true;
 	expected->negative = false;
@@ -38,10 +38,10 @@ void test_tay_zero(void) {
 }
 
 void test_tay_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->accumulator = 0xF8;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->y = actual->accumulator;
 	expected->zero = false;
 	expected->negative = true;

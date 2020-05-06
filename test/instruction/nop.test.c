@@ -3,8 +3,8 @@
 #include "nop.test.h"
 
 void test_nop(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 
 	nop(actual);
 

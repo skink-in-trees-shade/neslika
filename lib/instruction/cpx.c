@@ -1,6 +1,6 @@
 #include "cpx.h"
 
-void cpx(cpu_t *cpu) {
+void cpx(struct cpu *cpu) {
 	uint8_t result = cpu->x - cpu->operand;
 	cpu_carry(cpu, result);
 	cpu_zero(cpu, result);

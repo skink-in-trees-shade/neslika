@@ -5,10 +5,10 @@
 #include "dey.test.h"
 
 void test_dey(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->y = 0x24;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->y = actual->y - 1;
 	expected->zero = false;
 	expected->negative = false;
@@ -22,10 +22,10 @@ void test_dey(void) {
 }
 
 void test_dey_zero(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->y = 0x01;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->y = actual->y - 1;
 	expected->zero = true;
 	expected->negative = false;
@@ -39,10 +39,10 @@ void test_dey_zero(void) {
 }
 
 void test_dey_negative(void) {
-	cpu_t *actual = cpu_random();
+	struct cpu *actual = cpu_random();
 	actual->y = 0xF8;
 
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *expected = cpu_clone(actual);
 	expected->y = actual->y - 1;
 	expected->zero = false;
 	expected->negative = true;

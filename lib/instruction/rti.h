@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void rti(cpu_t *cpu);
+void rti(struct cpu *cpu);
 
 #endif

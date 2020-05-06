@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void sty(cpu_t *cpu);
+void sty(struct cpu *cpu);
 
 #endif

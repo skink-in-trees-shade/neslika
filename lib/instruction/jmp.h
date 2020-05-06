@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void jmp(cpu_t *cpu);
+void jmp(struct cpu *cpu);
 
 #endif

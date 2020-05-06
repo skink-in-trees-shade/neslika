@@ -1,5 +1,5 @@
 #include "jmp.h"
 
-void jmp(cpu_t *cpu) {
+void jmp(struct cpu *cpu) {
 	cpu->program_counter = cpu->operand;
 }

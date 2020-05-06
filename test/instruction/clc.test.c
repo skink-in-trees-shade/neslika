@@ -4,8 +4,8 @@
 #include "clc.test.h"
 
 void test_clc(void) {
-	cpu_t *actual = cpu_random();
-	cpu_t *expected = cpu_clone(actual);
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
 	expected->carry = false;
 
 	clc(actual);

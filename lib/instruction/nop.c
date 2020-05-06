@@ -1,5 +1,5 @@
 #include "nop.h"
 
-void nop(cpu_t *cpu) {
+void nop(struct cpu *cpu) {
 	cpu = cpu;
 }

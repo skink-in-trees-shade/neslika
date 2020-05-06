@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void pla(cpu_t *cpu);
+void pla(struct cpu *cpu);
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef ADDRESSING_MODE_H
 #define ADDRESSING_MODE_H
 
-typedef enum {
+enum addressing_mode {
 	addressing_implicit,
 	addressing_accumulator,
 	addressing_immediate,
@@ -15,6 +15,6 @@ typedef enum {
 	addressing_indirect,
 	addressing_indexed_indirect,
 	addressing_indirect_indexed
-} addressing_mode_t;
+};
 
 #endif

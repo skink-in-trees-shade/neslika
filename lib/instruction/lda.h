@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void lda(cpu_t *cpu);
+void lda(struct cpu *cpu);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void cli(cpu_t *cpu);
+void cli(struct cpu *cpu);
 
 #endif

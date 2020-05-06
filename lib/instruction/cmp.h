@@ -3,6 +3,6 @@
 
 #include "cpu.h"
 
-void cmp(cpu_t *cpu);
+void cmp(struct cpu *cpu);
 
 #endif

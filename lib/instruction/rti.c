@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include "rti.h"
 
-void rti(cpu_t *cpu) {
+void rti(struct cpu *cpu) {
 	uint8_t status = cpu_pull(cpu);
 	uint8_t low = cpu_pull(cpu);
 	uint8_t high = cpu_pull(cpu);
