@@ -16,8 +16,8 @@ void test_jsr(void) {
 	jsr(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0x8A);
-	assert(actual->memory[0x0146] == 0x20);
+	assert(cpu_peek(actual, 0x0147) == 0x8A);
+	assert(cpu_peek(actual, 0x0146) == 0x20);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);

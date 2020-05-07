@@ -7,8 +7,8 @@
 
 void test_zpx_operand(void) {
 	struct cpu *cpu = cpu_random();
-	cpu->memory[cpu->program_counter] = 0x24;
-	cpu->memory[0x24 + cpu->x] = 0xA2;
+	cpu_poke(cpu, cpu->program_counter, 0x24);
+	cpu_poke(cpu, 0x24 + cpu->x, 0xA2);
 	uint8_t expected = 0xA2;
 
 	zpx(cpu);
@@ -20,7 +20,7 @@ void test_zpx_operand(void) {
 
 void test_zpx_operand_address(void) {
 	struct cpu *cpu = cpu_random();
-	cpu->memory[cpu->program_counter] = 0x24;
+	cpu_poke(cpu, cpu->program_counter, 0x24);
 	uint16_t expected = 0x24 + cpu->x;
 
 	zpx(cpu);

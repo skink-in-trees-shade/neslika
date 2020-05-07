@@ -13,7 +13,7 @@ void test_stx(void) {
 	stx(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[actual->operand_address] == actual->x);
+	assert(cpu_peek(actual, actual->operand_address) == actual->x);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
