@@ -36,6 +36,7 @@
 #include "instruction/php.h"
 #include "instruction/pla.h"
 #include "instruction/plp.h"
+#include "instruction/rol.h"
 #include "instruction/rti.h"
 #include "instruction/rts.h"
 #include "instruction/sec.h"
@@ -56,8 +57,8 @@ instruction_fn instruction_table[0x100] = {
 /*          0x00  0x01  0x02  0x03  0x04  0x05  0x06  0x07  0x08  0x09  0x0A  0x0B  0x0C  0x0D  0x0E  0x0F */
 /* 0x00 */  brk,  ora,  NULL, NULL, NULL, ora,  asl,  NULL, php,  ora,  asl,  NULL, NULL, ora,  asl,  NULL,
 /* 0x10 */  bpl,  ora,  NULL, NULL, NULL, ora,  asl,  NULL, clc,  ora,  NULL, NULL, NULL, ora,  asl,  NULL,
-/* 0x20 */  jsr,  and,  NULL, NULL, bit,  and,  NULL, NULL, plp,  and,  NULL, NULL, bit,  and,  NULL, NULL,
-/* 0x30 */  bmi,  and,  NULL, NULL, NULL, and,  NULL, NULL, sec,  and,  NULL, NULL, NULL, and,  NULL, NULL,
+/* 0x20 */  jsr,  and,  NULL, NULL, bit,  and,  rol,  NULL, plp,  and,  rol,  NULL, bit,  and,  rol,  NULL,
+/* 0x30 */  bmi,  and,  NULL, NULL, NULL, and,  rol,  NULL, sec,  and,  NULL, NULL, NULL, and,  rol,  NULL,
 /* 0x40 */  rti,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL, pha,  eor,  lsr,  NULL, jmp,  eor,  lsr,  NULL,
 /* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL, cli,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL,
 /* 0x60 */  rts,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, pla,  NULL, NULL, NULL, jmp,  NULL, NULL, NULL,
