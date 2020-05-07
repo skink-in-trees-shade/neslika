@@ -17,8 +17,8 @@ void brk(struct cpu *cpu) {
 	cpu_push(cpu, old_low);
 	cpu_push(cpu, status);
 
-	uint8_t new_high = cpu->memory[0xFFFE];
-	uint8_t new_low = cpu->memory[0xFFFF];
+	uint8_t new_high = cpu_peek(cpu, 0xFFFE);
+	uint8_t new_low = cpu_peek(cpu, 0xFFFF);
 	cpu->program_counter = (new_high << 8) + new_low;
 
 	cpu->break_command = true;

@@ -25,12 +25,24 @@ void cpu_negative(struct cpu *cpu, uint8_t value) {
 	cpu->negative = value & 0x80;
 }
 
+uint8_t cpu_read(struct cpu *cpu) {
+	return cpu_peek(cpu, cpu->program_counter++);
+}
+
+uint8_t cpu_peek(struct cpu *cpu, uint16_t address) {
+	return cpu->memory[address];
+}
+
+void cpu_poke(struct cpu *cpu, uint16_t address, uint8_t value) {
+	cpu->memory[address] = value;
+}
+
 void cpu_push(struct cpu *cpu, uint8_t value) {
-	cpu->memory[0x0100 + cpu->stack_pointer--] = value;
+	cpu_poke(cpu, 0x0100 + cpu->stack_pointer--, value);
 }
 
 uint8_t cpu_pull(struct cpu *cpu) {
-	return cpu->memory[0x0100 + ++cpu->stack_pointer];
+	return cpu_peek(cpu, 0x0100 + ++cpu->stack_pointer);
 }
 
 bool cpu_running(struct cpu *cpu) {
@@ -38,7 +50,7 @@ bool cpu_running(struct cpu *cpu) {
 }
 
 void cpu_fetch(struct cpu *cpu) {
-	cpu->instruction = cpu->memory[cpu->program_counter++];
+	cpu->instruction = cpu_read(cpu);
 }
 
 void cpu_decode(struct cpu *cpu) {

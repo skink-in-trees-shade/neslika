@@ -8,7 +8,7 @@ void test_dec(void) {
 	struct cpu *actual = cpu_random();
 	actual->operand_address = 0xE7;
 	actual->operand = 0x48;
-	actual->memory[actual->operand_address] = actual->operand;
+	cpu_poke(actual, actual->operand_address, actual->operand);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->zero = false;
@@ -17,7 +17,7 @@ void test_dec(void) {
 	dec(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[actual->operand_address] == actual->operand - 1);
+	assert(cpu_peek(actual, actual->operand_address) == actual->operand - 1);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -27,7 +27,7 @@ void test_dec_zero(void) {
 	struct cpu *actual = cpu_random();
 	actual->operand_address = 0xE7;
 	actual->operand = 0x01;
-	actual->memory[actual->operand_address] = actual->operand;
+	cpu_poke(actual, actual->operand_address, actual->operand);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->zero = true;
@@ -36,7 +36,7 @@ void test_dec_zero(void) {
 	dec(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[actual->operand_address] == 0x00);
+	assert(cpu_peek(actual, actual->operand_address) == 0x00);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -46,7 +46,7 @@ void test_dec_negative(void) {
 	struct cpu *actual = cpu_random();
 	actual->operand_address = 0xE7;
 	actual->operand = 0xF8;
-	actual->memory[actual->operand_address] = actual->operand;
+	cpu_poke(actual, actual->operand_address, actual->operand);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->zero = false;
@@ -55,7 +55,7 @@ void test_dec_negative(void) {
 	dec(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[actual->operand_address] == actual->operand - 1);
+	assert(cpu_peek(actual, actual->operand_address) == actual->operand - 1);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);

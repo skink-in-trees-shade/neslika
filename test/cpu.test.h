@@ -16,6 +16,11 @@ void test_cpu_zero_no(void);
 void test_cpu_negative_yes(void);
 void test_cpu_negative_no(void);
 
+void test_cpu_read(void);
+void test_cpu_read_program_counter(void);
+void test_cpu_peek(void);
+void test_cpu_poke(void);
+
 void test_cpu_push(void);
 void test_cpu_pull(void);
 

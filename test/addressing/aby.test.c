@@ -7,9 +7,9 @@
 
 void test_aby_operand(void) {
 	struct cpu *cpu = cpu_random();
-	cpu->memory[cpu->program_counter] = 0x24;
-	cpu->memory[cpu->program_counter + 1] = 0xF1;
-	cpu->memory[0x24F1 + cpu->y] = 0xA2;
+	cpu_poke(cpu, cpu->program_counter, 0x24);
+	cpu_poke(cpu, cpu->program_counter + 1, 0xF1);
+	cpu_poke(cpu, 0x24F1 + cpu->y, 0xA2);
 	uint8_t expected = 0xA2;
 
 	aby(cpu);
@@ -21,8 +21,8 @@ void test_aby_operand(void) {
 
 void test_aby_operand_address(void) {
 	struct cpu *cpu = cpu_random();
-	cpu->memory[cpu->program_counter] = 0x24;
-	cpu->memory[cpu->program_counter + 1] = 0xF1;
+	cpu_poke(cpu, cpu->program_counter, 0x24);
+	cpu_poke(cpu, cpu->program_counter + 1, 0xF1);
 	uint16_t expected = 0x24F1 + cpu->y;
 
 	aby(cpu);

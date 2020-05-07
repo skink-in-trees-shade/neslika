@@ -7,10 +7,10 @@
 
 void test_iiy_operand(void) {
 	struct cpu *cpu = cpu_random();
-	cpu->memory[cpu->program_counter] = 0x84;
-	cpu->memory[0x84] = 0x24;
-	cpu->memory[0x85] = 0xF1;
-	cpu->memory[0x24F1 + cpu->y] = 0xA2;
+	cpu_poke(cpu, cpu->program_counter, 0x84);
+	cpu_poke(cpu, 0x84, 0x24);
+	cpu_poke(cpu, 0x85, 0xF1);
+	cpu_poke(cpu, 0x24F1 + cpu->y, 0xA2);
 	uint8_t expected = 0xA2;
 
 	iiy(cpu);
@@ -22,9 +22,9 @@ void test_iiy_operand(void) {
 
 void test_iiy_operand_address(void) {
 	struct cpu *cpu = cpu_random();
-	cpu->memory[cpu->program_counter] = 0x84;
-	cpu->memory[0x84] = 0x24;
-	cpu->memory[0x85] = 0xF1;
+	cpu_poke(cpu, cpu->program_counter, 0x84);
+	cpu_poke(cpu, 0x84, 0x24);
+	cpu_poke(cpu, 0x85, 0xF1);
 	uint16_t expected = 0x24F1 + cpu->y;
 
 	iiy(cpu);

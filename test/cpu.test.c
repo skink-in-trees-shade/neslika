@@ -24,9 +24,9 @@ void test_cpu_load(void) {
 	cpu_load(actual, rom, sizeof(rom));
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x8000] == rom[0]);
-	assert(actual->memory[0x8001] == rom[1]);
-	assert(actual->memory[0x8002] == rom[2]);
+	assert(cpu_peek(actual, 0x8000) == rom[0]);
+	assert(cpu_peek(actual, 0x8001) == rom[1]);
+	assert(cpu_peek(actual, 0x8002) == rom[2]);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -53,11 +53,11 @@ void test_cpu_decode(void) {
 	uint8_t rom[] = { 0xA4, 0x24 };
 	struct cpu *actual = cpu_new();
 	cpu_load(actual, rom, sizeof(rom));
-	actual->memory[rom[1]] = 0x1E;
+	cpu_poke(actual, rom[1], 0x1E);
 	cpu_fetch(actual);
 
 	struct cpu *expected = cpu_clone(actual);
-	expected->operand = actual->memory[rom[1]];
+	expected->operand = cpu_peek(actual, rom[1]);
 	expected->operand_address = rom[1];
 	expected->program_counter = actual->program_counter + 1;
 
@@ -139,6 +139,54 @@ void test_cpu_negative_no(void) {
 	cpu_destroy(actual);
 }
 
+void test_cpu_read(void) {
+	struct cpu *cpu = cpu_random();
+	cpu_poke(cpu, cpu->program_counter, 0x1A);
+	uint8_t expected = 0x1A;
+
+	uint8_t result = cpu_read(cpu);
+
+	assert(result == expected);
+
+	cpu_destroy(cpu);
+}
+
+void test_cpu_read_program_counter(void) {
+	struct cpu *actual = cpu_random();
+	struct cpu *expected = cpu_clone(actual);
+	expected->program_counter = actual->program_counter + 1;
+
+	cpu_read(actual);
+
+	cpu_compare(expected, actual);
+
+	cpu_destroy(expected);
+	cpu_destroy(actual);
+}
+
+void test_cpu_peek(void) {
+	struct cpu *cpu = cpu_random();
+	cpu_poke(cpu, 0x0B25, 0x1A);
+	uint8_t expected = 0x1A;
+
+	uint8_t result = cpu_peek(cpu, 0x0B25);
+
+	assert(result == expected);
+
+	cpu_destroy(cpu);
+}
+
+void test_cpu_poke(void) {
+	struct cpu *cpu = cpu_random();
+	uint8_t expected = 0x1A;
+
+	cpu_poke(cpu, 0x0B25, 0x1A);
+
+	assert(cpu_peek(cpu, 0xB25) == expected);
+
+	cpu_destroy(cpu);
+}
+
 void test_cpu_push(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
@@ -148,7 +196,7 @@ void test_cpu_push(void) {
 	cpu_push(actual, 0xF8);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0xF8);
+	assert(cpu_peek(actual, 0x0147) == 0xF8);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -157,7 +205,7 @@ void test_cpu_push(void) {
 void test_cpu_pull(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
-	actual->memory[0x0148] = 0xF8;
+	cpu_poke(actual, 0x0148, 0xF8);
 	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x48;
 
