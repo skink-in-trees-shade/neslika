@@ -10,6 +10,7 @@
 #include "addressing/zpx.test.h"
 #include "addressing/zpy.test.h"
 #include "instruction/and.test.h"
+#include "instruction/asl.test.h"
 #include "instruction/bcc.test.h"
 #include "instruction/bcs.test.h"
 #include "instruction/beq.test.h"
@@ -132,6 +133,12 @@ int main(void) {
 	runner_test(test_and);
 	runner_test(test_and_zero);
 	runner_test(test_and_negative);
+
+	runner_test(test_asl_memory);
+	runner_test(test_asl_accumulator);
+	runner_test(test_asl_carry);
+	runner_test(test_asl_zero);
+	runner_test(test_asl_negative);
 
 	runner_test(test_bcc_carry_yes);
 	runner_test(test_bcc_carry_no);
