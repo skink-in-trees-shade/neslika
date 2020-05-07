@@ -69,8 +69,6 @@ int main(void) {
 	runner_test(test_cpu_fetch);
 	runner_test(test_cpu_decode);
 	runner_test(test_cpu_execute);
-	runner_test(test_cpu_carry_yes);
-	runner_test(test_cpu_carry_no);
 	runner_test(test_cpu_zero_yes);
 	runner_test(test_cpu_zero_no);
 	runner_test(test_cpu_negative_yes);
