@@ -40,6 +40,7 @@
 #include "instruction/lda.test.h"
 #include "instruction/ldx.test.h"
 #include "instruction/ldy.test.h"
+#include "instruction/lsr.test.h"
 #include "instruction/nop.test.h"
 #include "instruction/ora.test.h"
 #include "instruction/pha.test.h"
@@ -235,6 +236,11 @@ int main(void) {
 	runner_test(test_ldy);
 	runner_test(test_ldy_zero);
 	runner_test(test_ldy_negative);
+
+	runner_test(test_lsr_memory);
+	runner_test(test_lsr_accumulator);
+	runner_test(test_lsr_carry);
+	runner_test(test_lsr_zero);
 
 	runner_test(test_nop);
 
