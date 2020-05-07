@@ -10,9 +10,6 @@ void test_cpu_fetch(void);
 void test_cpu_decode(void);
 void test_cpu_execute(void);
 
-void test_cpu_carry_yes(void);
-void test_cpu_carry_no(void);
-
 void test_cpu_zero_yes(void);
 void test_cpu_zero_no(void);
 
