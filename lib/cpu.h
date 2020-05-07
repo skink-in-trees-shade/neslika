@@ -32,7 +32,6 @@ struct cpu {
 
 struct cpu *cpu_new(void);
 void cpu_load(struct cpu *cpu, uint8_t *rom, size_t size);
-void cpu_carry(struct cpu *cpu, uint8_t value);
 void cpu_zero(struct cpu *cpu, uint8_t value);
 void cpu_negative(struct cpu *cpu, uint8_t value);
 void cpu_push(struct cpu *cpu, uint8_t value);

@@ -100,32 +100,6 @@ void test_cpu_negative_yes(void) {
 	cpu_destroy(actual);
 }
 
-void test_cpu_carry_yes(void) {
-	struct cpu *actual = cpu_random();
-	struct cpu *expected = cpu_clone(actual);
-	expected->carry = true;
-
-	cpu_carry(actual, 0x24);
-
-	cpu_compare(expected, actual);
-
-	cpu_destroy(expected);
-	cpu_destroy(actual);
-}
-
-void test_cpu_carry_no(void) {
-	struct cpu *actual = cpu_random();
-	struct cpu *expected = cpu_clone(actual);
-	expected->carry = false;
-
-	cpu_carry(actual, 0x82);
-
-	cpu_compare(expected, actual);
-
-	cpu_destroy(expected);
-	cpu_destroy(actual);
-}
-
 void test_cpu_zero_yes(void) {
 	struct cpu *actual = cpu_random();
 	struct cpu *expected = cpu_clone(actual);

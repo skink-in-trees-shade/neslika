@@ -17,10 +17,6 @@ void cpu_load(struct cpu *cpu, uint8_t *rom, size_t size) {
 	memcpy(&cpu->memory[cpu->program_counter], rom, size);
 }
 
-void cpu_carry(struct cpu *cpu, uint8_t value) {
-	cpu->carry = (int8_t)value >= 0x00;
-}
-
 void cpu_zero(struct cpu *cpu, uint8_t value) {
 	cpu->zero = value == 0x00;
 }
