@@ -47,6 +47,7 @@
 #include "instruction/php.test.h"
 #include "instruction/pla.test.h"
 #include "instruction/plp.test.h"
+#include "instruction/rol.test.h"
 #include "instruction/rti.test.h"
 #include "instruction/rts.test.h"
 #include "instruction/sec.test.h"
@@ -267,6 +268,12 @@ int main(void) {
 	runner_test(test_plp_decimal_mode);
 	runner_test(test_plp_overflow);
 	runner_test(test_plp_negative);
+
+	runner_test(test_rol_memory);
+	runner_test(test_rol_accumulator);
+	runner_test(test_rol_carry);
+	runner_test(test_rol_zero);
+	runner_test(test_rol_negative);
 
 	runner_test(test_rti);
 
