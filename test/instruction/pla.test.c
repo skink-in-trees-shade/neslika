@@ -6,7 +6,7 @@
 void test_pla(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
-	actual->memory[0x0148] = 0x1A;
+	cpu_poke(actual, 0x0148, 0x1A);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->accumulator = 0x1A;
@@ -25,7 +25,7 @@ void test_pla(void) {
 void test_pla_zero(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
-	actual->memory[0x0148] = 0x00;
+	cpu_poke(actual, 0x0148, 0x00);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->accumulator = 0x00;
@@ -44,7 +44,7 @@ void test_pla_zero(void) {
 void test_pla_negative(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x47;
-	actual->memory[0x0148] = 0xEA;
+	cpu_poke(actual, 0x0148, 0xEA);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->accumulator = 0xEA;

@@ -7,7 +7,7 @@
 
 void test_imm_operand(void) {
 	struct cpu *cpu = cpu_random();
-	cpu->memory[cpu->program_counter] = 0xA2;
+	cpu_poke(cpu, cpu->program_counter, 0xA2);
 	uint8_t expected = 0xA2;
 
 	imm(cpu);

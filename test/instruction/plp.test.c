@@ -6,7 +6,7 @@
 void test_plp_carry(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x46;
-	actual->memory[0x0147] = 0x31;
+	cpu_poke(actual, 0x0147, 0x31);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x47;
@@ -28,7 +28,7 @@ void test_plp_carry(void) {
 void test_plp_zero(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x46;
-	actual->memory[0x0147] = 0x32;
+	cpu_poke(actual, 0x0147, 0x32);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x47;
@@ -50,7 +50,7 @@ void test_plp_zero(void) {
 void test_plp_interrupt_disable(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x46;
-	actual->memory[0x0147] = 0x34;
+	cpu_poke(actual, 0x0147, 0x34);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x47;
@@ -72,7 +72,7 @@ void test_plp_interrupt_disable(void) {
 void test_plp_decimal_mode(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x46;
-	actual->memory[0x0147] = 0x38;
+	cpu_poke(actual, 0x0147, 0x38);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x47;
@@ -94,7 +94,7 @@ void test_plp_decimal_mode(void) {
 void test_plp_overflow(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x46;
-	actual->memory[0x0147] = 0x70;
+	cpu_poke(actual, 0x0147, 0x70);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x47;
@@ -116,7 +116,7 @@ void test_plp_overflow(void) {
 void test_plp_negative(void) {
 	struct cpu *actual = cpu_random();
 	actual->stack_pointer = 0x46;
-	actual->memory[0x0147] = 0xB0;
+	cpu_poke(actual, 0x0147, 0xB0);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->stack_pointer = 0x47;

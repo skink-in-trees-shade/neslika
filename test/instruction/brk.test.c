@@ -6,8 +6,8 @@
 
 void test_brk(void) {
 	struct cpu *actual = cpu_random();
-	actual->memory[0xFFFE] = 0x31;
-	actual->memory[0xFFFF] = 0xA2;
+	cpu_poke(actual, 0xFFFE, 0x31);
+	cpu_poke(actual, 0xFFFF, 0xA2);
 
 	struct cpu *expected = cpu_clone(actual);
 	expected->program_counter = 0x31A2;

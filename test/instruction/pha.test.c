@@ -14,7 +14,7 @@ void test_pha(void) {
 	pha(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0xA3);
+	assert(cpu_peek(actual, 0x0147) == 0xA3);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);

@@ -20,7 +20,7 @@ void test_php_carry(void) {
 	php(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0x31);
+	assert(cpu_peek(actual, 0x0147) == 0x31);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -42,7 +42,7 @@ void test_php_zero(void) {
 	php(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0x32);
+	assert(cpu_peek(actual, 0x0147) == 0x32);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -64,7 +64,7 @@ void test_php_interrupt_disable(void) {
 	php(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0x34);
+	assert(cpu_peek(actual, 0x0147) == 0x34);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -86,7 +86,7 @@ void test_php_decimal_mode(void) {
 	php(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0x38);
+	assert(cpu_peek(actual, 0x0147) == 0x38);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -108,7 +108,7 @@ void test_php_overflow(void) {
 	php(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0x70);
+	assert(cpu_peek(actual, 0x0147) == 0x70);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
@@ -130,7 +130,7 @@ void test_php_negative(void) {
 	php(actual);
 
 	cpu_compare(expected, actual);
-	assert(actual->memory[0x0147] == 0xB0);
+	assert(cpu_peek(actual, 0x0147) == 0xB0);
 
 	cpu_destroy(expected);
 	cpu_destroy(actual);
