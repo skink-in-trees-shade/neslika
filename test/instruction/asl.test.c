@@ -8,12 +8,13 @@
 void test_asl_memory(void) {
 	struct cpu *cpu = cpu_random();
 	cpu->operand = 0x84;
+	cpu->operand_address = 0x11B3;
 	cpu->addressing_mode = addressing_zero_page;
 	uint8_t expected = 0x08;
 
 	asl(cpu);
 
-	assert(cpu->operand == expected);
+	assert(cpu_peek(cpu, cpu->operand_address) == expected);
 
 	cpu_destroy(cpu);
 }

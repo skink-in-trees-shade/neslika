@@ -9,12 +9,13 @@ void test_rol_memory(void) {
 	struct cpu *cpu = cpu_random();
 	cpu->carry = true;
 	cpu->operand = 0x84;
+	cpu->operand_address = 0x11B3;
 	cpu->addressing_mode = addressing_zero_page;
 	uint8_t expected = 0x09;
 
 	rol(cpu);
 
-	assert(cpu->operand == expected);
+	assert(cpu_peek(cpu, cpu->operand_address) == expected);
 
 	cpu_destroy(cpu);
 }
