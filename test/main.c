@@ -52,6 +52,7 @@
 #include "instruction/ror.test.h"
 #include "instruction/rti.test.h"
 #include "instruction/rts.test.h"
+#include "instruction/sbc.test.h"
 #include "instruction/sec.test.h"
 #include "instruction/sed.test.h"
 #include "instruction/sei.test.h"
@@ -293,6 +294,14 @@ int main(void) {
 	runner_test(test_rti);
 
 	runner_test(test_rts);
+
+	runner_test(test_sbc_no_carry_no_overflow);
+	runner_test(test_sbc_carry_overflow);
+	runner_test(test_sbc_carry_no_overflow);
+	runner_test(test_sbc_no_carry_overflow);
+	runner_test(test_sbc_carry);
+	runner_test(test_sbc_zero);
+	runner_test(test_sbc_negative);
 
 	runner_test(test_sec);
 
