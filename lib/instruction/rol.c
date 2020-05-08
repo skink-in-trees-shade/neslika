@@ -10,7 +10,7 @@ void rol(struct cpu *cpu) {
 	} else {
 		result = (cpu->operand << 1) + (cpu->carry ? 0x01 : 0x00);
 		cpu->carry = cpu->operand & 0x80;
-		cpu->operand = result;
+		cpu_poke(cpu, cpu->operand_address, result);
 	}
 	cpu_zero(cpu, result);
 	cpu_negative(cpu, result);
