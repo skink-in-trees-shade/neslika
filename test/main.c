@@ -2,10 +2,13 @@
 #include "addressing/abo.test.h"
 #include "addressing/abx.test.h"
 #include "addressing/aby.test.h"
+#include "addressing/acc.test.h"
 #include "addressing/iix.test.h"
 #include "addressing/iiy.test.h"
 #include "addressing/imm.test.h"
 #include "addressing/imp.test.h"
+#include "addressing/ind.test.h"
+#include "addressing/rel.test.h"
 #include "addressing/zpa.test.h"
 #include "addressing/zpx.test.h"
 #include "addressing/zpy.test.h"
@@ -103,6 +106,8 @@ int main(void) {
 	runner_test(test_aby_address_mode);
 	runner_test(test_aby_program_counter);
 
+	runner_test(test_acc_address_mode);
+
 	runner_test(test_iix_operand);
 	runner_test(test_iix_operand_address);
 	runner_test(test_iix_address_mode);
@@ -119,6 +124,16 @@ int main(void) {
 	runner_test(test_imm_program_counter);
 
 	runner_test(test_imp_address_mode);
+
+	runner_test(test_ind_operand);
+	runner_test(test_ind_operand_address);
+	runner_test(test_ind_address_mode);
+	runner_test(test_ind_program_counter);
+
+	runner_test(test_rel_operand);
+	runner_test(test_rel_operand_address);
+	runner_test(test_rel_address_mode);
+	runner_test(test_rel_program_counter);
 
 	runner_test(test_zpa_operand);
 	runner_test(test_zpa_operand_address);
