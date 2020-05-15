@@ -1,9 +1,8 @@
-#include "../addressing_mode.h"
 #include "rol.h"
 
 void rol(struct cpu *cpu) {
 	uint16_t result;
-	if (cpu->addressing_mode == addressing_accumulator) {
+	if (cpu->instruction == 0x2A) {
 		result = (cpu->accumulator << 1) + (cpu->carry ? 0x01 : 0x00);
 		cpu->carry = cpu->accumulator & 0x80;
 		cpu->accumulator = result;

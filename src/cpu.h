@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include "addressing_mode.h"
 
 struct cpu {
 	uint16_t program_counter;
@@ -25,7 +24,6 @@ struct cpu {
 	uint8_t instruction;
 	uint8_t operand;
 	uint16_t operand_address;
-	enum addressing_mode addressing_mode;
 
 	uint8_t *memory;
 };
