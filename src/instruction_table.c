@@ -29,6 +29,7 @@
 #include "instruction/isc.h"
 #include "instruction/jmp.h"
 #include "instruction/jsr.h"
+#include "instruction/lax.h"
 #include "instruction/lda.h"
 #include "instruction/ldx.h"
 #include "instruction/ldy.h"
@@ -70,8 +71,8 @@ instruction_fn instruction_table[0x100] = {
 /* 0x70 */  bvs,  adc,  NULL, NULL, NULL, adc,  ror,  NULL, sei,  adc,  NULL, NULL, NULL, adc,  ror,  NULL,
 /* 0x80 */  NULL, sta,  NULL, NULL, sty,  sta,  stx,  NULL, dey,  NULL, txa,  NULL, sty,  sta,  stx,  NULL,
 /* 0x90 */  bcc,  sta,  NULL, NULL, sty,  sta,  stx,  NULL, tya,  sta,  txs,  NULL, NULL, sta,  NULL, NULL,
-/* 0xA0 */  ldy,  lda,  ldx,  NULL, ldy,  lda,  ldx,  NULL, tay,  lda,  tax,  NULL, ldy,  lda,  ldx,  NULL,
-/* 0xB0 */  bcs,  lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  tsx,  NULL, ldy,  lda,  ldx,  NULL,
+/* 0xA0 */  ldy,  lda,  ldx,  lax,  ldy,  lda,  ldx,  lax,  tay,  lda,  tax,  NULL, ldy,  lda,  ldx,  lax,
+/* 0xB0 */  bcs,  lda,  NULL, lax,  ldy,  lda,  ldx,  lax,  clv,  lda,  tsx,  NULL, ldy,  lda,  ldx,  lax,
 /* 0xC0 */  cpy,  cmp,  NULL, dcp,  cpy,  cmp,  dec,  dcp,  iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  dcp,
 /* 0xD0 */  bne,  cmp,  NULL, dcp,  NULL, cmp,  dec,  dcp,  cld,  cmp,  NULL, dcp,  NULL, cmp,  dec,  dcp,
 /* 0xE0 */  cpx,  sbc,  NULL, isc,  cpx,  sbc,  inc,  isc,  inx,  sbc,  nop,  NULL, cpx,  sbc,  inc,  isc,
