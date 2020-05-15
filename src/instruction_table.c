@@ -26,6 +26,7 @@
 #include "instruction/inc.h"
 #include "instruction/inx.h"
 #include "instruction/iny.h"
+#include "instruction/isc.h"
 #include "instruction/jmp.h"
 #include "instruction/jsr.h"
 #include "instruction/lda.h"
@@ -73,6 +74,6 @@ instruction_fn instruction_table[0x100] = {
 /* 0xB0 */  bcs,  lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  tsx,  NULL, ldy,  lda,  ldx,  NULL,
 /* 0xC0 */  cpy,  cmp,  NULL, dcp,  cpy,  cmp,  dec,  dcp,  iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  dcp,
 /* 0xD0 */  bne,  cmp,  NULL, dcp,  NULL, cmp,  dec,  dcp,  cld,  cmp,  NULL, dcp,  NULL, cmp,  dec,  dcp,
-/* 0xE0 */  cpx,  sbc,  NULL, NULL, cpx,  sbc,  inc,  NULL, inx,  sbc,  nop,  NULL, cpx,  sbc,  inc,  NULL,
-/* 0xF0 */  beq,  sbc,  NULL, NULL, NULL, sbc,  inc,  NULL, sed,  sbc,  NULL, NULL, NULL, sbc,  inc,  NULL
+/* 0xE0 */  cpx,  sbc,  NULL, isc,  cpx,  sbc,  inc,  isc,  inx,  sbc,  nop,  NULL, cpx,  sbc,  inc,  isc,
+/* 0xF0 */  beq,  sbc,  NULL, isc,  NULL, sbc,  inc,  isc,  sed,  sbc,  NULL, isc,  NULL, sbc,  inc,  isc
 };
