@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "addressing_table.h"
-#include "instruction_table.h"
+#include "instruction.h"
 #include "cpu.h"
 
 struct cpu *cpu_new(void) {
@@ -57,11 +56,11 @@ void cpu_fetch(struct cpu *cpu) {
 }
 
 void cpu_decode(struct cpu *cpu) {
-	addressing_table[cpu->instruction](cpu);
+	instructions[cpu->instruction].decode(cpu);
 }
 
 void cpu_execute(struct cpu *cpu) {
-	instruction_table[cpu->instruction](cpu);
+	instructions[cpu->instruction].execute(cpu);
 }
 
 void cpu_destroy(struct cpu *cpu) {
