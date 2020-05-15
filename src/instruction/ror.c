@@ -3,7 +3,7 @@
 
 void ror(struct cpu *cpu) {
 	uint16_t result;
-	if (cpu->addressing_mode == addressing_implicit) {
+	if (cpu->addressing_mode == addressing_accumulator) {
 		result = (cpu->accumulator >> 1) + (cpu->carry ? 0x80 : 0x00);
 		cpu->carry = cpu->accumulator & 0x01;
 		cpu->accumulator = result;
