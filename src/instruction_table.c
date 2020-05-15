@@ -46,6 +46,7 @@
 #include "instruction/rra.h"
 #include "instruction/rti.h"
 #include "instruction/rts.h"
+#include "instruction/sax.h"
 #include "instruction/sbc.h"
 #include "instruction/sec.h"
 #include "instruction/sed.h"
@@ -71,8 +72,8 @@ instruction_fn instruction_table[0x100] = {
 /* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL, cli,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL,
 /* 0x60 */  rts,  adc,  NULL, rra,  NULL, adc,  ror,  rra,  pla,  adc,  ror,  NULL, jmp,  adc,  ror,  rra,
 /* 0x70 */  bvs,  adc,  NULL, rra,  NULL, adc,  ror,  rra,  sei,  adc,  NULL, rra,  NULL, adc,  ror,  rra,
-/* 0x80 */  NULL, sta,  NULL, NULL, sty,  sta,  stx,  NULL, dey,  NULL, txa,  NULL, sty,  sta,  stx,  NULL,
-/* 0x90 */  bcc,  sta,  NULL, NULL, sty,  sta,  stx,  NULL, tya,  sta,  txs,  NULL, NULL, sta,  NULL, NULL,
+/* 0x80 */  NULL, sta,  NULL, sax,  sty,  sta,  stx,  sax,  dey,  NULL, txa,  NULL, sty,  sta,  stx,  sax,
+/* 0x90 */  bcc,  sta,  NULL, NULL, sty,  sta,  stx,  sax,  tya,  sta,  txs,  NULL, NULL, sta,  NULL, NULL,
 /* 0xA0 */  ldy,  lda,  ldx,  lax,  ldy,  lda,  ldx,  lax,  tay,  lda,  tax,  NULL, ldy,  lda,  ldx,  lax,
 /* 0xB0 */  bcs,  lda,  NULL, lax,  ldy,  lda,  ldx,  lax,  clv,  lda,  tsx,  NULL, ldy,  lda,  ldx,  lax,
 /* 0xC0 */  cpy,  cmp,  NULL, dcp,  cpy,  cmp,  dec,  dcp,  iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  dcp,
