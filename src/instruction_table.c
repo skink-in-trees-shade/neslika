@@ -43,6 +43,7 @@
 #include "instruction/rla.h"
 #include "instruction/rol.h"
 #include "instruction/ror.h"
+#include "instruction/rra.h"
 #include "instruction/rti.h"
 #include "instruction/rts.h"
 #include "instruction/sbc.h"
@@ -68,8 +69,8 @@ instruction_fn instruction_table[0x100] = {
 /* 0x30 */  bmi,  and,  NULL, rla,  NULL, and,  rol,  rla,  sec,  and,  NULL, rla,  NULL, and,  rol,  rla,
 /* 0x40 */  rti,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL, pha,  eor,  lsr,  NULL, jmp,  eor,  lsr,  NULL,
 /* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL, cli,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL,
-/* 0x60 */  rts,  adc,  NULL, NULL, NULL, adc,  ror,  NULL, pla,  adc,  ror,  NULL, jmp,  adc,  ror,  NULL,
-/* 0x70 */  bvs,  adc,  NULL, NULL, NULL, adc,  ror,  NULL, sei,  adc,  NULL, NULL, NULL, adc,  ror,  NULL,
+/* 0x60 */  rts,  adc,  NULL, rra,  NULL, adc,  ror,  rra,  pla,  adc,  ror,  NULL, jmp,  adc,  ror,  rra,
+/* 0x70 */  bvs,  adc,  NULL, rra,  NULL, adc,  ror,  rra,  sei,  adc,  NULL, rra,  NULL, adc,  ror,  rra,
 /* 0x80 */  NULL, sta,  NULL, NULL, sty,  sta,  stx,  NULL, dey,  NULL, txa,  NULL, sty,  sta,  stx,  NULL,
 /* 0x90 */  bcc,  sta,  NULL, NULL, sty,  sta,  stx,  NULL, tya,  sta,  txs,  NULL, NULL, sta,  NULL, NULL,
 /* 0xA0 */  ldy,  lda,  ldx,  lax,  ldy,  lda,  ldx,  lax,  tay,  lda,  tax,  NULL, ldy,  lda,  ldx,  lax,
