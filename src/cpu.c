@@ -11,10 +11,13 @@ struct cpu *cpu_new(void) {
 }
 
 void cpu_load(struct cpu *cpu, uint8_t *rom, size_t size) {
-	cpu->stack_pointer = 0xFF;
-	cpu->program_counter = 0x8000;
+	cpu->stack_pointer = 0xFD;
+	cpu->program_counter = 0xC000; 
+	cpu->interrupt_disable = true;
 	cpu->program_end = cpu->program_counter + size - 1;
-	memcpy(&cpu->memory[cpu->program_counter], rom, size);
+	memcpy(&cpu->memory[0x4000], rom, size);
+	memcpy(&cpu->memory[0x8000], rom, size);
+	memcpy(&cpu->memory[0xC000], rom, size);
 }
 
 void cpu_zero(struct cpu *cpu, uint8_t value) {
