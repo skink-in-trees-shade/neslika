@@ -51,6 +51,7 @@
 #include "instruction/sec.h"
 #include "instruction/sed.h"
 #include "instruction/sei.h"
+#include "instruction/slo.h"
 #include "instruction/sta.h"
 #include "instruction/stx.h"
 #include "instruction/sty.h"
@@ -64,8 +65,8 @@
 
 instruction_fn instruction_table[0x100] = {
 /*          0x00  0x01  0x02  0x03  0x04  0x05  0x06  0x07  0x08  0x09  0x0A  0x0B  0x0C  0x0D  0x0E  0x0F */
-/* 0x00 */  brk,  ora,  NULL, NULL, NULL, ora,  asl,  NULL, php,  ora,  asl,  NULL, NULL, ora,  asl,  NULL,
-/* 0x10 */  bpl,  ora,  NULL, NULL, NULL, ora,  asl,  NULL, clc,  ora,  NULL, NULL, NULL, ora,  asl,  NULL,
+/* 0x00 */  brk,  ora,  NULL, slo,  NULL, ora,  asl,  slo,  php,  ora,  asl,  NULL, NULL, ora,  asl,  slo,
+/* 0x10 */  bpl,  ora,  NULL, slo,  NULL, ora,  asl,  slo,  clc,  ora,  NULL, slo,  NULL, ora,  asl,  slo,
 /* 0x20 */  jsr,  and,  NULL, rla,  bit,  and,  rol,  rla,  plp,  and,  rol,  NULL, bit,  and,  rol,  rla,
 /* 0x30 */  bmi,  and,  NULL, rla,  NULL, and,  rol,  rla,  sec,  and,  NULL, rla,  NULL, and,  rol,  rla,
 /* 0x40 */  rti,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL, pha,  eor,  lsr,  NULL, jmp,  eor,  lsr,  NULL,

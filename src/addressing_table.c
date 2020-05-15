@@ -15,8 +15,8 @@
 
 addressing_fn addressing_table[0x100] = {
 /*          0x00  0x01  0x02  0x03  0x04  0x05  0x06  0x07  0x08  0x09  0x0A  0x0B  0x0C  0x0D  0x0E  0x0F */
-/* 0x00 */  imp,  iix,  NULL, NULL, NULL, zpa,  zpa,  NULL, imp,  imm,  acc,  NULL, NULL, abo,  abo,  NULL,
-/* 0x10 */  rel,  iiy,  NULL, NULL, NULL, zpx,  zpx,  NULL, imp,  aby,  NULL, NULL, NULL, abx,  abx,  NULL,
+/* 0x00 */  imp,  iix,  NULL, iix,  NULL, zpa,  zpa,  zpa,  imp,  imm,  acc,  NULL, NULL, abo,  abo,  abo,
+/* 0x10 */  rel,  iiy,  NULL, iiy,  NULL, zpx,  zpx,  zpx,  imp,  aby,  NULL, aby,  NULL, abx,  abx,  abx,
 /* 0x20 */  abo,  iix,  NULL, iix,  zpa,  zpa,  zpa,  zpa,  imp,  imm,  acc,  NULL, abo,  abo,  abo,  abo,
 /* 0x30 */  rel,  iiy,  NULL, iiy,  NULL, zpx,  zpx,  zpx,  imp,  aby,  NULL, aby,  NULL, abx,  abx,  abx,
 /* 0x40 */  imp,  iix,  NULL, NULL, NULL, zpa,  zpa,  NULL, imp,  imm,  acc,  NULL, abo,  abo,  abo,  NULL,
