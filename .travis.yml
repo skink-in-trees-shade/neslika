@@ -11,13 +11,9 @@ compiler:
   - gcc
 
 before_install:
-  - sudo pip install scons cpp-coveralls
+  - sudo pip install scons
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - scons coverage=yes
-  - ./tests
-  - gcov $(find . -type f -name "*.c")
-
-after_success:
-  - 'if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then coveralls --exclude test; fi'
+  - scons
+  - ./6502
