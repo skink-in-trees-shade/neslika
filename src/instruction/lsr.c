@@ -1,9 +1,8 @@
-#include "../addressing_mode.h"
 #include "lsr.h"
 
 void lsr(struct cpu *cpu) {
 	uint16_t result;
-	if (cpu->addressing_mode == addressing_accumulator) {
+	if (cpu->instruction == 0x4A) {
 		result = cpu->accumulator >> 1;
 		cpu->carry = cpu->accumulator & 0x01;
 		cpu->accumulator = result;
