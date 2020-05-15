@@ -18,6 +18,7 @@
 #include "instruction/cmp.h"
 #include "instruction/cpx.h"
 #include "instruction/cpy.h"
+#include "instruction/dcp.h"
 #include "instruction/dec.h"
 #include "instruction/dex.h"
 #include "instruction/dey.h"
@@ -70,8 +71,8 @@ instruction_fn instruction_table[0x100] = {
 /* 0x90 */  bcc,  sta,  NULL, NULL, sty,  sta,  stx,  NULL, tya,  sta,  txs,  NULL, NULL, sta,  NULL, NULL,
 /* 0xA0 */  ldy,  lda,  ldx,  NULL, ldy,  lda,  ldx,  NULL, tay,  lda,  tax,  NULL, ldy,  lda,  ldx,  NULL,
 /* 0xB0 */  bcs,  lda,  NULL, NULL, ldy,  lda,  ldx,  NULL, clv,  lda,  tsx,  NULL, ldy,  lda,  ldx,  NULL,
-/* 0xC0 */  cpy,  cmp,  NULL, NULL, cpy,  cmp,  dec,  NULL, iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  NULL,
-/* 0xD0 */  bne,  cmp,  NULL, NULL, NULL, cmp,  dec,  NULL, cld,  cmp,  NULL, NULL, NULL, cmp,  dec,  NULL,
+/* 0xC0 */  cpy,  cmp,  NULL, dcp,  cpy,  cmp,  dec,  dcp,  iny,  cmp,  dex,  NULL, cpy,  cmp,  dec,  dcp,
+/* 0xD0 */  bne,  cmp,  NULL, dcp,  NULL, cmp,  dec,  dcp,  cld,  cmp,  NULL, dcp,  NULL, cmp,  dec,  dcp,
 /* 0xE0 */  cpx,  sbc,  NULL, NULL, cpx,  sbc,  inc,  NULL, inx,  sbc,  nop,  NULL, cpx,  sbc,  inc,  NULL,
 /* 0xF0 */  beq,  sbc,  NULL, NULL, NULL, sbc,  inc,  NULL, sed,  sbc,  NULL, NULL, NULL, sbc,  inc,  NULL
 };
