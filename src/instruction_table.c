@@ -52,6 +52,7 @@
 #include "instruction/sed.h"
 #include "instruction/sei.h"
 #include "instruction/slo.h"
+#include "instruction/sre.h"
 #include "instruction/sta.h"
 #include "instruction/stx.h"
 #include "instruction/sty.h"
@@ -69,8 +70,8 @@ instruction_fn instruction_table[0x100] = {
 /* 0x10 */  bpl,  ora,  NULL, slo,  NULL, ora,  asl,  slo,  clc,  ora,  NULL, slo,  NULL, ora,  asl,  slo,
 /* 0x20 */  jsr,  and,  NULL, rla,  bit,  and,  rol,  rla,  plp,  and,  rol,  NULL, bit,  and,  rol,  rla,
 /* 0x30 */  bmi,  and,  NULL, rla,  NULL, and,  rol,  rla,  sec,  and,  NULL, rla,  NULL, and,  rol,  rla,
-/* 0x40 */  rti,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL, pha,  eor,  lsr,  NULL, jmp,  eor,  lsr,  NULL,
-/* 0x50 */  bvc,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL, cli,  eor,  NULL, NULL, NULL, eor,  lsr,  NULL,
+/* 0x40 */  rti,  eor,  NULL, sre,  NULL, eor,  lsr,  sre,  pha,  eor,  lsr,  NULL, jmp,  eor,  lsr,  sre,
+/* 0x50 */  bvc,  eor,  NULL, sre,  NULL, eor,  lsr,  sre,  cli,  eor,  NULL, sre,  NULL, eor,  lsr,  sre,
 /* 0x60 */  rts,  adc,  NULL, rra,  NULL, adc,  ror,  rra,  pla,  adc,  ror,  NULL, jmp,  adc,  ror,  rra,
 /* 0x70 */  bvs,  adc,  NULL, rra,  NULL, adc,  ror,  rra,  sei,  adc,  NULL, rra,  NULL, adc,  ror,  rra,
 /* 0x80 */  NULL, sta,  NULL, sax,  sty,  sta,  stx,  sax,  dey,  NULL, txa,  NULL, sty,  sta,  stx,  sax,
