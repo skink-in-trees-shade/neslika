@@ -27,8 +27,8 @@ addressing_fn addressing_table[0x100] = {
 /* 0x90 */  rel,  iiy,  NULL, NULL, zpx,  zpx,  zpy,  NULL, imp,  aby,  imp,  NULL, NULL, abx,  NULL, NULL,
 /* 0xA0 */  imm,  iix,  imm,  NULL, zpa,  zpa,  zpa,  NULL, imp,  imm,  imp,  NULL, abo,  abo,  abo,  NULL,
 /* 0xB0 */  rel,  iiy,  NULL, NULL, zpx,  zpx,  zpy,  NULL, imp,  aby,  imp,  NULL, abx,  abx,  aby,  NULL,
-/* 0xC0 */  imm,  iix,  NULL, NULL, zpa,  zpa,  zpa,  NULL, imp,  imm,  imp,  NULL, abo,  abo,  abo,  NULL,
-/* 0xD0 */  rel,  iiy,  NULL, NULL, NULL, zpx,  zpx,  NULL, imp,  aby,  NULL, NULL, NULL, abx,  abx,  NULL,
+/* 0xC0 */  imm,  iix,  NULL, iix,  zpa,  zpa,  zpa,  zpa,  imp,  imm,  imp,  NULL, abo,  abo,  abo,  abo,
+/* 0xD0 */  rel,  iiy,  NULL, iiy,  NULL, zpx,  zpx,  zpx,  imp,  aby,  NULL, aby,  NULL, abx,  abx,  abx,
 /* 0xE0 */  imm,  iix,  NULL, NULL, zpa,  zpa,  zpa,  NULL, imp,  imm,  imp,  NULL, abo,  abo,  abo,  NULL,
 /* 0xF0 */  rel,  iiy,  NULL, NULL, NULL, zpx,  zpx,  NULL, imp,  aby,  NULL, NULL, NULL, abx,  abx,  NULL
 };
