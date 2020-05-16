@@ -2,8 +2,8 @@
 #include "brk.h"
 
 void brk(struct cpu *cpu) {
-	uint8_t old_high = (cpu->program_counter >> 8) & 0xFF;
-	uint8_t old_low = cpu->program_counter & 0xFF;
+	uint8_t high = (cpu->program_counter >> 8) & 0xFF;
+	uint8_t low = cpu->program_counter & 0xFF;
 	uint8_t status = 0
 		| (cpu->carry << 0)
 		| (cpu->zero << 1)
@@ -13,13 +13,13 @@ void brk(struct cpu *cpu) {
 		| (1 << 5)
 		| (cpu->overflow << 6)
 		| (cpu->negative << 7);
-	cpu_push(cpu, old_high);
-	cpu_push(cpu, old_low);
+	cpu_push(cpu, high);
+	cpu_push(cpu, low);
 	cpu_push(cpu, status);
 
-	uint8_t new_high = cpu_peek(cpu, 0xFFFE);
-	uint8_t new_low = cpu_peek(cpu, 0xFFFF);
-	cpu->program_counter = (new_high << 8) + new_low;
+	low = cpu_peek(cpu, 0xFFFE);
+	high = cpu_peek(cpu, 0xFFFF);
+	cpu->program_counter = (high << 8) + low;
 
 	cpu->break_command = true;
 }

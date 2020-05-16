@@ -1,9 +1,8 @@
 #include "iiy.h"
 
 void iiy(struct cpu *cpu) {
-	uint8_t sub = cpu_read(cpu);
-	uint8_t high = cpu_peek(cpu, sub);
-	uint8_t low = cpu_peek(cpu, sub + 1);
-	cpu->operand_address = (high << 8) + low + cpu->y;
-	cpu->operand = cpu_peek(cpu, cpu->operand_address);
+	uint16_t address = cpu_read(cpu);
+	cpu->operand_low = cpu_peek(cpu, address);
+	cpu->operand_high = cpu_peek(cpu, (address + 1) & 0xFF);
+	cpu->operand += cpu->y;
 }
