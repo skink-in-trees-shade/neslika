@@ -22,8 +22,13 @@ struct cpu {
 
 	uint16_t program_end;
 	uint8_t instruction;
-	uint8_t operand;
-	uint16_t operand_address;
+	union {
+		uint16_t operand;
+		struct {
+			uint8_t operand_low;
+			uint8_t operand_high;
+		};
+	};
 
 	uint8_t *memory;
 };

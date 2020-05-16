@@ -1,16 +1,12 @@
 #include "rol.h"
 
 void rol(struct cpu *cpu) {
-	uint16_t result;
-	if (cpu->instruction == 0x2A) {
-		result = (cpu->accumulator << 1) + (cpu->carry ? 0x01 : 0x00);
-		cpu->carry = cpu->accumulator & 0x80;
-		cpu->accumulator = result;
-	} else {
-		result = (cpu->operand << 1) + (cpu->carry ? 0x01 : 0x00);
-		cpu->carry = cpu->operand & 0x80;
-		cpu_poke(cpu, cpu->operand_address, result);
-	}
-	cpu_zero(cpu, result);
-	cpu_negative(cpu, result);
+	uint8_t operand = cpu_peek(cpu, cpu->operand);
+	uint8_t carry = cpu->carry ? 0x01 : 0x00;
+	cpu->carry = operand & 0x80;
+	operand <<= 1;
+	operand += carry;
+	cpu_zero(cpu, operand);
+	cpu_negative(cpu, operand);
+	cpu_poke(cpu, cpu->operand, operand);
 }

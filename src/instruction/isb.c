@@ -1,8 +1,8 @@
 #include "inc.h"
 #include "sbc.h"
-#include "isc.h"
+#include "isb.h"
 
-void isc(struct cpu *cpu) {
+void isb(struct cpu *cpu) {
 	inc(cpu);
 	sbc(cpu);
 }
