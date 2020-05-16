@@ -1,5 +1,5 @@
 #include "imp.h"
 
 void imp(struct cpu *cpu) {
-	(void)cpu;
+	cpu->operand = 0x0000;
 }

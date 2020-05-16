@@ -1,7 +1,8 @@
 #include "bit.h"
 
 void bit(struct cpu *cpu) {
-	cpu_zero(cpu, cpu->accumulator & cpu->operand);
-	cpu_negative(cpu, cpu->operand);
-	cpu->overflow = cpu->operand & 0x40;
+	uint8_t operand = cpu_peek(cpu, cpu->operand);
+	cpu_zero(cpu, cpu->accumulator & operand);
+	cpu_negative(cpu, operand);
+	cpu->overflow = operand & 0x40;
 }

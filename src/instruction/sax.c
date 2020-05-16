@@ -5,5 +5,5 @@
 void sax(struct cpu *cpu) {
 	sta(cpu);
 	stx(cpu);
-	cpu_poke(cpu, cpu->operand_address, cpu->accumulator & cpu->x);
+	cpu_poke(cpu, cpu->operand, cpu->accumulator & cpu->x);
 }

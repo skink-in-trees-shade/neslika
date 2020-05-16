@@ -1,16 +1,12 @@
 #include "ror.h"
 
 void ror(struct cpu *cpu) {
-	uint16_t result;
-	if (cpu->instruction == 0x6A) {
-		result = (cpu->accumulator >> 1) + (cpu->carry ? 0x80 : 0x00);
-		cpu->carry = cpu->accumulator & 0x01;
-		cpu->accumulator = result;
-	} else {
-		result = (cpu->operand >> 1) + (cpu->carry ? 0x80 : 0x00);
-		cpu->carry = cpu->operand & 0x01;
-		cpu_poke(cpu, cpu->operand_address, result);
-	}
-	cpu_zero(cpu, result);
-	cpu_negative(cpu, result);
+	uint8_t operand = cpu_peek(cpu, cpu->operand);
+	uint8_t borrow = cpu->carry ? 0x80 : 0x00;
+	cpu->carry = operand & 0x01;
+	operand >>= 1;
+	operand += borrow;
+	cpu_zero(cpu, operand);
+	cpu_negative(cpu, operand);
+	cpu_poke(cpu, cpu->operand, operand);
 }
