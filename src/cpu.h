@@ -20,7 +20,6 @@ struct cpu {
 	bool overflow;
 	bool negative;
 
-	uint16_t program_end;
 	uint8_t instruction;
 	union {
 		uint16_t operand;
