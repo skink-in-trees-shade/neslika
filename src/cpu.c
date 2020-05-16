@@ -11,12 +11,12 @@ struct cpu *cpu_new(void) {
 
 void cpu_load(struct cpu *cpu, uint8_t *rom, size_t size) {
 	cpu->stack_pointer = 0xFD;
-	cpu->program_counter = 0xC000; 
 	cpu->interrupt_disable = true;
-	cpu->program_end = cpu->program_counter + size - 1;
-	memcpy(&cpu->memory[0x4000], rom, size);
 	memcpy(&cpu->memory[0x8000], rom, size);
-	memcpy(&cpu->memory[0xC000], rom, size);
+	if (size == 0x4000) {
+		memcpy(&cpu->memory[0xC000], rom, size);
+	}
+	cpu->program_counter = (cpu_peek(cpu, 0xFFFD) << 8) + cpu_peek(cpu, 0xFFFC); 
 }
 
 void cpu_zero(struct cpu *cpu, uint8_t value) {
@@ -48,7 +48,7 @@ uint8_t cpu_pull(struct cpu *cpu) {
 }
 
 bool cpu_running(struct cpu *cpu) {
-	return cpu->program_counter < cpu->program_end + 1;
+	return cpu->instruction != 0x00;
 }
 
 void cpu_fetch(struct cpu *cpu) {
