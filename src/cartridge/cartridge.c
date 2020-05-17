@@ -3,29 +3,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "mapper.h"
+#include "format/ines.h"
 #include "cartridge.h"
-
-#pragma pack(push, 1)
-struct ines_header {
-	char signature[4];
-	uint8_t prg_rom_count;
-	uint8_t chr_rom_count;
-	bool horizontal_mirroring: 1;
-	bool has_prg_ram: 1;
-	bool has_trainer: 1;
-	bool ignore_mirroring: 1;
-	uint8_t mapper_low: 4;
-	bool vs_unisystem: 1;
-	bool playchoice10: 1;
-	uint8_t version: 2;
-	uint8_t mapper_high: 4;
-	uint8_t prg_ram_count;
-	bool tv_ntsc: 1;
-	uint8_t reserved1: 7;
-	uint8_t reserved2;
-	uint8_t reserved3[5];
-};
-#pragma pack(pop)
 
 static uint8_t _cartridge_read(struct device *device, uint16_t address) {
 	struct cartridge *cartridge = (struct cartridge *)device;
@@ -50,16 +29,7 @@ struct cartridge *cartridge_new(void) {
 }
 
 void cartridge_load(struct cartridge *cartridge, const char *filename) {
-	FILE *file = fopen(filename, "rb");
-
-	struct ines_header header;
-	fread(&header, sizeof(header), 1, file);
-
-	cartridge->mapper = (header.mapper_high << 8) + header.mapper_low;
-	cartridge->prg_rom_count = header.prg_rom_count;
-	fread(cartridge->prg_rom, 0x4000, cartridge->prg_rom_count, file);
-
-	fclose(file);
+	ines_load(cartridge, filename);
 }
 
 void cartridge_destroy(struct cartridge *cartridge) {
