@@ -5,4 +5,5 @@ void cmp(struct cpu *cpu) {
 	cpu->carry = cpu->accumulator >= result;
 	cpu_zero(cpu, result);
 	cpu_negative(cpu, result);
+	cpu->extra_execute_cycle = true;
 }

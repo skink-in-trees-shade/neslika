@@ -25,6 +25,9 @@ struct cpu {
 	bool overflow;
 	bool negative;
 
+	unsigned long cycle;
+	bool extra_decode_cycle;
+	bool extra_execute_cycle;
 	uint8_t instruction;
 	union {
 		uint16_t operand;

@@ -9,6 +9,7 @@ struct instruction {
 	bool undocumented;
 	void (*decode)(struct cpu *);
 	void (*execute)(struct cpu *);
+	unsigned int cycles;
 };
 
 extern struct instruction instructions[0x100];

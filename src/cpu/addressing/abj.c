@@ -1,6 +1,6 @@
-#include "abo.h"
 #include "abj.h"
 
 void abj(struct cpu *cpu) {
-	abo(cpu);
+	cpu->operand_low = cpu_read(cpu);
+	cpu->operand_high = cpu_read(cpu);
 }

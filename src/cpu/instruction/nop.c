@@ -1,5 +1,5 @@
 #include "nop.h"
 
 void nop(struct cpu *cpu) {
-	(void)cpu;
+	cpu->extra_execute_cycle = cpu->instruction & 0x0C;
 }

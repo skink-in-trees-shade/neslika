@@ -27,6 +27,7 @@ struct cpu *cpu_new(void) {
 void cpu_start(struct cpu *cpu) {
 	cpu->stack_pointer = 0xFD;
 	cpu->interrupt_disable = true;
+	cpu->cycle = 7;
 	cpu->program_counter = (cpu_peek(cpu, 0xFFFD) << 8) + cpu_peek(cpu, 0xFFFC);
 }
 
@@ -70,12 +71,21 @@ void cpu_fetch(struct cpu *cpu) {
 }
 
 void cpu_decode(struct cpu *cpu) {
+	cpu->extra_decode_cycle = false;
+	cpu->extra_execute_cycle = false;
+
 	instructions[cpu->instruction].decode(cpu);
+
 	cpu_debug(cpu);
 }
 
 void cpu_execute(struct cpu *cpu) {
 	instructions[cpu->instruction].execute(cpu);
+
+	cpu->cycle += instructions[cpu->instruction].cycles;
+	if (cpu->extra_decode_cycle && cpu->extra_execute_cycle) {
+		cpu->cycle++;
+	}
 }
 
 void cpu_destroy(struct cpu *cpu) {

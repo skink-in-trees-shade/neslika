@@ -1,6 +1,5 @@
-#include "zpa.h"
 #include "rel.h"
 
 void rel(struct cpu *cpu) {
-	zpa(cpu);
+	cpu->operand = cpu_read(cpu);
 }
