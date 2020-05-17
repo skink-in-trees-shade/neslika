@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "mapper.h"
 #include "cartridge.h"
 
 #pragma pack(push, 1)
@@ -28,12 +29,14 @@ struct ines_header {
 
 static uint8_t _cartridge_read(struct device *device, uint16_t address) {
 	struct cartridge *cartridge = (struct cartridge *)device;
-	return cartridge->prg_rom[address & 0x3FFF];
+	address = mappers[cartridge->mapper].map(cartridge, address);
+	return cartridge->prg_rom[address];
 }
 
 static void _cartridge_write(struct device *device, uint16_t address, uint8_t value) {
 	struct cartridge *cartridge = (struct cartridge *)device;
-	cartridge->prg_rom[address & 0x3FFF] = value;
+	address = mappers[cartridge->mapper].map(cartridge, address);
+	cartridge->prg_rom[address] = value;
 }
 
 struct cartridge *cartridge_new(void) {
@@ -52,7 +55,9 @@ void cartridge_load(struct cartridge *cartridge, const char *filename) {
 	struct ines_header header;
 	fread(&header, sizeof(header), 1, file);
 
-	fread(cartridge->prg_rom, 0x4000, 1, file);
+	cartridge->mapper = (header.mapper_high << 8) + header.mapper_low;
+	cartridge->prg_rom_count = header.prg_rom_count;
+	fread(cartridge->prg_rom, 0x4000, cartridge->prg_rom_count, file);
 
 	fclose(file);
 }
