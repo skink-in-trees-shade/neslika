@@ -5,11 +5,14 @@
 #include "device.h"
 
 struct cartridge {
-	struct device device;
+	struct device cpu_device;
+	struct device ppu_device;
 
 	uint8_t mapper;
 	uint8_t prg_rom_count;
 	uint8_t *prg_rom;
+	uint8_t chr_rom_count;
+	uint8_t *chr_rom;
 };
 
 struct cartridge *cartridge_new(void);
