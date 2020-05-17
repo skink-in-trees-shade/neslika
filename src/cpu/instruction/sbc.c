@@ -8,4 +8,5 @@ void sbc(struct cpu *cpu) {
 	cpu->accumulator = result & 0xFF;
 	cpu_zero(cpu, cpu->accumulator);
 	cpu_negative(cpu, cpu->accumulator);
+	cpu->extra_execute_cycle = true;
 }
