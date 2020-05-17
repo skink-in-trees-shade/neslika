@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "instruction.h"
 #include "debug.h"
+#include "error.h"
 #include "cpu.h"
 
 static uint8_t _cpu_read(struct device *device, uint16_t address) {
@@ -63,6 +64,9 @@ bool cpu_running(struct cpu *cpu) {
 
 void cpu_fetch(struct cpu *cpu) {
 	cpu->instruction = cpu_read(cpu);
+	if (instructions[cpu->instruction].decode == NULL) {
+		error("Unknown instruction %02X.", cpu->instruction);
+	}
 }
 
 void cpu_decode(struct cpu *cpu) {

@@ -39,6 +39,7 @@ bool ines_load(struct cartridge *cartridge, const char *filename) {
 	if (is_ines(&header)) {
 		cartridge->mapper = (header.mapper_high << 8) + header.mapper_low;
 		cartridge->prg_rom_count = header.prg_rom_count;
+		cartridge->prg_rom = calloc(0x4000 * cartridge->prg_rom_count, sizeof(uint8_t));
 		fread(cartridge->prg_rom, 0x4000, cartridge->prg_rom_count, file);
 
 		fclose(file);
