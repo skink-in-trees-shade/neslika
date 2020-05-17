@@ -1,0 +1,16 @@
+#ifndef PPU_H
+#define PPU_H
+
+#include <stdint.h>
+#include "device.h"
+
+struct ppu {
+	struct device device;
+
+	uint8_t *memory;
+};
+
+struct ppu *ppu_new(void);
+void ppu_destroy(struct ppu *ppu);
+
+#endif
