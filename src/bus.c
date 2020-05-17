@@ -31,6 +31,7 @@ void bus_write(struct bus *bus, uint16_t address, uint8_t value) {
 		struct device *device = bus->devices[i];
 		if (device->address_from <= address && device->address_to >= address) {
 			device->write(device, address, value);
+			return;
 		}
 	}
 }
