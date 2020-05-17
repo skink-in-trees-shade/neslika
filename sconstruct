@@ -1,2 +1,2 @@
 env = Environment(CPPPATH='src', CCFLAGS=['-Wall', '-Wextra', '-Werror', '-Wpedantic', '-std=c11', '-fdiagnostics-color'])
-env.Program('6502', [Glob('src/*.c'), Glob('src/*/*.c')])
+env.Program('neslika', [Glob('src/*.c'), Glob('src/*/*.c')])
