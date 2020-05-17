@@ -2,7 +2,7 @@
 #define INSTRUCTION_H
 
 #include <stdbool.h>
-#include "cpu/cpu.h"
+#include "cpu.h"
 
 struct instruction {
 	const char *name;
