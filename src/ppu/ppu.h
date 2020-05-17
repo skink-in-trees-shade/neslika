@@ -11,6 +11,7 @@ struct ppu {
 };
 
 struct ppu *ppu_new(void);
+void ppu_tick(struct ppu *ppu);
 void ppu_destroy(struct ppu *ppu);
 
 #endif

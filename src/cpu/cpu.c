@@ -66,24 +66,18 @@ bool cpu_running(struct cpu *cpu) {
 	return cpu->instruction != 0x00;
 }
 
-void cpu_fetch(struct cpu *cpu) {
+void cpu_tick(struct cpu *cpu) {
 	cpu->instruction = cpu_read(cpu);
 	if (instructions[cpu->instruction].decode == NULL) {
 		error("Unknown instruction %02X.", cpu->instruction);
 	}
-}
-
-void cpu_decode(struct cpu *cpu) {
+	
 	cpu->extra_decode_cycle = false;
-
 	instructions[cpu->instruction].decode(cpu);
 
 	cpu_debug(cpu);
-}
 
-void cpu_execute(struct cpu *cpu) {
 	cpu->extra_execute_cycle = false;
-
 	instructions[cpu->instruction].execute(cpu);
 
 	cpu->cycle += instructions[cpu->instruction].cycles;

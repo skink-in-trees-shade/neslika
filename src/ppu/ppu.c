@@ -21,6 +21,10 @@ struct ppu *ppu_new(void) {
 	return ppu;
 }
 
+void ppu_tick(struct ppu *ppu) {
+	(void)ppu;
+}
+
 void ppu_destroy(struct ppu *ppu) {
 	free(ppu->memory);
 	free(ppu);
