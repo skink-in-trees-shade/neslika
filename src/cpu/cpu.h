@@ -17,13 +17,19 @@ struct cpu {
 	uint8_t x;
 	uint8_t y;
 
-	bool carry;
-	bool zero;
-	bool interrupt_disable;
-	bool decimal_mode;
-	bool break_command;
-	bool overflow;
-	bool negative;
+	union {
+		uint8_t status;
+		struct {
+			bool carry: 1;
+			bool zero: 1;
+			bool interrupt_disable: 1;
+			bool decimal_mode: 1;
+			bool break_command: 1;
+			bool unused: 1;
+			bool overflow: 1;
+			bool negative: 1;
+		};
+	};
 
 	unsigned long cycle;
 	bool extra_decode_cycle;
@@ -41,7 +47,7 @@ struct cpu {
 };
 
 struct cpu *cpu_new(void);
-void cpu_start(struct cpu *cpu);
+void cpu_reset(struct cpu *cpu);
 void cpu_zero(struct cpu *cpu, uint8_t value);
 void cpu_negative(struct cpu *cpu, uint8_t value);
 uint8_t cpu_read(struct cpu *cpu);
