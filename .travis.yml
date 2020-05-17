@@ -7,13 +7,19 @@ branches:
   only:
     - trunk
 
+cache:
+  directories:
+    - assets
+
 compiler:
   - gcc
 
 before_install:
   - sudo pip install scons
+  - echo "${TRAVIS_TEST_ROM}"
+  - 'if ! [ -f assets/travis_test_rom.nes ]; then curl -L ${TRAVIS_TEST_ROM} -o ${TRAVIS_BUILD_DIR}/assets/travis_test_rom.nes; fi'
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
   - scons
-  - ./neslika
+  - ./neslika assets/travis_test_rom.nes
