@@ -11,6 +11,7 @@ struct apu {
 };
 
 struct apu *apu_new(void);
+void apu_tick(struct apu *apu);
 void apu_destroy(struct apu *apu);
 
 #endif

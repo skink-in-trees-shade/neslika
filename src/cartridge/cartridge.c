@@ -38,6 +38,10 @@ void cartridge_load(struct cartridge *cartridge, const char *filename) {
 	}
 }
 
+void cartridge_tick(struct cartridge *cartridge) {
+	(void)cartridge;
+}
+
 void cartridge_destroy(struct cartridge *cartridge) {
 	free(cartridge->prg_rom);
 	free(cartridge);
