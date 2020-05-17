@@ -16,18 +16,6 @@
 #include "instruction.h"
 #include "debug.h"
 
-static uint8_t cpu_status(struct cpu *cpu) {
-	return 0
-		| (cpu->carry << 0)
-		| (cpu->zero << 1)
-		| (cpu->interrupt_disable << 2)
-		| (cpu->decimal_mode << 3)
-		| (cpu->break_command << 4)
-		| (1 << 5)
-		| (cpu->overflow << 6)
-		| (cpu->negative << 7);
-}
-
 static void debug_imp(struct cpu *cpu, struct instruction *instruction) {
 	printf(
 		"%04X  %02X       %s%s                             A:%02X X:%02X Y:%02X P:%02X SP:%02X CYC:%lu\n",
@@ -38,7 +26,7 @@ static void debug_imp(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -54,7 +42,7 @@ static void debug_acc(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -72,7 +60,7 @@ static void debug_imm(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -90,7 +78,7 @@ static void debug_rel(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -109,7 +97,7 @@ static void debug_zpa(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -129,7 +117,7 @@ static void debug_zpx(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -149,7 +137,7 @@ static void debug_zpy(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -168,7 +156,7 @@ static void debug_abj(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -188,7 +176,7 @@ static void debug_abo(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -209,7 +197,7 @@ static void debug_abx(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -230,7 +218,7 @@ static void debug_aby(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -250,7 +238,7 @@ static void debug_ind(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -271,7 +259,7 @@ static void debug_iix(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);
@@ -292,7 +280,7 @@ static void debug_iiy(struct cpu *cpu, struct instruction *instruction) {
 		cpu->accumulator,
 		cpu->x,
 		cpu->y,
-		cpu_status(cpu),
+		cpu->status,
 		cpu->stack_pointer,
 		cpu->cycle
 	);

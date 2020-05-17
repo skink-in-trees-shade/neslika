@@ -41,7 +41,7 @@ void neslika_load(struct neslika *nes, const char *filename) {
 }
 
 void neslika_run(struct neslika *nes) {
-	cpu_start(nes->cpu);
+	cpu_reset(nes->cpu);
 
 	do {
 		cpu_fetch(nes->cpu);
