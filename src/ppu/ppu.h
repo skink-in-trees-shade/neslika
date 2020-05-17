@@ -5,7 +5,8 @@
 #include "device.h"
 
 struct ppu {
-	struct device device;
+	struct device cpu_device;
+	struct device ppu_device;
 
 	uint8_t *memory;
 };

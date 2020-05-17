@@ -10,7 +10,8 @@
 
 struct neslika {
 	struct clock *clock;
-	struct bus *bus;
+	struct bus *cpu_bus;
+	struct bus *ppu_bus;
 	struct cpu *cpu;
 	struct ppu *ppu;
 	struct apu *apu;
@@ -36,20 +37,23 @@ struct neslika *neslika_new(void) {
 	nes->clock = clock_new();
 	clock_on_tick(nes->clock, &_neslika_tick, nes);
 
-	nes->bus = bus_new();
+	nes->cpu_bus = bus_new();
+	nes->ppu_bus = bus_new();
 
 	nes->cpu = cpu_new();
-	nes->cpu->bus = nes->bus;
-	bus_attach(nes->bus, &nes->cpu->device);
+	nes->cpu->bus = nes->cpu_bus;
+	bus_attach(nes->cpu_bus, &nes->cpu->device);
 
 	nes->ppu = ppu_new();
-	bus_attach(nes->bus, &nes->ppu->device);
+	bus_attach(nes->cpu_bus, &nes->ppu->cpu_device);
+	bus_attach(nes->ppu_bus, &nes->ppu->ppu_device);
 
 	nes->apu = apu_new();
-	bus_attach(nes->bus, &nes->apu->device);
+	bus_attach(nes->cpu_bus, &nes->apu->device);
 
 	nes->cartridge = cartridge_new();
-	bus_attach(nes->bus, &nes->cartridge->device);
+	bus_attach(nes->cpu_bus, &nes->cartridge->cpu_device);
+	bus_attach(nes->ppu_bus, &nes->cartridge->ppu_device);
 
 	return nes;
 }
@@ -68,7 +72,8 @@ void neslika_destroy(struct neslika *nes) {
 	apu_destroy(nes->apu);
 	ppu_destroy(nes->ppu);
 	cpu_destroy(nes->cpu);
-	bus_destroy(nes->bus);
+	bus_destroy(nes->ppu_bus);
+	bus_destroy(nes->cpu_bus);
 	clock_destroy(nes->clock);
 	free(nes);
 }
