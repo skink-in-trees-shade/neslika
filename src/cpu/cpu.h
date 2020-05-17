@@ -56,9 +56,7 @@ void cpu_poke(struct cpu *cpu, uint16_t address, uint8_t value);
 void cpu_push(struct cpu *cpu, uint8_t value);
 uint8_t cpu_pull(struct cpu *cpu);
 bool cpu_running(struct cpu *cpu);
-void cpu_fetch(struct cpu *cpu);
-void cpu_decode(struct cpu *cpu);
-void cpu_execute(struct cpu *cpu);
+void cpu_tick(struct cpu *cpu);
 void cpu_destroy(struct cpu *cpu);
 
 #endif

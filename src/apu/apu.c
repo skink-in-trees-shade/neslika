@@ -21,6 +21,10 @@ struct apu *apu_new(void) {
 	return apu;
 }
 
+void apu_tick(struct apu *apu) {
+	(void)apu;
+}
+
 void apu_destroy(struct apu *apu) {
 	free(apu->memory);
 	free(apu);
