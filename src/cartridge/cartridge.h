@@ -7,6 +7,8 @@
 struct cartridge {
 	struct device device;
 
+	uint8_t mapper;
+	uint8_t prg_rom_count;
 	uint8_t *prg_rom;
 };
 
