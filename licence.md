@@ -1,13 +1,3 @@
-Do What The Fuck You Want To Public License
-===========================================
+_To my dearest M, who is perfect, unlike this code._
 
-_Version 2, December 2004_  
-_Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>_
-
-Everyone is permitted to copy and distribute verbatim or modified
-copies of this license document, and changing it is allowed as long
-as the name is changed.
-
-### Terms and Conditions for Copying, Distribution and Modification
-
-0. You just do what the fuck you want to.
+All the source code is public domain. Do whatever you want with it, there is no copyright, no restrictions and no warranty.
