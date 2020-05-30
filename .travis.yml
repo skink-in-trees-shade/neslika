@@ -1,25 +1,28 @@
 language: c
 
 git:
-  depth: false
+  depth: 1
 
 branches:
-  only:
-    - trunk
+  only: trunk
 
-cache:
-  directories:
-    - assets
+os: linux
 
-compiler:
-  - gcc
+dist: bionic
 
-before_install:
-  - sudo pip install scons
-  - echo "${TRAVIS_TEST_ROM}"
-  - 'if ! [ -f assets/travis_test_rom.nes ]; then curl -L ${TRAVIS_TEST_ROM} -o ${TRAVIS_BUILD_DIR}/assets/travis_test_rom.nes; fi'
+addons:
+  apt:
+    sources:
+      ubuntu-toolchain-r-test
+    packages:
+      scons
+      gcc-10
+
+compiler: gcc
+
+before_script:
+  - sudo rm /usr/bin/gcc
+  - sudo ln -s /usr/bin/gcc-10 /usr/bin/gcc
 
 script:
-  - cd ${TRAVIS_BUILD_DIR}
-  - scons
-  - ./neslika assets/travis_test_rom.nes
+  - scons -C ${TRAVIS_BUILD_DIR}
