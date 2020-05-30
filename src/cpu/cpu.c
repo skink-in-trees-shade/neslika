@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "instruction.h"
-#include "debug.h"
 #include "error.h"
 #include "cpu.h"
 
@@ -74,8 +73,6 @@ void cpu_tick(struct cpu *cpu) {
 	
 	cpu->extra_decode_cycle = false;
 	instructions[cpu->instruction].decode(cpu);
-
-	cpu_debug(cpu);
 
 	cpu->extra_execute_cycle = false;
 	instructions[cpu->instruction].execute(cpu);
