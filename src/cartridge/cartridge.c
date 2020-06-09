@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -8,25 +9,25 @@
 #include "cartridge.h"
 
 static uint8_t _cartridge_cpu_read(struct device *device, uint16_t address) {
-	struct cartridge *cartridge = (struct cartridge *)device;
+	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, cpu_device));
 	address = mappers[cartridge->mapper].cpu(cartridge, address);
 	return cartridge->prg_rom[address];
 }
 
 static void _cartridge_cpu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct cartridge *cartridge = (struct cartridge *)device;
+	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, cpu_device));
 	address = mappers[cartridge->mapper].cpu(cartridge, address);
 	cartridge->prg_rom[address] = value;
 }
 
 static uint8_t _cartridge_ppu_read(struct device *device, uint16_t address) {
-	struct cartridge *cartridge = (struct cartridge *)device;
+	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, ppu_device));
 	address = mappers[cartridge->mapper].ppu(cartridge, address);
 	return cartridge->chr_rom[address];
 }
 
 static void _cartridge_ppu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct cartridge *cartridge = (struct cartridge *)device;
+	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, ppu_device));
 	address = mappers[cartridge->mapper].ppu(cartridge, address);
 	cartridge->chr_rom[address] = value;
 }
@@ -39,8 +40,8 @@ struct cartridge *cartridge_new(void) {
 	cartridge->cpu_device.read = &_cartridge_cpu_read;
 	cartridge->cpu_device.write = &_cartridge_cpu_write;
 
-	cartridge->ppu_device.address_from = 0x8000;
-	cartridge->ppu_device.address_to = 0xFFFF;
+	cartridge->ppu_device.address_from = 0x0000;
+	cartridge->ppu_device.address_to = 0x1FFF;
 	cartridge->ppu_device.read = &_cartridge_ppu_read;
 	cartridge->ppu_device.write = &_cartridge_ppu_write;
 
@@ -62,6 +63,7 @@ void cartridge_tick(struct cartridge *cartridge) {
 }
 
 void cartridge_destroy(struct cartridge *cartridge) {
+	free(cartridge->chr_rom);
 	free(cartridge->prg_rom);
 	free(cartridge);
 }

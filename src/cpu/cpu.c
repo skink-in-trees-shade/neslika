@@ -1,15 +1,16 @@
+#include <stddef.h>
 #include <stdlib.h>
 #include "instruction.h"
 #include "error.h"
 #include "cpu.h"
 
 static uint8_t _cpu_read(struct device *device, uint16_t address) {
-	struct cpu *cpu = (struct cpu *)device;
+	struct cpu *cpu = (struct cpu *)((char *)device - offsetof(struct cpu, device));
 	return cpu->memory[address & 0x07FF];
 }
 
 static void _cpu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct cpu *cpu = (struct cpu *)device;
+	struct cpu *cpu = (struct cpu *)((char *)device - offsetof(struct cpu, device));
 	cpu->memory[address & 0x07FF] = value;
 }
 
@@ -61,12 +62,9 @@ uint8_t cpu_pull(struct cpu *cpu) {
 	return cpu_peek(cpu, 0x0100 + ++cpu->stack_pointer);
 }
 
-bool cpu_running(struct cpu *cpu) {
-	return cpu->instruction != 0x00;
-}
-
 void cpu_tick(struct cpu *cpu) {
 	cpu->instruction = cpu_read(cpu);
+
 	if (instructions[cpu->instruction].decode == NULL) {
 		error("Unknown instruction %02X.", cpu->instruction);
 	}
@@ -81,6 +79,23 @@ void cpu_tick(struct cpu *cpu) {
 	if (cpu->extra_decode_cycle && cpu->extra_execute_cycle) {
 		cpu->cycle++;
 	}
+}
+
+void cpu_nmi(struct cpu *cpu) {
+	uint8_t high = (cpu->program_counter >> 8) & 0xFF;
+	uint8_t low = cpu->program_counter & 0xFF;
+	cpu_push(cpu, high);
+	cpu_push(cpu, low);
+	
+	cpu->break_command = false;
+	cpu->interrupt_disable = true;
+	cpu_push(cpu, cpu->status);
+
+	low = cpu_peek(cpu, 0xFFFA);
+	high = cpu_peek(cpu, 0xFFFB);
+	cpu->program_counter = (high << 8) + low;
+
+	cpu->cycle += 8;
 }
 
 void cpu_destroy(struct cpu *cpu) {

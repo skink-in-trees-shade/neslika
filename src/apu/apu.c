@@ -1,13 +1,14 @@
+#include <stddef.h>
 #include <stdlib.h>
 #include "apu.h"
 
 static uint8_t _apu_read(struct device *device, uint16_t address) {
-	struct apu *apu = (struct apu *)device;
+	struct apu *apu = (struct apu *)((char *)device - offsetof(struct apu, device));
 	return apu->memory[address & 0x3FFF];
 }
 
 static void _apu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct apu *apu = (struct apu *)device;
+	struct apu *apu = (struct apu *)((char *)device - offsetof(struct apu, device));
 	apu->memory[address & 0x3FFF] = value;
 }
 
