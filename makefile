@@ -1,5 +1,5 @@
 CFLAGS  = -Wall -Wextra -Werror -Wpedantic -std=c11 -Isrc
-LDFLAGS =
+LDFLAGS = -lGL -lglfw
 
 SOURCES = $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c)
 OBJECTS = $(SOURCES:.c=.o)
