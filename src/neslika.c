@@ -1,41 +1,25 @@
 #include <stdlib.h>
 #include "bus.h"
-#include "clock.h"
 #include "device.h"
 #include "cpu/cpu.h"
 #include "ppu/ppu.h"
+#include "ppu/screen.h"
 #include "apu/apu.h"
 #include "cartridge/cartridge.h"
 #include "neslika.h"
 
 struct neslika {
-	struct clock *clock;
 	struct bus *cpu_bus;
 	struct bus *ppu_bus;
 	struct cpu *cpu;
 	struct ppu *ppu;
 	struct apu *apu;
 	struct cartridge *cartridge;
+	struct screen *screen;
 };
-
-static void _neslika_tick(void *system) {
-	struct neslika *nes = system;
-
-	cpu_tick(nes->cpu);
-	ppu_tick(nes->ppu);
-	apu_tick(nes->apu);
-	cartridge_tick(nes->cartridge);
-
-	if (!cpu_running(nes->cpu)) {
-		clock_stop(nes->clock);
-	}
-}
 
 struct neslika *neslika_new(void) {
 	struct neslika *nes = calloc(1, sizeof(struct neslika));
-
-	nes->clock = clock_new();
-	clock_on_tick(nes->clock, &_neslika_tick, nes);
 
 	nes->cpu_bus = bus_new();
 	nes->ppu_bus = bus_new();
@@ -45,6 +29,7 @@ struct neslika *neslika_new(void) {
 	bus_attach(nes->cpu_bus, &nes->cpu->device);
 
 	nes->ppu = ppu_new();
+	nes->ppu->bus = nes->ppu_bus;
 	bus_attach(nes->cpu_bus, &nes->ppu->cpu_device);
 	bus_attach(nes->ppu_bus, &nes->ppu->ppu_device);
 
@@ -55,6 +40,9 @@ struct neslika *neslika_new(void) {
 	bus_attach(nes->cpu_bus, &nes->cartridge->cpu_device);
 	bus_attach(nes->ppu_bus, &nes->cartridge->ppu_device);
 
+	nes->screen = screen_new();
+	nes->ppu->screen = nes->screen;
+
 	return nes;
 }
 
@@ -64,16 +52,34 @@ void neslika_load(struct neslika *nes, const char *filename) {
 
 void neslika_run(struct neslika *nes) {
 	cpu_reset(nes->cpu);
-	clock_start(nes->clock);
+	
+	while (!screen_done(nes->screen)) {
+		ppu_tick(nes->ppu);
+		ppu_tick(nes->ppu);
+		ppu_tick(nes->ppu);
+		cpu_tick(nes->cpu);
+		apu_tick(nes->apu);
+		cartridge_tick(nes->cartridge);
+
+		if (nes->ppu->nmi_occured) {
+			nes->ppu->nmi_occured = false;
+			cpu_nmi(nes->cpu);
+		}
+
+		if (nes->ppu->frame_completed) {
+			nes->ppu->frame_completed = false;
+			screen_update(nes->screen);
+		}
+	}
 }
 
 void neslika_destroy(struct neslika *nes) {
+	screen_destroy(nes->screen);
 	cartridge_destroy(nes->cartridge);
 	apu_destroy(nes->apu);
 	ppu_destroy(nes->ppu);
 	cpu_destroy(nes->cpu);
 	bus_destroy(nes->ppu_bus);
 	bus_destroy(nes->cpu_bus);
-	clock_destroy(nes->clock);
 	free(nes);
 }
