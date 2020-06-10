@@ -26,6 +26,7 @@ struct ppu {
 
 	uint8_t *name_table;
 	uint8_t *palette_table;
+	uint8_t *oam;
 
 	uint16_t vram_address;
 	uint16_t temp_vram_address;
