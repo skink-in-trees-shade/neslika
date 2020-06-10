@@ -30,6 +30,7 @@ struct ppu {
 	uint16_t vram_address;
 	uint16_t temp_vram_address;
 	uint8_t fine_x;
+	uint8_t read_buffer;
 
 	uint8_t tile_id;
 	uint8_t tile_low;

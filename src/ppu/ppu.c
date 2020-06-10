@@ -7,9 +7,23 @@ static uint8_t _ppu_cpu_read(struct device *device, uint16_t address) {
 	struct ppu *ppu = (struct ppu *)((char *)device - offsetof(struct ppu, cpu_device));
 
 	switch (address) {
-		case 0x2002:
+		case 0x2002: {
+			uint8_t value = (ppu->status & 0xE0) | (ppu->read_buffer & 0x1F);
+			ppu->status |= 0x7F;
 			ppu->write_toggle = false;
-			return ppu->status;
+			return value;
+		}
+		break;
+
+		case 0x2007: {
+			uint8_t value = ppu->read_buffer;
+			ppu->read_buffer = bus_read(ppu->bus, ppu->vram_address);
+			if ((ppu->vram_address & 0x3F00) == 0x3F00) {
+				value = ppu->read_buffer;
+			}
+			ppu->vram_address += (ppu->control & 0x04) == 0x04 ? 32 : 1;
+			return value;
+		}
 		break;
 	}
 
