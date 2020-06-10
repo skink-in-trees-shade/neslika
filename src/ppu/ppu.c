@@ -74,11 +74,15 @@ static uint8_t _ppu_ppu_read(struct device *device, uint16_t address) {
 	struct ppu *ppu = (struct ppu *)((char *)device - offsetof(struct ppu, ppu_device));
 
 	if (address >= 0x2000 && address <= 0x3EFF) {
-		return ppu->name_table[address & 0x03FF];
+		return ppu->name_table[address & 0x0FFF];
 	}
 
 	if (address >= 0x3F00 && address <= 0x3FFF) {
-		return ppu->palette_table[address & 0x001F];
+		address &= 0x001F;
+		if ((address & 0x0013) == 0x0010) {
+			address &= 0x000F;
+		}
+		return ppu->palette_table[address];
 	}
 
 	return 0x00;
@@ -88,17 +92,21 @@ static void _ppu_ppu_write(struct device *device, uint16_t address, uint8_t valu
 	struct ppu *ppu = (struct ppu *)((char *)device - offsetof(struct ppu, ppu_device));
 
 	if (address >= 0x2000 && address <= 0x3EFF) {
-		ppu->name_table[address & 0x03FF] = value;
+		ppu->name_table[address & 0x0FFF] = value;
 	}
 
 	if (address >= 0x3F00 && address <= 0x3FFF) {
-		ppu->palette_table[address & 0x001F] = value;
+		address &= 0x001F;
+		if ((address & 0x0013) == 0x0010) {
+			address &= 0x000F;
+		}
+		ppu->palette_table[address] = value;
 	}
 }
 
 struct ppu *ppu_new(void) {
 	struct ppu *ppu = calloc(1, sizeof(struct ppu));
-	ppu->name_table = calloc(0x0400, sizeof(uint8_t));
+	ppu->name_table = calloc(0x1000, sizeof(uint8_t));
 	ppu->palette_table = calloc(0x20, sizeof(uint8_t));
 	ppu->status = 0xA0;
 	ppu->scanline = 261;
