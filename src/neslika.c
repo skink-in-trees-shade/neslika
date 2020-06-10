@@ -6,16 +6,18 @@
 #include "ppu/screen.h"
 #include "apu/apu.h"
 #include "cartridge/cartridge.h"
+#include "controller/controller.h"
 #include "neslika.h"
 
 struct neslika {
 	struct bus *cpu_bus;
 	struct bus *ppu_bus;
+	struct screen *screen;
 	struct cpu *cpu;
 	struct ppu *ppu;
 	struct apu *apu;
 	struct cartridge *cartridge;
-	struct screen *screen;
+	struct controller *controller;
 };
 
 struct neslika *neslika_new(void) {
@@ -24,12 +26,15 @@ struct neslika *neslika_new(void) {
 	nes->cpu_bus = bus_new();
 	nes->ppu_bus = bus_new();
 
+	nes->screen = screen_new();
+
 	nes->cpu = cpu_new();
 	nes->cpu->bus = nes->cpu_bus;
 	bus_attach(nes->cpu_bus, &nes->cpu->device);
 
 	nes->ppu = ppu_new();
 	nes->ppu->bus = nes->ppu_bus;
+	nes->ppu->screen = nes->screen;
 	bus_attach(nes->cpu_bus, &nes->ppu->cpu_device);
 	bus_attach(nes->ppu_bus, &nes->ppu->ppu_device);
 
@@ -40,8 +45,9 @@ struct neslika *neslika_new(void) {
 	bus_attach(nes->cpu_bus, &nes->cartridge->cpu_device);
 	bus_attach(nes->ppu_bus, &nes->cartridge->ppu_device);
 
-	nes->screen = screen_new();
-	nes->ppu->screen = nes->screen;
+	nes->controller = controller_new();
+	nes->controller->screen = nes->screen;
+	bus_attach(nes->cpu_bus, &nes->controller->device);
 
 	return nes;
 }
@@ -60,6 +66,7 @@ void neslika_run(struct neslika *nes) {
 		cpu_tick(nes->cpu);
 		apu_tick(nes->apu);
 		cartridge_tick(nes->cartridge);
+		controller_tick(nes->controller);
 
 		if (nes->ppu->nmi_occured) {
 			nes->ppu->nmi_occured = false;
@@ -74,11 +81,12 @@ void neslika_run(struct neslika *nes) {
 }
 
 void neslika_destroy(struct neslika *nes) {
-	screen_destroy(nes->screen);
+	controller_destroy(nes->controller);
 	cartridge_destroy(nes->cartridge);
 	apu_destroy(nes->apu);
 	ppu_destroy(nes->ppu);
 	cpu_destroy(nes->cpu);
+	screen_destroy(nes->screen);
 	bus_destroy(nes->ppu_bus);
 	bus_destroy(nes->cpu_bus);
 	free(nes);

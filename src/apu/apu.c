@@ -16,7 +16,7 @@ struct apu *apu_new(void) {
 	struct apu *apu = calloc(1, sizeof(struct apu));
 	apu->memory = calloc(0x18, sizeof(uint8_t));
 	apu->device.address_from = 0x4000;
-	apu->device.address_to = 0x4017;
+	apu->device.address_to = 0x4007;
 	apu->device.read = &_apu_read;
 	apu->device.write = &_apu_write;
 	return apu;
