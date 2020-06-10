@@ -108,6 +108,7 @@ struct ppu *ppu_new(void) {
 	struct ppu *ppu = calloc(1, sizeof(struct ppu));
 	ppu->name_table = calloc(0x1000, sizeof(uint8_t));
 	ppu->palette_table = calloc(0x20, sizeof(uint8_t));
+	ppu->oam = calloc(0xFF, sizeof(uint8_t));
 	ppu->status = 0xA0;
 	ppu->scanline = 261;
 
@@ -141,6 +142,7 @@ void ppu_tick(struct ppu *ppu) {
 }
 
 void ppu_destroy(struct ppu *ppu) {
+	free(ppu->oam);
 	free(ppu->palette_table);
 	free(ppu->name_table);
 	free(ppu);

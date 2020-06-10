@@ -5,6 +5,7 @@
 #include "ppu/ppu.h"
 #include "ppu/screen.h"
 #include "apu/apu.h"
+#include "dma/dma.h"
 #include "cartridge/cartridge.h"
 #include "controller/controller.h"
 #include "neslika.h"
@@ -16,6 +17,7 @@ struct neslika {
 	struct cpu *cpu;
 	struct ppu *ppu;
 	struct apu *apu;
+	struct dma *dma;
 	struct cartridge *cartridge;
 	struct controller *controller;
 };
@@ -41,6 +43,12 @@ struct neslika *neslika_new(void) {
 	nes->apu = apu_new();
 	bus_attach(nes->cpu_bus, &nes->apu->device);
 
+	nes->dma = dma_new();
+	nes->dma->cpu = nes->cpu;
+	nes->dma->ppu = nes->ppu;
+	nes->dma->bus = nes->cpu_bus;
+	bus_attach(nes->cpu_bus, &nes->dma->device);
+
 	nes->cartridge = cartridge_new();
 	bus_attach(nes->cpu_bus, &nes->cartridge->cpu_device);
 	bus_attach(nes->ppu_bus, &nes->cartridge->ppu_device);
@@ -63,7 +71,12 @@ void neslika_run(struct neslika *nes) {
 		ppu_tick(nes->ppu);
 		ppu_tick(nes->ppu);
 		ppu_tick(nes->ppu);
-		cpu_tick(nes->cpu);
+		dma_tick(nes->dma);
+
+		if (!nes->dma->write_toggle) {
+			cpu_tick(nes->cpu);
+		}
+
 		apu_tick(nes->apu);
 		cartridge_tick(nes->cartridge);
 		controller_tick(nes->controller);
@@ -83,6 +96,7 @@ void neslika_run(struct neslika *nes) {
 void neslika_destroy(struct neslika *nes) {
 	controller_destroy(nes->controller);
 	cartridge_destroy(nes->cartridge);
+	dma_destroy(nes->dma);
 	apu_destroy(nes->apu);
 	ppu_destroy(nes->ppu);
 	cpu_destroy(nes->cpu);
