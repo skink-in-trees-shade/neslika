@@ -20,16 +20,34 @@ struct screen {
 	GLFWwindow *window;
 	GLuint texture;
 	uint32_t *pixels;
+	bool *keys;
 };
+
+static void keyboard_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+	(void)scancode;
+	(void)mods;
+
+	if (key > GLFW_KEY_UNKNOWN) {
+		struct screen *screen = glfwGetWindowUserPointer(window);
+		screen->keys[key] = action == GLFW_PRESS;
+	}
+
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
+	}
+}
 
 struct screen *screen_new(void) {
 	glfwInit();
 
 	struct screen *screen = calloc(1, sizeof(struct screen));
 	screen->pixels = calloc(width * height, sizeof(uint32_t));
+	screen->keys = calloc(GLFW_KEY_LAST, sizeof(bool));
 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	screen->window = glfwCreateWindow(width * 2, height * 2, "Neslika", NULL, NULL);
+	glfwSetWindowUserPointer(screen->window, screen);
+	glfwSetKeyCallback(screen->window, &keyboard_callback);
 	glfwMakeContextCurrent(screen->window);
 	glfwSwapInterval(1);
 
@@ -69,6 +87,10 @@ void screen_update(struct screen *screen) {
 	glfwPollEvents();
 }
 
+bool screen_key_pressed(struct screen *screen, int key) {
+	return screen->keys[key];
+}
+
 bool screen_done(struct screen *screen) {
 	return glfwWindowShouldClose(screen->window);
 }
@@ -76,6 +98,7 @@ bool screen_done(struct screen *screen) {
 void screen_destroy(struct screen *screen) {
 	glDeleteTextures(1, &screen->texture);
 	glfwDestroyWindow(screen->window);
+	free(screen->keys);
 	free(screen->pixels);
 	free(screen);
 	glfwTerminate();
