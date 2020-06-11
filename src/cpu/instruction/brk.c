@@ -8,7 +8,7 @@ void brk(struct cpu *cpu) {
 	cpu_push(cpu, low);
 	
 	cpu->break_command = true;
-	cpu_push(cpu, cpu->status);
+	cpu_push(cpu, cpu_status(cpu));
 
 	low = cpu_peek(cpu, 0xFFFE);
 	high = cpu_peek(cpu, 0xFFFF);

@@ -1,6 +1,6 @@
 #include "zpy.h"
 
 void zpy(struct cpu *cpu) {
-	cpu->operand = cpu_read(cpu);
-	cpu->operand_low += cpu->y;
+	uint8_t operand_low = cpu_read(cpu);
+	cpu->operand = (operand_low + cpu->y) & 0x00FF;
 }

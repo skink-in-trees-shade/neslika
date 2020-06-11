@@ -1,4 +1,4 @@
-CFLAGS  = -Wall -Wextra -Werror -Wpedantic -std=c11 -Isrc
+CFLAGS  = -Wall -Wextra -Werror -Wpedantic -std=c99 -Isrc
 LDFLAGS = -lGL -lglfw
 
 SOURCES = $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c)
