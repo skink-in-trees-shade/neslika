@@ -30,7 +30,7 @@ void cpu_reset(struct cpu *cpu) {
 	cpu->accumulator = 0x00;
 	cpu->x = 0x00;
 	cpu->y = 0x00;
-	cpu->status = 0x24;
+	cpu->interrupt_disable = true;
 	cpu->cycle = 7;
 }
 
@@ -40,6 +40,18 @@ void cpu_zero(struct cpu *cpu, uint8_t value) {
 
 void cpu_negative(struct cpu *cpu, uint8_t value) {
 	cpu->negative = value & 0x80;
+}
+
+uint8_t cpu_status(struct cpu *cpu) {
+	return 0
+		| (cpu->carry << 0)
+		| (cpu->zero << 1)
+		| (cpu->interrupt_disable << 2)
+		| (cpu->decimal_mode << 3)
+		| (cpu->break_command << 4)
+		| (1 << 5)
+		| (cpu->overflow << 6)
+		| (cpu->negative << 7);
 }
 
 uint8_t cpu_read(struct cpu *cpu) {
@@ -89,7 +101,7 @@ void cpu_nmi(struct cpu *cpu) {
 	
 	cpu->break_command = false;
 	cpu->interrupt_disable = true;
-	cpu_push(cpu, cpu->status);
+	cpu_push(cpu, cpu_status(cpu));
 
 	low = cpu_peek(cpu, 0xFFFA);
 	high = cpu_peek(cpu, 0xFFFB);

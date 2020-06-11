@@ -1,6 +1,7 @@
 #include "abj.h"
 
 void abj(struct cpu *cpu) {
-	cpu->operand_low = cpu_read(cpu);
-	cpu->operand_high = cpu_read(cpu);
+	uint8_t operand_low = cpu_read(cpu);
+	uint8_t operand_high = cpu_read(cpu);
+	cpu->operand = (operand_high << 8) | operand_low;
 }
