@@ -30,17 +30,15 @@ struct dma *dma_new(void) {
 
 void dma_tick(struct dma *dma) {
 	if (dma->write_toggle) {
-		if (dma->cycle > 0x00) {
-			if (dma->cycle % 2 == 0) {
-				uint16_t address = (dma->page << 8) | dma->address;
-				dma->value = bus_read(dma->bus, address);
-			} else {
-				dma->ppu->oam[dma->address++] = dma->value;
+		if (dma->cycle % 2 == 0) {
+			uint16_t address = (dma->page << 8) | dma->address;
+			dma->value = bus_read(dma->bus, address);
+		} else {
+			if (dma->address == 0xFF) {
+				dma->write_toggle = false;
 			}
-		}
 
-		if (dma->cycle == 0xFF) {
-			dma->write_toggle = false;
+			dma->ppu->primary_oam[dma->address++] = dma->value;
 		}
 
 		dma->cycle++;

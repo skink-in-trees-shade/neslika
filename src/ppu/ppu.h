@@ -26,7 +26,8 @@ struct ppu {
 
 	uint8_t *name_table;
 	uint8_t *palette_table;
-	uint8_t *oam;
+	uint8_t *primary_oam;
+	uint8_t *secondary_oam;
 
 	uint16_t vram_address;
 	uint16_t temp_vram_address;
@@ -42,6 +43,13 @@ struct ppu {
 	uint8_t palette_id;
 	uint16_t palette_shift_low;
 	uint16_t palette_shift_high;
+
+	uint8_t primary_sprite;
+	uint8_t secondary_sprite;
+	uint8_t sprite_shift_low[8];
+	uint8_t sprite_shift_high[8];
+	uint8_t sprite_shift_x[8];
+	uint8_t sprite_shift_attribute[8];
 };
 
 struct ppu *ppu_new(void);

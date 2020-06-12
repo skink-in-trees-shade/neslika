@@ -3,6 +3,8 @@
 
 #include "ppu/ppu.h"
 
-extern void (*events[262][342][4])(struct ppu *);
+enum { max_events = 6 };
+
+extern void (*events[262][342][max_events])(struct ppu *);
 
 #endif
