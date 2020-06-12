@@ -108,7 +108,8 @@ struct ppu *ppu_new(void) {
 	struct ppu *ppu = calloc(1, sizeof(struct ppu));
 	ppu->name_table = calloc(0x1000, sizeof(uint8_t));
 	ppu->palette_table = calloc(0x20, sizeof(uint8_t));
-	ppu->oam = calloc(0xFF, sizeof(uint8_t));
+	ppu->primary_oam = calloc(0x100, sizeof(uint8_t));
+	ppu->secondary_oam = calloc(0x20, sizeof(uint8_t));
 	ppu->status = 0xA0;
 	ppu->scanline = 261;
 
@@ -127,7 +128,7 @@ struct ppu *ppu_new(void) {
 
 void ppu_tick(struct ppu *ppu) {
 	void (**cycle_events)(struct ppu *) = events[ppu->scanline][ppu->cycle];
-	for (int i = 0; i < 4 && cycle_events[i]; i++) {
+	for (int i = 0; i < max_events && cycle_events[i]; i++) {
 		cycle_events[i](ppu);
 	}
 
@@ -142,7 +143,8 @@ void ppu_tick(struct ppu *ppu) {
 }
 
 void ppu_destroy(struct ppu *ppu) {
-	free(ppu->oam);
+	free(ppu->secondary_oam);
+	free(ppu->primary_oam);
 	free(ppu->palette_table);
 	free(ppu->name_table);
 	free(ppu);
