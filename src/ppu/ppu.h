@@ -52,6 +52,7 @@ struct ppu {
 	uint8_t sprite_shift_high[8];
 	uint8_t sprite_shift_x[8];
 	uint8_t sprite_shift_attribute[8];
+	bool sprite_zero_evaluated;
 };
 
 struct ppu *ppu_new(void);
