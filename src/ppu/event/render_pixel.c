@@ -28,7 +28,7 @@ void render_pixel(struct ppu *ppu) {
 
 				if (fg_pixel > 0x00) {
 					fg_palette = (ppu->sprite_shift_attribute[i] & 0x03) + 0x04;
-					fg_priority = !(ppu->sprite_shift_attribute[i] >> 5);
+					fg_priority = (ppu->sprite_shift_attribute[i] & 0x20) == 0x00;
 					break;
 				}
 			}
