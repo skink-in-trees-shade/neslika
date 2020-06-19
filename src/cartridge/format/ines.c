@@ -9,7 +9,7 @@ struct header {
 	char signature[4];
 	uint8_t prg_rom_count;
 	uint8_t chr_rom_count;
-	bool horizontal_mirroring: 1;
+	bool vertical_mirroring: 1;
 	bool has_prg_ram: 1;
 	bool has_trainer: 1;
 	bool ignore_mirroring: 1;
@@ -38,6 +38,7 @@ bool ines_load(struct cartridge *cartridge, const char *filename) {
 
 	if (is_ines(&header)) {
 		cartridge->mapper = (header.mapper_high << 8) + header.mapper_low;
+		cartridge->vertical_mirroring = header.vertical_mirroring;
 
 		cartridge->prg_rom_count = header.prg_rom_count;
 		cartridge->prg_rom = calloc(0x4000 * cartridge->prg_rom_count, sizeof(uint8_t));

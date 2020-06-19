@@ -2,6 +2,7 @@
 #define CARTRIDGE_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "device.h"
 
 struct cartridge {
@@ -9,6 +10,7 @@ struct cartridge {
 	struct device ppu_device;
 
 	uint8_t mapper;
+	bool vertical_mirroring;
 	uint8_t prg_rom_count;
 	uint8_t *prg_rom;
 	uint8_t chr_rom_count;

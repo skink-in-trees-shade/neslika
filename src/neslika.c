@@ -34,24 +34,25 @@ struct neslika *neslika_new(void) {
 	nes->cpu->bus = nes->cpu_bus;
 	bus_attach(nes->cpu_bus, &nes->cpu->device);
 
+	nes->apu = apu_new();
+	bus_attach(nes->cpu_bus, &nes->apu->device);
+
+	nes->cartridge = cartridge_new();
+	bus_attach(nes->cpu_bus, &nes->cartridge->cpu_device);
+	bus_attach(nes->ppu_bus, &nes->cartridge->ppu_device);
+
 	nes->ppu = ppu_new();
 	nes->ppu->bus = nes->ppu_bus;
 	nes->ppu->screen = nes->screen;
+	nes->ppu->cartridge = nes->cartridge;
 	bus_attach(nes->cpu_bus, &nes->ppu->cpu_device);
 	bus_attach(nes->ppu_bus, &nes->ppu->ppu_device);
-
-	nes->apu = apu_new();
-	bus_attach(nes->cpu_bus, &nes->apu->device);
 
 	nes->dma = dma_new();
 	nes->dma->cpu = nes->cpu;
 	nes->dma->ppu = nes->ppu;
 	nes->dma->bus = nes->cpu_bus;
 	bus_attach(nes->cpu_bus, &nes->dma->device);
-
-	nes->cartridge = cartridge_new();
-	bus_attach(nes->cpu_bus, &nes->cartridge->cpu_device);
-	bus_attach(nes->ppu_bus, &nes->cartridge->ppu_device);
 
 	nes->controller = controller_new();
 	nes->controller->screen = nes->screen;

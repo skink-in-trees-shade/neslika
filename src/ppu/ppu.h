@@ -6,12 +6,14 @@
 #include "device.h"
 #include "screen.h"
 #include "bus.h"
+#include "cartridge/cartridge.h"
 
 struct ppu {
 	struct device cpu_device;
 	struct device ppu_device;
 	struct bus *bus;
 	struct screen *screen;
+	struct cartridge *cartridge;
 
 	uint16_t scanline;
 	uint16_t cycle;
