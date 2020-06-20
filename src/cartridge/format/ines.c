@@ -45,7 +45,7 @@ bool ines_load(struct cartridge *cartridge, const char *filename) {
 		fread(cartridge->prg_rom, 0x4000, cartridge->prg_rom_count, file);
 
 		cartridge->chr_rom_count = header.chr_rom_count;
-		cartridge->chr_rom = calloc(0x2000 * cartridge->chr_rom_count, sizeof(uint8_t));
+		cartridge->chr_rom = calloc(0x2000 * (cartridge->chr_rom_count || 1), sizeof(uint8_t));
 		fread(cartridge->chr_rom, 0x2000, cartridge->chr_rom_count, file);
 
 		fclose(file);
