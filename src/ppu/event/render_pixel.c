@@ -7,12 +7,12 @@ void render_pixel(struct ppu *ppu) {
 	if ((ppu->mask & 0x08) == 0x08) {
 		uint16_t shift = ppu->fine_x ^ 0x0F;
 
-		uint8_t bg_pixel_low = ppu->tile_shift_low >> shift;
-		uint8_t bg_pixel_high = ppu->tile_shift_high >> shift;
+		uint8_t bg_pixel_low = (ppu->tile_shift_low >> shift) & 0x01;
+		uint8_t bg_pixel_high = (ppu->tile_shift_high >> shift) & 0x01;
 		bg_pixel = (bg_pixel_high << 1) | bg_pixel_low;
 
-		uint8_t bg_palette_low = ppu->palette_shift_low >> shift;
-		uint8_t bg_palette_high = ppu->palette_shift_high >> shift;
+		uint8_t bg_palette_low = (ppu->palette_shift_low >> shift) & 0x01;
+		uint8_t bg_palette_high = (ppu->palette_shift_high >> shift) & 0x01;
 		bg_palette = (bg_palette_high << 1) | bg_palette_low;
 	}
 
@@ -46,5 +46,5 @@ void render_pixel(struct ppu *ppu) {
 	}
 
 	uint8_t color_id = ppu->palette_table[(palette << 2) | pixel];
-	screen_pixel(ppu->screen, ppu->cycle, ppu->scanline, color_id);
+	screen_pixel(ppu->screen, ppu->cycle - 1, ppu->scanline, color_id);
 }
