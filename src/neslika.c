@@ -69,23 +69,29 @@ void neslika_run(struct neslika *nes) {
 	cpu_reset(nes->cpu);
 	
 	while (!screen_done(nes->screen)) {
-		ppu_tick(nes->ppu);
-		ppu_tick(nes->ppu);
-		ppu_tick(nes->ppu);
-		dma_tick(nes->dma);
+		unsigned long old_cycle = nes->cpu->cycle;
 
-		if (!nes->dma->write_toggle) {
+		dma_tick(nes->dma);
+		if (nes->dma->write_toggle) {
+			nes->cpu->cycle++;
+		} else {
 			cpu_tick(nes->cpu);
 		}
-
-		apu_tick(nes->apu);
-		cartridge_tick(nes->cartridge);
-		controller_tick(nes->controller);
 
 		if (nes->ppu->nmi_occured) {
 			nes->ppu->nmi_occured = false;
 			cpu_nmi(nes->cpu);
 		}
+
+		unsigned long current_cycle = nes->cpu->cycle;
+
+		for (unsigned long i = 0; i < (current_cycle - old_cycle) * 3; i++) {
+			ppu_tick(nes->ppu);
+		}
+
+		apu_tick(nes->apu);
+		cartridge_tick(nes->cartridge);
+		controller_tick(nes->controller);
 
 		if (nes->ppu->frame_completed) {
 			nes->ppu->frame_completed = false;
