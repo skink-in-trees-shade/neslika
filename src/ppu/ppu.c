@@ -9,7 +9,7 @@ static uint8_t _ppu_cpu_read(struct device *device, uint16_t address) {
 	switch (address) {
 		case 0x2002: {
 			uint8_t value = (ppu->status & 0xE0) | (ppu->read_buffer & 0x1F);
-			ppu->status |= 0x7F;
+			ppu->status &= 0x7F;
 			ppu->write_toggle = false;
 			return value;
 		}
