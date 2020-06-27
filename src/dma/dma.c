@@ -13,8 +13,8 @@ static void _dma_write(struct device *device, uint16_t address, uint8_t value) {
 	
 	if (address == 0x4014) {
 		dma->cycle = 0x00;
-		dma->page = value;
-		dma->address = 0x00;
+		dma->cpu_address = value << 8;
+		dma->ppu_address = dma->ppu->oam_address;
 		dma->write_toggle = true;
 	}
 }
@@ -31,17 +31,17 @@ struct dma *dma_new(void) {
 void dma_tick(struct dma *dma) {
 	if (dma->write_toggle) {
 		if (dma->cycle % 2 == 0) {
-			uint16_t address = (dma->page << 8) | dma->address;
-			dma->value = bus_read(dma->bus, address);
+			dma->value = bus_read(dma->bus, dma->cpu_address++);
 		} else {
-			if (dma->address == 0xFF) {
-				dma->write_toggle = false;
-			}
-
-			dma->ppu->primary_oam[dma->address++] = dma->value;
+			dma->ppu->primary_oam[dma->ppu_address++] = dma->value;
 		}
 
 		dma->cycle++;
+		dma->cpu->cycle++;
+
+		if (dma->cycle == 0x201) {
+			dma->write_toggle = false;
+		}
 	}
 }
 

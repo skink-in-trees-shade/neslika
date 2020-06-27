@@ -72,9 +72,7 @@ void neslika_run(struct neslika *nes) {
 		unsigned long old_cycle = nes->cpu->cycle;
 
 		dma_tick(nes->dma);
-		if (nes->dma->write_toggle) {
-			nes->cpu->cycle++;
-		} else {
+		if (!nes->dma->write_toggle) {
 			cpu_tick(nes->cpu);
 		}
 

@@ -15,6 +15,10 @@ static uint8_t _ppu_cpu_read(struct device *device, uint16_t address) {
 		}
 		break;
 
+		case 0x2004:
+			return ppu->primary_oam[ppu->oam_address];
+		break;
+
 		case 0x2007: {
 			uint8_t value = ppu->read_buffer;
 			ppu->read_buffer = bus_read(ppu->bus, ppu->vram_address);
@@ -41,6 +45,14 @@ static void _ppu_cpu_write(struct device *device, uint16_t address, uint8_t valu
 
 		case 0x2001:
 			ppu->mask = value;
+		break;
+
+		case 0x2003:
+			ppu->oam_address = value;
+		break;
+
+		case 0x2004:
+			ppu->primary_oam[ppu->oam_address++] = value;
 		break;
 
 		case 0x2005:
