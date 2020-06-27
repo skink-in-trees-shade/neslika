@@ -87,7 +87,7 @@ static uint8_t _ppu_ppu_read(struct device *device, uint16_t address) {
 
 	if (address >= 0x2000 && address <= 0x3EFF) {
 		if (!ppu->cartridge->vertical_mirroring) {
-			address |= (address & 0x0800) >> 1;
+			address = (address & 0x03FF) | ((address & 0x0800) >> 1);
 		}
 		address &= 0x07FF;
 		return ppu->name_table[address];
@@ -109,7 +109,7 @@ static void _ppu_ppu_write(struct device *device, uint16_t address, uint8_t valu
 
 	if (address >= 0x2000 && address <= 0x3EFF) {
 		if (!ppu->cartridge->vertical_mirroring) {
-			address |= (address & 0x0800) >> 1;
+			address = (address & 0x03FF) | ((address & 0x0800) >> 1);
 		}
 		address &= 0x07FF;
 		ppu->name_table[address] = value;
