@@ -14,9 +14,9 @@ struct dma {
 	struct cpu *cpu;
 	struct ppu *ppu;
 
-	uint8_t cycle;
-	uint8_t page;
-	uint8_t address;
+	uint16_t cycle;
+	uint16_t cpu_address;
+	uint8_t ppu_address;
 	uint8_t value;
 	bool write_toggle;
 };
