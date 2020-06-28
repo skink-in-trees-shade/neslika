@@ -16,6 +16,10 @@ void render_pixel(struct ppu *ppu) {
 		bg_palette = (bg_palette_high << 1) | bg_palette_low;
 	}
 
+	if ((ppu->mask & 0x08) == 0x00 && (ppu->mask & 0x10) == 0x00 && (ppu->vram_address & 0x3F00) == 0x3F00) {
+		bg_pixel = ppu->vram_address & 0x1F;
+	}
+
 	uint8_t fg_palette = 0x00;
 	uint8_t fg_pixel = 0x00;
 	bool fg_priority = false;
