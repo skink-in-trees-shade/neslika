@@ -10,26 +10,22 @@
 
 static uint8_t _cartridge_cpu_read(struct device *device, uint16_t address) {
 	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, cpu_device));
-	address = mappers[cartridge->mapper].cpu(cartridge, address);
-	return cartridge->prg_rom[address];
+	return mappers[cartridge->mapper].cpu_read(cartridge, address);
 }
 
 static void _cartridge_cpu_write(struct device *device, uint16_t address, uint8_t value) {
 	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, cpu_device));
-	address = mappers[cartridge->mapper].cpu(cartridge, address);
-	cartridge->prg_rom[address] = value;
+	mappers[cartridge->mapper].cpu_write(cartridge, address, value);
 }
 
 static uint8_t _cartridge_ppu_read(struct device *device, uint16_t address) {
 	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, ppu_device));
-	address = mappers[cartridge->mapper].ppu(cartridge, address);
-	return cartridge->chr_rom[address];
+	return mappers[cartridge->mapper].ppu_read(cartridge, address);
 }
 
 static void _cartridge_ppu_write(struct device *device, uint16_t address, uint8_t value) {
 	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, ppu_device));
-	address = mappers[cartridge->mapper].ppu(cartridge, address);
-	cartridge->chr_rom[address] = value;
+	mappers[cartridge->mapper].ppu_write(cartridge, address, value);
 }
 
 struct cartridge *cartridge_new(void) {
@@ -53,7 +49,7 @@ void cartridge_load(struct cartridge *cartridge, const char *filename) {
 		error("Unknown cartridge format.");
 	}
 
-	if (mappers[cartridge->mapper].cpu == NULL) {
+	if (mappers[cartridge->mapper].cpu_read == NULL) {
 		error("Unknown mapper %02X.", cartridge->mapper);
 	}
 }
