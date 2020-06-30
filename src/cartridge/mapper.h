@@ -5,8 +5,10 @@
 #include "cartridge/cartridge.h"
 
 struct mapper {
-	uint16_t (*cpu)(struct cartridge *cartridge, uint16_t address);
-	uint16_t (*ppu)(struct cartridge *cartridge, uint16_t address);
+	uint8_t (*cpu_read)(struct cartridge *cartridge, uint16_t address);
+	void (*cpu_write)(struct cartridge *cartridge, uint16_t address, uint8_t value);
+	uint8_t (*ppu_read)(struct cartridge *cartridge, uint16_t address);
+	void (*ppu_write)(struct cartridge *cartridge, uint16_t address, uint8_t value);
 };
 
 extern struct mapper mappers[0x100];
