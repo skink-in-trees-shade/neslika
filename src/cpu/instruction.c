@@ -258,7 +258,7 @@ struct instruction instructions[0x100] = {
 /* 0xA8 */ { "TAY", 0, imp,  tay, 2 },
 /* 0xA9 */ { "LDA", 0, imm,  lda, 2 },
 /* 0xAA */ { "TAX", 0, imp,  tax, 2 },
-/* 0xAB */ {  NULL, 0, NULL, NULL, 0 },
+/* 0xAB */ { "LAX", 1, imm,  lax, 0 },
 /* 0xAC */ { "LDY", 0, abo,  ldy, 4 },
 /* 0xAD */ { "LDA", 0, abo,  lda, 4 },
 /* 0xAE */ { "LDX", 0, abo,  ldx, 4 },
