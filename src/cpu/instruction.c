@@ -14,6 +14,7 @@
 #include "addressing/zpy.h"
 #include "instruction/adc.h"
 #include "instruction/alr.h"
+#include "instruction/anc.h"
 #include "instruction/and.h"
 #include "instruction/asl.h"
 #include "instruction/asla.h"
@@ -95,7 +96,7 @@ struct instruction instructions[0x100] = {
 /* 0x08 */ { "PHP", 0, imp,  php, 3 },
 /* 0x09 */ { "ORA", 0, imm,  ora, 2 },
 /* 0x0A */ { "ASL", 0, acc,  asla, 2 },
-/* 0x0B */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x0B */ { "ANC", 1, imm,  anc, 2 },
 /* 0x0C */ { "NOP", 1, abo,  nop, 4 },
 /* 0x0D */ { "ORA", 0, abo,  ora, 4 },
 /* 0x0E */ { "ASL", 0, abo,  asl, 6 },
@@ -127,7 +128,7 @@ struct instruction instructions[0x100] = {
 /* 0x28 */ { "PLP", 0, imp,  plp, 4 },
 /* 0x29 */ { "AND", 0, imm,  and, 2 },
 /* 0x2A */ { "ROL", 0, acc,  rola, 2 },
-/* 0x2B */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x2B */ { "ANC", 1, imm,  anc, 2 },
 /* 0x2C */ { "BIT", 0, abo,  bit, 4 },
 /* 0x2D */ { "AND", 0, abo,  and, 4 },
 /* 0x2E */ { "ROL", 0, abo,  rol, 6 },
