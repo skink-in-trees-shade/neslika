@@ -2,15 +2,15 @@
 #include "brk.h"
 
 void brk(struct cpu *cpu) {
-	uint8_t high = (cpu->program_counter >> 8) & 0xFF;
-	uint8_t low = cpu->program_counter & 0xFF;
-	cpu_push(cpu, high);
-	cpu_push(cpu, low);
-	
+	cpu->program_counter++;
+	cpu_push(cpu, cpu->program_counter >> 8);
+	cpu_push(cpu, cpu->program_counter & 0xFF);
+
 	cpu->break_command = true;
 	cpu_push(cpu, cpu_status(cpu));
+	cpu->interrupt_disable = true;
 
-	low = cpu_peek(cpu, 0xFFFE);
-	high = cpu_peek(cpu, 0xFFFF);
+	uint8_t low = cpu_peek(cpu, 0xFFFE);
+	uint8_t high = cpu_peek(cpu, 0xFFFF);
 	cpu->program_counter = (high << 8) + low;
 }
