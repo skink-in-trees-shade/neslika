@@ -147,10 +147,7 @@ struct ppu *ppu_new(void) {
 }
 
 void ppu_tick(struct ppu *ppu) {
-	void (**cycle_events)(struct ppu *) = events[ppu->scanline][ppu->cycle];
-	for (int i = 0; i < max_events && cycle_events[i]; i++) {
-		cycle_events[i](ppu);
-	}
+	event_execute(ppu);
 
 	ppu->cycle++;
 	if (ppu->cycle == 341) {
