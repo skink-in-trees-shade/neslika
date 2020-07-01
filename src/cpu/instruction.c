@@ -75,6 +75,7 @@
 #include "instruction/sed.h"
 #include "instruction/sei.h"
 #include "instruction/shx.h"
+#include "instruction/shy.h"
 #include "instruction/slo.h"
 #include "instruction/sre.h"
 #include "instruction/sta.h"
@@ -245,7 +246,7 @@ struct instruction instructions[0x100] = {
 /* 0x99 */ { "STA", 0, aby,  sta, 5 },
 /* 0x9A */ { "TXS", 0, imp,  txs, 2 },
 /* 0x9B */ {  NULL, 0, NULL, NULL, 0 },
-/* 0x9C */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x9C */ { "SHY", 1, abx,  shy, 5 },
 /* 0x9D */ { "STA", 0, abx,  sta, 5 },
 /* 0x9E */ { "SHX", 1, aby,  shx, 5 },
 /* 0x9F */ {  NULL, 0, NULL, NULL, 0 },
