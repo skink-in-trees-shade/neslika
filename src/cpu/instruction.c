@@ -16,6 +16,7 @@
 #include "instruction/alr.h"
 #include "instruction/anc.h"
 #include "instruction/and.h"
+#include "instruction/arr.h"
 #include "instruction/asl.h"
 #include "instruction/asla.h"
 #include "instruction/bcc.h"
@@ -192,7 +193,7 @@ struct instruction instructions[0x100] = {
 /* 0x68 */ { "PLA", 0, imp,  pla, 4 },
 /* 0x69 */ { "ADC", 0, imm,  adc, 2 },
 /* 0x6A */ { "ROR", 0, acc,  rora, 2 },
-/* 0x6B */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x6B */ { "ARR", 1, imm,  arr, 2 },
 /* 0x6C */ { "JMP", 0, ind,  jmp, 5 },
 /* 0x6D */ { "ADC", 0, abo,  adc, 4 },
 /* 0x6E */ { "ROR", 0, abo,  ror, 6 },
