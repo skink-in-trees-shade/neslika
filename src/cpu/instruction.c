@@ -19,6 +19,7 @@
 #include "instruction/arr.h"
 #include "instruction/asl.h"
 #include "instruction/asla.h"
+#include "instruction/axs.h"
 #include "instruction/bcc.h"
 #include "instruction/bcs.h"
 #include "instruction/beq.h"
@@ -289,7 +290,7 @@ struct instruction instructions[0x100] = {
 /* 0xC8 */ { "INY", 0, imp,  iny, 2 },
 /* 0xC9 */ { "CMP", 0, imm,  cmp, 2 },
 /* 0xCA */ { "DEX", 0, imp,  dex, 2 },
-/* 0xCB */ {  NULL, 0, NULL, NULL, 0 },
+/* 0xCB */ { "AXS", 1, imm,  axs, 2 },
 /* 0xCC */ { "CPY", 0, abo,  cpy, 4 },
 /* 0xCD */ { "CMP", 0, abo,  cmp, 4 },
 /* 0xCE */ { "DEC", 0, abo,  dec, 6 },
