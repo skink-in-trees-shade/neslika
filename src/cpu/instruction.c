@@ -13,6 +13,7 @@
 #include "addressing/zpx.h"
 #include "addressing/zpy.h"
 #include "instruction/adc.h"
+#include "instruction/alr.h"
 #include "instruction/and.h"
 #include "instruction/asl.h"
 #include "instruction/asla.h"
@@ -158,7 +159,7 @@ struct instruction instructions[0x100] = {
 /* 0x48 */ { "PHA", 0, imp,  pha, 3 },
 /* 0x49 */ { "EOR", 0, imm,  eor, 2 },
 /* 0x4A */ { "LSR", 0, acc,  lsra, 2 },
-/* 0x4B */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x4B */ { "ALR", 1, imm,  alr, 2 },
 /* 0x4C */ { "JMP", 0, abj,  jmp, 3 },
 /* 0x4D */ { "EOR", 0, abo,  eor, 4 },
 /* 0x4E */ { "LSR", 0, abo,  lsr, 6 },
