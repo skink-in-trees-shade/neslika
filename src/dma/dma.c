@@ -5,8 +5,7 @@ static void _dma_write(void *device, uint16_t address, uint8_t value) {
 	(void)address;
 	struct dma *dma = device;
 	dma->cycle = 0x00;
-	dma->cpu_address = value << 8;
-	dma->ppu_address = dma->ppu->oam_address;
+	dma->address = value << 8;
 	dma->write_toggle = true;
 }
 
@@ -22,9 +21,9 @@ struct dma *dma_new(struct bus *bus) {
 void dma_tick(struct dma *dma) {
 	if (dma->write_toggle) {
 		if (dma->cycle % 2 == 0) {
-			dma->value = bus_read(dma->bus, dma->cpu_address++);
+			dma->value = bus_read(dma->bus, dma->address++);
 		} else {
-			dma->ppu->primary_oam[dma->ppu_address++] = dma->value;
+			bus_write(dma->bus, 0x2004, dma->value);
 		}
 
 		dma->cycle++;
