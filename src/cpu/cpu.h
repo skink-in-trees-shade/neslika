@@ -3,12 +3,9 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <stddef.h>
-#include "device.h"
 #include "bus.h"
 
 struct cpu {
-	struct device device;
 	struct bus *bus;
 
 	uint16_t program_counter;
@@ -35,7 +32,7 @@ struct cpu {
 	uint8_t *memory;
 };
 
-struct cpu *cpu_new(void);
+struct cpu *cpu_new(struct bus *bus);
 void cpu_reset(struct cpu *cpu);
 void cpu_zero(struct cpu *cpu, uint8_t value);
 void cpu_negative(struct cpu *cpu, uint8_t value);

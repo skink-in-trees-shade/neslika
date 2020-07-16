@@ -1,30 +1,21 @@
-#include <stddef.h>
 #include <stdlib.h>
 #include "dma.h"
 
-static uint8_t _dma_read(struct device *device, uint16_t address) {
-	(void)device;
+static void _dma_write(void *device, uint16_t address, uint8_t value) {
 	(void)address;
-	return 0x00;
+	struct dma *dma = device;
+	dma->cycle = 0x00;
+	dma->cpu_address = value << 8;
+	dma->ppu_address = dma->ppu->oam_address;
+	dma->write_toggle = true;
 }
 
-static void _dma_write(struct device *device, uint16_t address, uint8_t value) {
-	struct dma *dma = (struct dma *)((char *)device - offsetof(struct dma, device));
-	
-	if (address == 0x4014) {
-		dma->cycle = 0x00;
-		dma->cpu_address = value << 8;
-		dma->ppu_address = dma->ppu->oam_address;
-		dma->write_toggle = true;
-	}
-}
-
-struct dma *dma_new(void) {
+struct dma *dma_new(struct bus *bus) {
 	struct dma *dma = calloc(1, sizeof(struct dma));
-	dma->device.address_from = 0x4014;
-	dma->device.address_to = 0x4014;
-	dma->device.read = &_dma_read;
-	dma->device.write = &_dma_write;
+
+	dma->bus = bus;
+	bus_register(dma->bus, dma, 0x4014, 0x4014, NULL, &_dma_write);
+
 	return dma;
 }
 

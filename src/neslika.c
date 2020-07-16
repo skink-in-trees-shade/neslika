@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "bus.h"
-#include "device.h"
 #include "cpu/cpu.h"
 #include "ppu/ppu.h"
 #include "ppu/screen.h"
@@ -25,38 +24,27 @@ struct neslika {
 struct neslika *neslika_new(void) {
 	struct neslika *nes = calloc(1, sizeof(struct neslika));
 
+	nes->screen = screen_new();
+
 	nes->cpu_bus = bus_new();
 	nes->ppu_bus = bus_new();
 
-	nes->screen = screen_new();
+	nes->cpu = cpu_new(nes->cpu_bus);
 
-	nes->cpu = cpu_new();
-	nes->cpu->bus = nes->cpu_bus;
-	bus_attach(nes->cpu_bus, &nes->cpu->device);
+	nes->apu = apu_new(nes->cpu_bus);
 
-	nes->apu = apu_new();
-	bus_attach(nes->cpu_bus, &nes->apu->device);
+	nes->cartridge = cartridge_new(nes->cpu_bus, nes->ppu_bus);
 
-	nes->cartridge = cartridge_new();
-	bus_attach(nes->cpu_bus, &nes->cartridge->cpu_device);
-	bus_attach(nes->ppu_bus, &nes->cartridge->ppu_device);
-
-	nes->ppu = ppu_new();
-	nes->ppu->bus = nes->ppu_bus;
+	nes->ppu = ppu_new(nes->cpu_bus, nes->ppu_bus);
 	nes->ppu->screen = nes->screen;
 	nes->ppu->cartridge = nes->cartridge;
-	bus_attach(nes->cpu_bus, &nes->ppu->cpu_device);
-	bus_attach(nes->ppu_bus, &nes->ppu->ppu_device);
 
-	nes->dma = dma_new();
+	nes->dma = dma_new(nes->cpu_bus);
 	nes->dma->cpu = nes->cpu;
 	nes->dma->ppu = nes->ppu;
-	nes->dma->bus = nes->cpu_bus;
-	bus_attach(nes->cpu_bus, &nes->dma->device);
 
-	nes->controller = controller_new();
+	nes->controller = controller_new(nes->cpu_bus);
 	nes->controller->screen = nes->screen;
-	bus_attach(nes->cpu_bus, &nes->controller->device);
 
 	return nes;
 }
