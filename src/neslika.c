@@ -41,7 +41,6 @@ struct neslika *neslika_new(void) {
 
 	nes->dma = dma_new(nes->cpu_bus);
 	nes->dma->cpu = nes->cpu;
-	nes->dma->ppu = nes->ppu;
 
 	nes->controller = controller_new(nes->cpu_bus);
 	nes->controller->screen = nes->screen;

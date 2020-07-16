@@ -4,17 +4,14 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "cpu/cpu.h"
-#include "ppu/ppu.h"
 #include "bus.h"
 
 struct dma {
 	struct bus *bus;
 	struct cpu *cpu;
-	struct ppu *ppu;
 
 	uint16_t cycle;
-	uint16_t cpu_address;
-	uint8_t ppu_address;
+	uint16_t address;
 	uint8_t value;
 	bool write_toggle;
 };
