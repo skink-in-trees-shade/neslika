@@ -1,26 +1,25 @@
-#include <stddef.h>
 #include <stdlib.h>
 #include "instruction.h"
 #include "error.h"
 #include "cpu.h"
 
-static uint8_t _cpu_read(struct device *device, uint16_t address) {
-	struct cpu *cpu = (struct cpu *)((char *)device - offsetof(struct cpu, device));
+static uint8_t _cpu_read(void *device, uint16_t address) {
+	struct cpu *cpu = device;
 	return cpu->memory[address & 0x07FF];
 }
 
-static void _cpu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct cpu *cpu = (struct cpu *)((char *)device - offsetof(struct cpu, device));
+static void _cpu_write(void *device, uint16_t address, uint8_t value) {
+	struct cpu *cpu = device;
 	cpu->memory[address & 0x07FF] = value;
 }
 
-struct cpu *cpu_new(void) {
+struct cpu *cpu_new(struct bus *bus) {
 	struct cpu *cpu = calloc(1, sizeof(struct cpu));
 	cpu->memory = calloc(0x0800, sizeof(uint8_t));
-	cpu->device.address_from = 0x0000;
-	cpu->device.address_to = 0x1FFF;
-	cpu->device.read = &_cpu_read;
-	cpu->device.write = &_cpu_write;
+
+	cpu->bus = bus;
+	bus_register(cpu->bus, cpu, 0x0000, 0x1FFF, &_cpu_read, &_cpu_write);
+
 	return cpu;
 }
 

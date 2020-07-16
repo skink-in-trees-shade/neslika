@@ -1,45 +1,37 @@
-#include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
 #include "mapper.h"
 #include "format/ines.h"
 #include "error.h"
 #include "cartridge.h"
 
-static uint8_t _cartridge_cpu_read(struct device *device, uint16_t address) {
-	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, cpu_device));
+static uint8_t _cartridge_cpu_read(void *device, uint16_t address) {
+	struct cartridge *cartridge = device;
 	return mappers[cartridge->mapper].cpu_read(cartridge, address);
 }
 
-static void _cartridge_cpu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, cpu_device));
+static void _cartridge_cpu_write(void *device, uint16_t address, uint8_t value) {
+	struct cartridge *cartridge = device;
 	mappers[cartridge->mapper].cpu_write(cartridge, address, value);
 }
 
-static uint8_t _cartridge_ppu_read(struct device *device, uint16_t address) {
-	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, ppu_device));
+static uint8_t _cartridge_ppu_read(void *device, uint16_t address) {
+	struct cartridge *cartridge = device;
 	return mappers[cartridge->mapper].ppu_read(cartridge, address);
 }
 
-static void _cartridge_ppu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct cartridge *cartridge = (struct cartridge *)((char *)device - offsetof(struct cartridge, ppu_device));
+static void _cartridge_ppu_write(void *device, uint16_t address, uint8_t value) {
+	struct cartridge *cartridge = device;
 	mappers[cartridge->mapper].ppu_write(cartridge, address, value);
 }
 
-struct cartridge *cartridge_new(void) {
+struct cartridge *cartridge_new(struct bus *cpu_bus, struct bus *ppu_bus) {
 	struct cartridge *cartridge = calloc(1, sizeof(struct cartridge));
 
-	cartridge->cpu_device.address_from = 0x8000;
-	cartridge->cpu_device.address_to = 0xFFFF;
-	cartridge->cpu_device.read = &_cartridge_cpu_read;
-	cartridge->cpu_device.write = &_cartridge_cpu_write;
+	cartridge->cpu_bus = cpu_bus;
+	cartridge->ppu_bus = ppu_bus;
 
-	cartridge->ppu_device.address_from = 0x0000;
-	cartridge->ppu_device.address_to = 0x1FFF;
-	cartridge->ppu_device.read = &_cartridge_ppu_read;
-	cartridge->ppu_device.write = &_cartridge_ppu_write;
+	bus_register(cartridge->cpu_bus, cartridge, 0x8000, 0xFFFF, &_cartridge_cpu_read, &_cartridge_cpu_write);
+	bus_register(cartridge->ppu_bus, cartridge, 0x0000, 0x1FFF, &_cartridge_ppu_read, &_cartridge_ppu_write);
 
 	return cartridge;
 }

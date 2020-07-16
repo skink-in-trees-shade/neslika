@@ -3,15 +3,13 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "device.h"
 #include "screen.h"
 #include "bus.h"
 #include "cartridge/cartridge.h"
 
 struct ppu {
-	struct device cpu_device;
-	struct device ppu_device;
-	struct bus *bus;
+	struct bus *cpu_bus;
+	struct bus *ppu_bus;
 	struct screen *screen;
 	struct cartridge *cartridge;
 
@@ -56,7 +54,7 @@ struct ppu {
 	bool sprite_zero_evaluated;
 };
 
-struct ppu *ppu_new(void);
+struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus);
 void ppu_tick(struct ppu *ppu);
 void ppu_destroy(struct ppu *ppu);
 

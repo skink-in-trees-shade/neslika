@@ -1,10 +1,9 @@
-#include <stddef.h>
 #include <stdlib.h>
 #include "event.h"
 #include "ppu.h"
 
-static uint8_t _ppu_cpu_read(struct device *device, uint16_t address) {
-	struct ppu *ppu = (struct ppu *)((char *)device - offsetof(struct ppu, cpu_device));
+static uint8_t _ppu_cpu_read(void *device, uint16_t address) {
+	struct ppu *ppu = device;
 
 	switch (address) {
 		case 0x2002: {
@@ -21,7 +20,7 @@ static uint8_t _ppu_cpu_read(struct device *device, uint16_t address) {
 
 		case 0x2007: {
 			uint8_t value = ppu->read_buffer;
-			ppu->read_buffer = bus_read(ppu->bus, ppu->vram_address);
+			ppu->read_buffer = bus_read(ppu->ppu_bus, ppu->vram_address);
 			if ((ppu->vram_address & 0x3F00) == 0x3F00) {
 				value = ppu->read_buffer;
 			}
@@ -34,8 +33,8 @@ static uint8_t _ppu_cpu_read(struct device *device, uint16_t address) {
 	return 0x00;
 }
 
-static void _ppu_cpu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct ppu *ppu = (struct ppu *)((char *)device - offsetof(struct ppu, cpu_device));
+static void _ppu_cpu_write(void *device, uint16_t address, uint8_t value) {
+	struct ppu *ppu = device;
 
 	switch (address) {
 		case 0x2000:
@@ -76,14 +75,14 @@ static void _ppu_cpu_write(struct device *device, uint16_t address, uint8_t valu
 		break;
 
 		case 0x2007:
-			bus_write(ppu->bus, ppu->vram_address, value);
+			bus_write(ppu->ppu_bus, ppu->vram_address, value);
 			ppu->vram_address += (ppu->control & 0x04) == 0x04 ? 32 : 1;
 		break;
 	}
 }
 
-static uint8_t _ppu_ppu_read(struct device *device, uint16_t address) {
-	struct ppu *ppu = (struct ppu *)((char *)device - offsetof(struct ppu, ppu_device));
+static uint8_t _ppu_ppu_read(void *device, uint16_t address) {
+	struct ppu *ppu = device;
 
 	if (address >= 0x2000 && address <= 0x3EFF) {
 		if (!ppu->cartridge->vertical_mirroring) {
@@ -104,8 +103,8 @@ static uint8_t _ppu_ppu_read(struct device *device, uint16_t address) {
 	return 0x00;
 }
 
-static void _ppu_ppu_write(struct device *device, uint16_t address, uint8_t value) {
-	struct ppu *ppu = (struct ppu *)((char *)device - offsetof(struct ppu, ppu_device));
+static void _ppu_ppu_write(void *device, uint16_t address, uint8_t value) {
+	struct ppu *ppu = device;
 
 	if (address >= 0x2000 && address <= 0x3EFF) {
 		if (!ppu->cartridge->vertical_mirroring) {
@@ -124,7 +123,7 @@ static void _ppu_ppu_write(struct device *device, uint16_t address, uint8_t valu
 	}
 }
 
-struct ppu *ppu_new(void) {
+struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus) {
 	struct ppu *ppu = calloc(1, sizeof(struct ppu));
 	ppu->name_table = calloc(0x800, sizeof(uint8_t));
 	ppu->palette_table = calloc(0x20, sizeof(uint8_t));
@@ -133,15 +132,11 @@ struct ppu *ppu_new(void) {
 	ppu->status = 0xA0;
 	ppu->scanline = 261;
 
-	ppu->cpu_device.address_from = 0x2000;
-	ppu->cpu_device.address_to = 0x2007;
-	ppu->cpu_device.read = &_ppu_cpu_read;
-	ppu->cpu_device.write = &_ppu_cpu_write;
+	ppu->cpu_bus = cpu_bus;
+	ppu->ppu_bus = ppu_bus;
 
-	ppu->ppu_device.address_from = 0x2000;
-	ppu->ppu_device.address_to = 0x3FFF;
-	ppu->ppu_device.read = &_ppu_ppu_read;
-	ppu->ppu_device.write = &_ppu_ppu_write;
+	bus_register(ppu->cpu_bus, ppu, 0x2000, 0x2007, &_ppu_cpu_read, &_ppu_cpu_write);
+	bus_register(ppu->ppu_bus, ppu, 0x2000, 0x3FFF, &_ppu_ppu_read, &_ppu_ppu_write);
 
 	return ppu;
 }

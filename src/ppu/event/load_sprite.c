@@ -29,8 +29,8 @@ void load_sprite(struct ppu *ppu) {
 				address |= ppu->scanline - sprite_y;
 			}
 
-			uint8_t sprite_low = bus_read(ppu->bus, address);
-			uint8_t sprite_high = bus_read(ppu->bus, address + 0x08);
+			uint8_t sprite_low = bus_read(ppu->ppu_bus, address);
+			uint8_t sprite_high = bus_read(ppu->ppu_bus, address + 0x08);
 
 			if ((sprite_attribute & 0x40) == 0x40) {
 				sprite_low = invert(sprite_low);
