@@ -1,7 +1,8 @@
 CFLAGS  = -Wall -Wextra -Werror -Wpedantic -std=c99 -Isrc
 LDFLAGS = -lGL -lglfw
 
-SOURCES = $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c)
+rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+SOURCES = $(call rwildcard,src/,*.c)
 OBJECTS = $(SOURCES:.c=.o)
 DEPENDS = $(SOURCES:.c=.d)
 TARGET  = neslika
