@@ -16,7 +16,7 @@
 #include "event.h"
 #include "ppu.h"
 
-struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus) {
+struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus, struct screen *screen) {
 	struct ppu *ppu = calloc(1, sizeof(struct ppu));
 	ppu->name_table = calloc(0x800, sizeof(uint8_t));
 	ppu->palette_table = calloc(0x20, sizeof(uint8_t));
@@ -27,6 +27,7 @@ struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus) {
 
 	ppu->cpu_bus = cpu_bus;
 	ppu->ppu_bus = ppu_bus;
+	ppu->screen = screen;
 
 	bus_register(ppu->cpu_bus, ppu, 0x2000, 0x2000, NULL, &write_controller);
 	bus_register(ppu->cpu_bus, ppu, 0x2001, 0x2001, NULL, &write_mask);
