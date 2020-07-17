@@ -1,19 +1,12 @@
 #include <stdlib.h>
+#include "memory/write_oam_dma.h"
 #include "dma.h"
-
-static void _dma_write(void *device, uint16_t address, uint8_t value) {
-	(void)address;
-	struct dma *dma = device;
-	dma->cycle = 0x00;
-	dma->address = value << 8;
-	dma->write_toggle = true;
-}
 
 struct dma *dma_new(struct bus *bus) {
 	struct dma *dma = calloc(1, sizeof(struct dma));
 
 	dma->bus = bus;
-	bus_register(dma->bus, dma, 0x4014, 0x4014, NULL, &_dma_write);
+	bus_register(dma->bus, dma, 0x4014, 0x4014, NULL, &write_oam_dma);
 
 	return dma;
 }

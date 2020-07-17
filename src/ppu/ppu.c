@@ -1,127 +1,20 @@
 #include <stdlib.h>
+#include "memory/read_data.h"
+#include "memory/read_name_table.h"
+#include "memory/read_oam_data.h"
+#include "memory/read_palette_table.h"
+#include "memory/read_status.h"
+#include "memory/write_address.h"
+#include "memory/write_controller.h"
+#include "memory/write_data.h"
+#include "memory/write_mask.h"
+#include "memory/write_name_table.h"
+#include "memory/write_oam_address.h"
+#include "memory/write_oam_data.h"
+#include "memory/write_palette_table.h"
+#include "memory/write_scroll.h"
 #include "event.h"
 #include "ppu.h"
-
-static uint8_t _ppu_cpu_read(void *device, uint16_t address) {
-	struct ppu *ppu = device;
-
-	switch (address) {
-		case 0x2002: {
-			uint8_t value = (ppu->status & 0xE0) | (ppu->read_buffer & 0x1F);
-			ppu->status &= 0x7F;
-			ppu->write_toggle = false;
-			return value;
-		}
-		break;
-
-		case 0x2004:
-			return ppu->primary_oam[ppu->oam_address];
-		break;
-
-		case 0x2007: {
-			uint8_t value = ppu->read_buffer;
-			ppu->read_buffer = bus_read(ppu->ppu_bus, ppu->vram_address);
-			if ((ppu->vram_address & 0x3F00) == 0x3F00) {
-				value = ppu->read_buffer;
-			}
-			ppu->vram_address += (ppu->control & 0x04) == 0x04 ? 32 : 1;
-			return value;
-		}
-		break;
-	}
-
-	return 0x00;
-}
-
-static void _ppu_cpu_write(void *device, uint16_t address, uint8_t value) {
-	struct ppu *ppu = device;
-
-	switch (address) {
-		case 0x2000:
-			ppu->control = value;
-			ppu->temp_vram_address = (ppu->temp_vram_address & 0x73FF) | ((value & 0x03) << 10);
-		break;
-
-		case 0x2001:
-			ppu->mask = value;
-		break;
-
-		case 0x2003:
-			ppu->oam_address = value;
-		break;
-
-		case 0x2004:
-			ppu->primary_oam[ppu->oam_address++] = value;
-		break;
-
-		case 0x2005:
-			if (!ppu->write_toggle) {
-				ppu->fine_x = value & 0x07;
-				ppu->temp_vram_address = (ppu->temp_vram_address & 0x7FE0) | (value >> 3);
-			} else {
-				ppu->temp_vram_address = (ppu->temp_vram_address & 0x0C1F) | ((value & 0x07) << 12) | ((value >> 3) << 5);
-			}
-			ppu->write_toggle = !ppu->write_toggle;
-		break;
-
-		case 0x2006:
-			if (!ppu->write_toggle) {
-				ppu->temp_vram_address = (ppu->temp_vram_address & 0x00FF) | ((value & 0x3F) << 8);
-			} else {
-				ppu->temp_vram_address = (ppu->temp_vram_address & 0xFF00) | value;
-				ppu->vram_address = ppu->temp_vram_address;
-			}
-			ppu->write_toggle = !ppu->write_toggle;
-		break;
-
-		case 0x2007:
-			bus_write(ppu->ppu_bus, ppu->vram_address, value);
-			ppu->vram_address += (ppu->control & 0x04) == 0x04 ? 32 : 1;
-		break;
-	}
-}
-
-static uint8_t _ppu_ppu_read(void *device, uint16_t address) {
-	struct ppu *ppu = device;
-
-	if (address >= 0x2000 && address <= 0x3EFF) {
-		if (!ppu->cartridge->vertical_mirroring) {
-			address = (address & 0x03FF) | ((address & 0x0800) >> 1);
-		}
-		address &= 0x07FF;
-		return ppu->name_table[address];
-	}
-
-	if (address >= 0x3F00 && address <= 0x3FFF) {
-		address &= 0x001F;
-		if ((address & 0x0013) == 0x0010) {
-			address &= 0x000F;
-		}
-		return ppu->palette_table[address];
-	}
-
-	return 0x00;
-}
-
-static void _ppu_ppu_write(void *device, uint16_t address, uint8_t value) {
-	struct ppu *ppu = device;
-
-	if (address >= 0x2000 && address <= 0x3EFF) {
-		if (!ppu->cartridge->vertical_mirroring) {
-			address = (address & 0x03FF) | ((address & 0x0800) >> 1);
-		}
-		address &= 0x07FF;
-		ppu->name_table[address] = value;
-	}
-
-	if (address >= 0x3F00 && address <= 0x3FFF) {
-		address &= 0x001F;
-		if ((address & 0x0013) == 0x0010) {
-			address &= 0x000F;
-		}
-		ppu->palette_table[address] = value;
-	}
-}
 
 struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus) {
 	struct ppu *ppu = calloc(1, sizeof(struct ppu));
@@ -135,8 +28,16 @@ struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus) {
 	ppu->cpu_bus = cpu_bus;
 	ppu->ppu_bus = ppu_bus;
 
-	bus_register(ppu->cpu_bus, ppu, 0x2000, 0x2007, &_ppu_cpu_read, &_ppu_cpu_write);
-	bus_register(ppu->ppu_bus, ppu, 0x2000, 0x3FFF, &_ppu_ppu_read, &_ppu_ppu_write);
+	bus_register(ppu->cpu_bus, ppu, 0x2000, 0x2000, NULL, &write_controller);
+	bus_register(ppu->cpu_bus, ppu, 0x2001, 0x2001, NULL, &write_mask);
+	bus_register(ppu->cpu_bus, ppu, 0x2002, 0x2002, &read_status, NULL);
+	bus_register(ppu->cpu_bus, ppu, 0x2003, 0x2003, NULL, &write_oam_address);
+	bus_register(ppu->cpu_bus, ppu, 0x2004, 0x2004, &read_oam_data, &write_oam_data);
+	bus_register(ppu->cpu_bus, ppu, 0x2005, 0x2005, NULL, &write_scroll);
+	bus_register(ppu->cpu_bus, ppu, 0x2006, 0x2006, NULL, &write_address);
+	bus_register(ppu->cpu_bus, ppu, 0x2007, 0x2007, &read_data, &write_data);
+	bus_register(ppu->ppu_bus, ppu, 0x2000, 0x3EFF, &read_name_table, &write_name_table);
+	bus_register(ppu->ppu_bus, ppu, 0x3F00, 0x3FFF, &read_palette_table, &write_palette_table);
 
 	return ppu;
 }

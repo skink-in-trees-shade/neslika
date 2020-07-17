@@ -11,8 +11,8 @@ struct controller {
 	struct screen *screen;
 
 	bool write_toggle;
-	uint8_t state_p1;
-	uint8_t state_p2;
+	uint8_t player_one;
+	uint8_t player_two;
 };
 
 struct controller *controller_new(struct bus *bus);

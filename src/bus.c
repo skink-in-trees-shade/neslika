@@ -16,7 +16,7 @@ struct bus {
 
 struct bus *bus_new(void) {
 	struct bus *bus = calloc(1, sizeof(struct bus));
-	bus->handlers = calloc(10, sizeof(struct handler));
+	bus->handlers = calloc(0x10, sizeof(struct handler));
 	return bus;
 }
 

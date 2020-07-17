@@ -1,24 +1,16 @@
 #include <stdlib.h>
 #include "instruction.h"
+#include "memory/read_memory.h"
+#include "memory/write_memory.h"
 #include "error.h"
 #include "cpu.h"
-
-static uint8_t _cpu_read(void *device, uint16_t address) {
-	struct cpu *cpu = device;
-	return cpu->memory[address & 0x07FF];
-}
-
-static void _cpu_write(void *device, uint16_t address, uint8_t value) {
-	struct cpu *cpu = device;
-	cpu->memory[address & 0x07FF] = value;
-}
 
 struct cpu *cpu_new(struct bus *bus) {
 	struct cpu *cpu = calloc(1, sizeof(struct cpu));
 	cpu->memory = calloc(0x0800, sizeof(uint8_t));
 
 	cpu->bus = bus;
-	bus_register(cpu->bus, cpu, 0x0000, 0x1FFF, &_cpu_read, &_cpu_write);
+	bus_register(cpu->bus, cpu, 0x0000, 0x1FFF, &read_memory, &write_memory);
 
 	return cpu;
 }
