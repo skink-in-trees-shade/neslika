@@ -1,5 +1,5 @@
 CFLAGS  = -Wall -Wextra -Werror -Wpedantic -std=c99 -Isrc
-LDFLAGS = -lGL -lglfw
+LDFLAGS = -lX11 -lGL
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 SOURCES = $(call rwildcard,src/,*.c)

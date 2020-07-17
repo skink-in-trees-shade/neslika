@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "screen.h"
+#include "screen/screen.h"
 #include "bus.h"
 #include "cartridge/cartridge.h"
 
@@ -54,7 +54,7 @@ struct ppu {
 	bool sprite_zero_evaluated;
 };
 
-struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus);
+struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus, struct screen *screen);
 void ppu_tick(struct ppu *ppu);
 void ppu_destroy(struct ppu *ppu);
 

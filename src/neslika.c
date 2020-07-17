@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include "bus.h"
+#include "screen/screen.h"
+#include "keyboard/keyboard.h"
 #include "cpu/cpu.h"
 #include "ppu/ppu.h"
-#include "ppu/screen.h"
 #include "apu/apu.h"
 #include "dma/dma.h"
 #include "cartridge/cartridge.h"
@@ -13,6 +14,7 @@ struct neslika {
 	struct bus *cpu_bus;
 	struct bus *ppu_bus;
 	struct screen *screen;
+	struct keyboard *keyboard;
 	struct cpu *cpu;
 	struct ppu *ppu;
 	struct apu *apu;
@@ -24,7 +26,8 @@ struct neslika {
 struct neslika *neslika_new(void) {
 	struct neslika *nes = calloc(1, sizeof(struct neslika));
 
-	nes->screen = screen_new();
+	nes->screen = screen_new("Neslika", 256, 240);
+	nes->keyboard = keyboard_new();
 
 	nes->cpu_bus = bus_new();
 	nes->ppu_bus = bus_new();
@@ -35,15 +38,13 @@ struct neslika *neslika_new(void) {
 
 	nes->cartridge = cartridge_new(nes->cpu_bus, nes->ppu_bus);
 
-	nes->ppu = ppu_new(nes->cpu_bus, nes->ppu_bus);
-	nes->ppu->screen = nes->screen;
+	nes->ppu = ppu_new(nes->cpu_bus, nes->ppu_bus, nes->screen);
 	nes->ppu->cartridge = nes->cartridge;
 
 	nes->dma = dma_new(nes->cpu_bus);
 	nes->dma->cpu = nes->cpu;
 
-	nes->controller = controller_new(nes->cpu_bus);
-	nes->controller->screen = nes->screen;
+	nes->controller = controller_new(nes->cpu_bus, nes->keyboard);
 
 	return nes;
 }
@@ -54,8 +55,9 @@ void neslika_load(struct neslika *nes, const char *filename) {
 
 void neslika_run(struct neslika *nes) {
 	cpu_reset(nes->cpu);
-	
-	while (!screen_done(nes->screen)) {
+
+	bool done;
+	while (!done) {
 		unsigned long old_cycle = nes->cpu->cycle;
 
 		dma_tick(nes->dma);
@@ -81,6 +83,7 @@ void neslika_run(struct neslika *nes) {
 		if (nes->ppu->frame_completed) {
 			nes->ppu->frame_completed = false;
 			screen_update(nes->screen);
+			done = keyboard_pressed(nes->keyboard, key_escape);
 		}
 	}
 }
@@ -92,6 +95,7 @@ void neslika_destroy(struct neslika *nes) {
 	apu_destroy(nes->apu);
 	ppu_destroy(nes->ppu);
 	cpu_destroy(nes->cpu);
+	keyboard_destroy(nes->keyboard);
 	screen_destroy(nes->screen);
 	bus_destroy(nes->ppu_bus);
 	bus_destroy(nes->cpu_bus);

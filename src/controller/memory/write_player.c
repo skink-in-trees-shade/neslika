@@ -1,47 +1,28 @@
 #include "controller/controller.h"
 #include "write_player.h"
 
-enum keyboard {
-	keyboard_a = 65,
-	keyboard_d = 68,
-	keyboard_e = 69,
-	keyboard_f = 70,
-	keyboard_g = 71,
-	keyboard_i = 73,
-	keyboard_j = 74,
-	keyboard_k = 75,
-	keyboard_l = 76,
-	keyboard_o = 79,
-	keyboard_q = 81,
-	keyboard_s = 83,
-	keyboard_u = 85,
-	keyboard_w = 87,
-	keyboard_semicolon = 59,
-	keyboard_apostrophe = 39
-};
-
 static uint8_t get_player_one(struct controller *controller) {
 	return 0
-		| (screen_key_pressed(controller->screen, keyboard_f) << 0)
-		| (screen_key_pressed(controller->screen, keyboard_g) << 1)
-		| (screen_key_pressed(controller->screen, keyboard_q) << 2)
-		| (screen_key_pressed(controller->screen, keyboard_e) << 3)
-		| (screen_key_pressed(controller->screen, keyboard_w) << 4)
-		| (screen_key_pressed(controller->screen, keyboard_s) << 5)
-		| (screen_key_pressed(controller->screen, keyboard_a) << 6)
-		| (screen_key_pressed(controller->screen, keyboard_d) << 7);
+		| (keyboard_pressed(controller->keyboard, key_f) << 0)
+		| (keyboard_pressed(controller->keyboard, key_g) << 1)
+		| (keyboard_pressed(controller->keyboard, key_q) << 2)
+		| (keyboard_pressed(controller->keyboard, key_e) << 3)
+		| (keyboard_pressed(controller->keyboard, key_w) << 4)
+		| (keyboard_pressed(controller->keyboard, key_s) << 5)
+		| (keyboard_pressed(controller->keyboard, key_a) << 6)
+		| (keyboard_pressed(controller->keyboard, key_d) << 7);
 }
 
 static uint8_t get_player_two(struct controller *controller) {
 	return 0
-		| (screen_key_pressed(controller->screen, keyboard_semicolon) << 0)
-		| (screen_key_pressed(controller->screen, keyboard_apostrophe) << 1)
-		| (screen_key_pressed(controller->screen, keyboard_u) << 2)
-		| (screen_key_pressed(controller->screen, keyboard_o) << 3)
-		| (screen_key_pressed(controller->screen, keyboard_i) << 4)
-		| (screen_key_pressed(controller->screen, keyboard_k) << 5)
-		| (screen_key_pressed(controller->screen, keyboard_j) << 6)
-		| (screen_key_pressed(controller->screen, keyboard_l) << 7);
+		| (keyboard_pressed(controller->keyboard, key_semicolon) << 0)
+		| (keyboard_pressed(controller->keyboard, key_apostrophe) << 1)
+		| (keyboard_pressed(controller->keyboard, key_u) << 2)
+		| (keyboard_pressed(controller->keyboard, key_o) << 3)
+		| (keyboard_pressed(controller->keyboard, key_i) << 4)
+		| (keyboard_pressed(controller->keyboard, key_k) << 5)
+		| (keyboard_pressed(controller->keyboard, key_j) << 6)
+		| (keyboard_pressed(controller->keyboard, key_l) << 7);
 }
 
 void write_player(void *device, uint16_t address, uint8_t value) {
