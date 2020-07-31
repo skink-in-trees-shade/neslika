@@ -1,7 +1,7 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <stdlib.h>
-#include "keyboard.h"
+#include "platform/keyboard.h"
 
 static KeySym map[max_keys]= {
 	[key_a] = XK_A,

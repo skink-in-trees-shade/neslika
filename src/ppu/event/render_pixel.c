@@ -1,4 +1,4 @@
-#include "screen/screen.h"
+#include "platform/screen.h"
 #include "render_pixel.h"
 
 void render_pixel(struct ppu *ppu) {
