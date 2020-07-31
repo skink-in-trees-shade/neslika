@@ -1,8 +1,15 @@
-CFLAGS  = -Wall -Wextra -Werror -Wpedantic -std=c99 -Isrc
-LDFLAGS = -lX11 -lGL
+CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -std=c99 -Isrc -pipe -O2
+
+ifeq ($(OS),Windows_NT)
+	PLATFORM = windows
+	LDFLAGS = -lgdi32
+else
+	PLATFORM = linux
+	LDFLAGS = -lX11 -lGL
+endif
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
-SOURCES = $(call rwildcard,src/,*.c)
+SOURCES = $(filter-out src/platform/%.c, $(call rwildcard,src/,*.c)) $(wildcard src/platform/$(PLATFORM)/*.c)
 OBJECTS = $(SOURCES:.c=.o)
 DEPENDS = $(SOURCES:.c=.d)
 TARGET  = neslika

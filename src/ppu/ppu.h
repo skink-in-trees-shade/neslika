@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "screen/screen.h"
+#include "platform/screen.h"
 #include "bus.h"
 #include "cartridge/cartridge.h"
 

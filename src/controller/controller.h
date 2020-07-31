@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "keyboard/keyboard.h"
+#include "platform/keyboard.h"
 #include "bus.h"
 
 struct controller {

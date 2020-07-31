@@ -760,7 +760,7 @@ static enum event special_post_render_scanline[341] = {
 };
 
 void event_execute(struct ppu *ppu) {
-	enum event events;
+	enum event events = ID;
 	if (ppu->scanline <= 239) {
 		events = visible_scanline[ppu->cycle];
 	} else if (ppu->scanline == 240 || (ppu->scanline >= 242 && ppu->scanline <= 260)) {

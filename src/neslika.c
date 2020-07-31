@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "bus.h"
-#include "screen/screen.h"
-#include "keyboard/keyboard.h"
+#include "platform/screen.h"
+#include "platform/keyboard.h"
 #include "cpu/cpu.h"
 #include "ppu/ppu.h"
 #include "apu/apu.h"
@@ -56,7 +56,7 @@ void neslika_load(struct neslika *nes, const char *filename) {
 void neslika_run(struct neslika *nes) {
 	cpu_reset(nes->cpu);
 
-	bool done;
+	bool done = false;
 	while (!done) {
 		unsigned long old_cycle = nes->cpu->cycle;
 

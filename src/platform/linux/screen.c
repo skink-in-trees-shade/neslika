@@ -3,7 +3,7 @@
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <stdlib.h>
-#include "screen.h"
+#include "platform/screen.h"
 
 static uint32_t palette[0x40] = {
 	0xFF545454, 0xFF741E00, 0xFF901008, 0xFF880030, 0xFF640044, 0xFF30005C, 0xFF000454, 0xFF00183C,
