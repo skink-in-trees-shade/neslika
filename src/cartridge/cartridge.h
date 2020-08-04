@@ -12,6 +12,7 @@ struct cartridge {
 	uint8_t mapper;
 	bool vertical_mirroring;
 	uint8_t prg_rom_count;
+	uint8_t prg_rom_bank;
 	uint8_t *prg_rom;
 	uint8_t chr_rom_count;
 	uint8_t *chr_rom;
