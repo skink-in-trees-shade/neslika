@@ -2,10 +2,10 @@ CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -std=c99 -Isrc -pi
 
 ifeq ($(OS),Windows_NT)
 	PLATFORM = windows
-	LDFLAGS = -lgdi32
+	LDFLAGS = -lgdi32 -lwinmm
 else
 	PLATFORM = linux
-	LDFLAGS = -lX11 -lGL
+	LDFLAGS = -lX11 -lGL -lasound -lpthread
 endif
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))

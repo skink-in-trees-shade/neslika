@@ -78,8 +78,6 @@ void screen_update(struct screen *screen) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-
-	Sleep(1);
 }
 
 void screen_destroy(struct screen *screen) {

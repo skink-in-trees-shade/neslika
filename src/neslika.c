@@ -2,6 +2,7 @@
 #include "clock.h"
 #include "bus.h"
 #include "platform/screen.h"
+#include "platform/audio.h"
 #include "platform/keyboard.h"
 #include "cpu/cpu.h"
 #include "ppu/ppu.h"
@@ -16,6 +17,7 @@ struct neslika {
 	struct bus *cpu_bus;
 	struct bus *ppu_bus;
 	struct screen *screen;
+	struct audio *audio;
 	struct keyboard *keyboard;
 	struct cpu *cpu;
 	struct ppu *ppu;
@@ -29,6 +31,7 @@ struct neslika *neslika_new(void) {
 	struct neslika *nes = calloc(1, sizeof(struct neslika));
 
 	nes->screen = screen_new("Neslika", 256, 240);
+	nes->audio = audio_new(1, 48000);
 	nes->keyboard = keyboard_new();
 
 	nes->cpu_bus = bus_new(0x10000);
@@ -36,7 +39,7 @@ struct neslika *neslika_new(void) {
 
 	nes->cpu = cpu_new(nes->cpu_bus);
 
-	nes->apu = apu_new(nes->cpu_bus);
+	nes->apu = apu_new(nes->cpu_bus, nes->audio);
 
 	nes->cartridge = cartridge_new(nes->cpu_bus, nes->ppu_bus);
 
@@ -74,6 +77,7 @@ void neslika_destroy(struct neslika *nes) {
 	ppu_destroy(nes->ppu);
 	cpu_destroy(nes->cpu);
 	keyboard_destroy(nes->keyboard);
+	audio_destroy(nes->audio);
 	screen_destroy(nes->screen);
 	bus_destroy(nes->ppu_bus);
 	bus_destroy(nes->cpu_bus);
