@@ -9,7 +9,7 @@ void evaluate_sprite(struct ppu *ppu) {
 
 		if (ppu->secondary_sprite < 0x09 && ppu->primary_sprite < 0x40) {
 			uint8_t *sprite = &ppu->primary_oam[ppu->primary_sprite * 4];
-			uint8_t sprite_height = 0x08;
+			uint8_t sprite_height = 0x08 << ((ppu->control & 0x20) >> 5);
 			uint8_t sprite_y = sprite[0];
 			if (ppu->scanline >= sprite_y && ppu->scanline < sprite_y + sprite_height) {
 				if (ppu->primary_sprite == 0x00) {
