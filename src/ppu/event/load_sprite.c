@@ -21,14 +21,22 @@ void load_sprite(struct ppu *ppu) {
 			uint8_t sprite_tile_id = sprite[1];
 			uint8_t sprite_attribute = sprite[2];
 
-			uint16_t address = ((ppu->control & 0x08) << 9) | (sprite_tile_id << 4);
-
-			if ((sprite_attribute & 0x80) == 0x80) {
-				address |= 7 - (ppu->scanline - sprite_y);
+			uint8_t page;
+			uint8_t tile;
+			if ((ppu->control & 0x20) == 0x00) {
+				page = (ppu->control & 0x08) >> 3;
+				tile = sprite_tile_id;
 			} else {
-				address |= ppu->scanline - sprite_y;
+				page = sprite_tile_id & 0x01;
+				tile = (sprite_tile_id & 0xFE) + (((ppu->scanline - sprite_y) / 8) ^ ((sprite_attribute & 0x80) == 0x80));
 			}
 
+			uint8_t row = ppu->scanline - sprite_y;
+			if ((sprite_attribute & 0x80) == 0x80) {
+				row = 7 - row;
+			}
+
+			uint16_t address = (page << 12) | (tile << 4) | (row & 0x07);
 			uint8_t sprite_low = bus_read(ppu->ppu_bus, address);
 			uint8_t sprite_high = bus_read(ppu->ppu_bus, address + 0x08);
 
