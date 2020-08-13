@@ -29,6 +29,7 @@ void cartridge_tick(struct cartridge *cartridge) {
 }
 
 void cartridge_destroy(struct cartridge *cartridge) {
+	free(cartridge->mapper_data);
 	free(cartridge->chr_rom);
 	free(cartridge->prg_rom);
 	free(cartridge);
