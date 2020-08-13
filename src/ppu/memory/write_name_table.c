@@ -3,7 +3,7 @@
 
 void write_name_table(void *device, uint16_t address, uint8_t value) {
 	struct ppu *ppu = device;
-	if (!ppu->cartridge->vertical_mirroring) {
+	if (ppu->cartridge->mirroring == mirroring_horizontal) {
 		address = (address & 0x03FF) | ((address & 0x0800) >> 1);
 	}
 	address &= 0x07FF;
