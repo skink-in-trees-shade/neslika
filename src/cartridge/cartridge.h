@@ -7,7 +7,9 @@
 
 enum mirroring {
 	mirroring_horizontal,
-	mirroring_vertical
+	mirroring_vertical,
+	mirroring_one_screen_lower,
+	mirroring_one_screen_upper
 };
 
 struct cartridge {
