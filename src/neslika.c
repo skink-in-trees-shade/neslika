@@ -29,8 +29,8 @@ struct neslika *neslika_new(void) {
 	nes->screen = screen_new("Neslika", 256, 240);
 	nes->keyboard = keyboard_new();
 
-	nes->cpu_bus = bus_new();
-	nes->ppu_bus = bus_new();
+	nes->cpu_bus = bus_new(0x10000);
+	nes->ppu_bus = bus_new(0x4000);
 
 	nes->cpu = cpu_new(nes->cpu_bus);
 
