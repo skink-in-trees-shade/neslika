@@ -2,8 +2,9 @@
 #include "bus.h"
 
 struct handler {
-	void *device;
+	void *read_device;
 	read_callback *read;
+	void *write_device;
 	write_callback *write;
 };
 
@@ -20,16 +21,21 @@ struct bus *bus_new(uint32_t size) {
 void bus_register(struct bus *bus, void *device, uint16_t from, uint16_t to, read_callback *read, write_callback *write) {
 	for (uint32_t i = from; i <= to; i++) {
 		struct handler *handler = &bus->handlers[i];
-		handler->device = device;
-		handler->read = read;
-		handler->write = write;
+		if (!handler->read && read) {
+			handler->read = read;
+			handler->read_device = device;
+		}
+		if (!handler->write && write) {
+			handler->write = write;
+			handler->write_device = device;
+		}
 	}
 }
 
 uint8_t bus_read(struct bus *bus, uint16_t address) {
 	struct handler *handler = &bus->handlers[address];
 	if (handler->read) {
-		return handler->read(handler->device, address);
+		return handler->read(handler->read_device, address);
 	}
 	return 0x00;
 }
@@ -37,7 +43,7 @@ uint8_t bus_read(struct bus *bus, uint16_t address) {
 void bus_write(struct bus *bus, uint16_t address, uint8_t value) {
 	struct handler *handler = &bus->handlers[address];
 	if (handler->write) {
-		handler->write(handler->device, address, value);
+		handler->write(handler->write_device, address, value);
 	}
 }
 
