@@ -3,6 +3,6 @@
 
 #include "cartridge/cartridge.h"
 
-extern void (*mappers[0x100])(struct cartridge *cartridge);
+extern void (*mappers[0x08])(struct cartridge *cartridge);
 
 #endif
