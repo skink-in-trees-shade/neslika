@@ -3,26 +3,26 @@
 
 static uint8_t get_player_one(struct controller *controller) {
 	return 0
-		| (keyboard_pressed(controller->keyboard, key_f) << 0)
-		| (keyboard_pressed(controller->keyboard, key_g) << 1)
-		| (keyboard_pressed(controller->keyboard, key_q) << 2)
-		| (keyboard_pressed(controller->keyboard, key_e) << 3)
-		| (keyboard_pressed(controller->keyboard, key_w) << 4)
-		| (keyboard_pressed(controller->keyboard, key_s) << 5)
-		| (keyboard_pressed(controller->keyboard, key_a) << 6)
-		| (keyboard_pressed(controller->keyboard, key_d) << 7);
+		| (keyboard_pressed(controller->keyboard, key_x) << 0)
+		| (keyboard_pressed(controller->keyboard, key_z) << 1)
+		| (keyboard_pressed(controller->keyboard, key_tab) << 2)
+		| (keyboard_pressed(controller->keyboard, key_space) << 3)
+		| (keyboard_pressed(controller->keyboard, key_up) << 4)
+		| (keyboard_pressed(controller->keyboard, key_down) << 5)
+		| (keyboard_pressed(controller->keyboard, key_left) << 6)
+		| (keyboard_pressed(controller->keyboard, key_right) << 7);
 }
 
 static uint8_t get_player_two(struct controller *controller) {
 	return 0
-		| (keyboard_pressed(controller->keyboard, key_semicolon) << 0)
-		| (keyboard_pressed(controller->keyboard, key_apostrophe) << 1)
-		| (keyboard_pressed(controller->keyboard, key_u) << 2)
-		| (keyboard_pressed(controller->keyboard, key_o) << 3)
-		| (keyboard_pressed(controller->keyboard, key_i) << 4)
-		| (keyboard_pressed(controller->keyboard, key_k) << 5)
-		| (keyboard_pressed(controller->keyboard, key_j) << 6)
-		| (keyboard_pressed(controller->keyboard, key_l) << 7);
+		| (keyboard_pressed(controller->keyboard, key_p) << 0)
+		| (keyboard_pressed(controller->keyboard, key_o) << 1)
+		| (keyboard_pressed(controller->keyboard, key_backspace) << 2)
+		| (keyboard_pressed(controller->keyboard, key_enter) << 3)
+		| (keyboard_pressed(controller->keyboard, key_num8) << 4)
+		| (keyboard_pressed(controller->keyboard, key_num5) << 5)
+		| (keyboard_pressed(controller->keyboard, key_num4) << 6)
+		| (keyboard_pressed(controller->keyboard, key_num6) << 7);
 }
 
 void write_player(void *device, uint16_t address, uint8_t value) {

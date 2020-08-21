@@ -4,22 +4,22 @@
 #include "platform/keyboard.h"
 
 static KeySym map[max_keys]= {
-	[key_a] = XK_A,
-	[key_d] = XK_D,
-	[key_e] = XK_E,
-	[key_f] = XK_F,
-	[key_g] = XK_G,
-	[key_i] = XK_I,
-	[key_j] = XK_J,
-	[key_k] = XK_K,
-	[key_l] = XK_L,
 	[key_o] = XK_O,
-	[key_q] = XK_Q,
-	[key_s] = XK_S,
-	[key_u] = XK_U,
-	[key_w] = XK_W,
-	[key_semicolon] = XK_semicolon,
-	[key_apostrophe] = XK_apostrophe,
+	[key_p] = XK_P,
+	[key_x] = XK_X,
+	[key_z] = XK_Z,
+	[key_num4] = XK_KP_4,
+	[key_num5] = XK_KP_5,
+	[key_num6] = XK_KP_6,
+	[key_num8] = XK_KP_8,
+	[key_left] = XK_Left,
+	[key_right] = XK_Right,
+	[key_up] = XK_Up,
+	[key_down] = XK_Down,
+	[key_tab] = XK_Tab,
+	[key_space] = XK_space,
+	[key_enter] = XK_Return,
+	[key_backspace] = XK_BackSpace,
 	[key_escape] = XK_Escape
 };
 
