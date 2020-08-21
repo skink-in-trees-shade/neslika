@@ -3,22 +3,22 @@
 #include "platform/keyboard.h"
 
 static int map[max_keys]= {
-	[key_a] = 'A',
-	[key_d] = 'D',
-	[key_e] = 'E',
-	[key_f] = 'F',
-	[key_g] = 'G',
-	[key_i] = 'I',
-	[key_j] = 'J',
-	[key_k] = 'K',
-	[key_l] = 'L',
 	[key_o] = 'O',
-	[key_q] = 'Q',
-	[key_s] = 'S',
-	[key_u] = 'U',
-	[key_w] = 'W',
-	[key_semicolon] = VK_OEM_1,
-	[key_apostrophe] = VK_OEM_7,
+	[key_p] = 'P',
+	[key_x] = 'X',
+	[key_z] = 'Z',
+	[key_num4] = VK_NUMPAD4,
+	[key_num5] = VK_NUMPAD5,
+	[key_num6] = VK_NUMPAD6,
+	[key_num8] = VK_NUMPAD8,
+	[key_left] = VK_LEFT,
+	[key_right] = VK_RIGHT,
+	[key_up] = VK_UP,
+	[key_down] = VK_DOWN,
+	[key_tab] = VK_TAB,
+	[key_space] = VK_SPACE,
+	[key_enter] = VK_RETURN,
+	[key_backspace] = VK_BACK,
 	[key_escape] = VK_ESCAPE
 };
 
