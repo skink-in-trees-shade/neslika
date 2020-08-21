@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include "error.h"
 #include "ines.h"
 
 #pragma pack(push, 1)
@@ -32,6 +33,9 @@ static bool is_ines(struct header *header) {
 
 bool ines_load(struct cartridge *cartridge, const char *filename) {
 	FILE *file = fopen(filename, "rb");
+	if (!file) {
+		error("File not found.");
+	}
 
 	struct header header;
 	fread(&header, sizeof(header), 1, file);
