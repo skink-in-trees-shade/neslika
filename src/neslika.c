@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "clock.h"
 #include "bus.h"
 #include "platform/screen.h"
 #include "platform/keyboard.h"
@@ -11,6 +12,7 @@
 #include "neslika.h"
 
 struct neslika {
+	struct clock *clock;
 	struct bus *cpu_bus;
 	struct bus *ppu_bus;
 	struct screen *screen;
@@ -46,6 +48,8 @@ struct neslika *neslika_new(void) {
 
 	nes->controller = controller_new(nes->cpu_bus, nes->keyboard);
 
+	nes->clock = clock_new(nes->cpu, nes->ppu, nes->apu, nes->dma, nes->cartridge, nes->controller);
+
 	return nes;
 }
 
@@ -56,39 +60,13 @@ void neslika_load(struct neslika *nes, const char *filename) {
 void neslika_run(struct neslika *nes) {
 	cpu_reset(nes->cpu);
 
-	bool done = false;
-	while (!done) {
-		unsigned long old_cycle = nes->cpu->cycle;
-
-		dma_tick(nes->dma);
-		if (!nes->dma->write_toggle) {
-			cpu_tick(nes->cpu);
-		}
-
-		if (nes->ppu->nmi_occured) {
-			nes->ppu->nmi_occured = false;
-			cpu_nmi(nes->cpu);
-		}
-
-		unsigned long current_cycle = nes->cpu->cycle;
-
-		for (unsigned long i = 0; i < (current_cycle - old_cycle) * 3; i++) {
-			ppu_tick(nes->ppu);
-		}
-
-		apu_tick(nes->apu);
-		cartridge_tick(nes->cartridge);
-		controller_tick(nes->controller);
-
-		if (nes->ppu->frame_completed) {
-			nes->ppu->frame_completed = false;
-			screen_update(nes->screen);
-			done = keyboard_pressed(nes->keyboard, key_escape);
-		}
+	while (!clock_done(nes->clock)) {
+		clock_tick(nes->clock);
 	}
 }
 
 void neslika_destroy(struct neslika *nes) {
+	clock_destroy(nes->clock);
 	controller_destroy(nes->controller);
 	cartridge_destroy(nes->cartridge);
 	dma_destroy(nes->dma);
