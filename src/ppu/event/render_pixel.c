@@ -34,7 +34,7 @@ void render_pixel(struct ppu *ppu) {
 					fg_palette = (ppu->sprite_shift_attribute[i] & 0x03) + 0x04;
 					fg_priority = (ppu->sprite_shift_attribute[i] & 0x20) == 0x00;
 
-					if (ppu->sprite_zero_evaluated && i == 0 && bg_pixel > 0x00) {
+					if (ppu->sprite_zero_evaluated && i == 0 && bg_pixel > 0x00 && (ppu->cycle > 8 || (ppu->mask & 0x06) == 0x06)) {
 						ppu->status |= 0x40;
 					}
 
