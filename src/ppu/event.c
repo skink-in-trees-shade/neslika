@@ -14,11 +14,12 @@
 #include "event/load_vram_y.h"
 #include "event/render_pixel.h"
 #include "event/set_vertical_blank.h"
+#include "event/skip_cycle.h"
 #include "event/update_sprite_shifters.h"
 #include "event/update_tile_shifters.h"
 #include "event.h"
 
-enum { max_events = 18 };
+enum { max_events = 19 };
 
 enum event {
 	ID = 0,
@@ -38,7 +39,8 @@ enum event {
 	CO = 1 << 13,
 	FS = 1 << 14,
 	ES = 1 << 15,
-	SS = 1 << 16
+	SS = 1 << 16,
+	SC = 1 << 17
 };
 
 static void (*event_map[max_events])(struct ppu *ppu) = {
@@ -59,7 +61,8 @@ static void (*event_map[max_events])(struct ppu *ppu) = {
 	&clear_oam,
 	&update_sprite_shifters,
 	&evaluate_sprite,
-	&load_sprite
+	&load_sprite,
+	&skip_cycle
 };
 
 static enum event visible_scanline[341] = {
@@ -745,7 +748,7 @@ static enum event pre_render_scanline[341] = {
 /* 335 */ LH|BS,
 /* 336 */ IX|BS,
 /* 337 */ LS|LT,
-/* 338 */ ID,
+/* 338 */ SC,
 /* 339 */ LS|LT,
 /* 340 */ ID
 };

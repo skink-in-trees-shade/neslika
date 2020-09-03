@@ -6,4 +6,5 @@ void set_vertical_blank(struct ppu *ppu) {
 		ppu->nmi_occured = true;
 	}
 	ppu->frame_completed = true;
+	ppu->odd_frame = !ppu->odd_frame;
 }
