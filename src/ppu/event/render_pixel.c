@@ -55,5 +55,5 @@ void render_pixel(struct ppu *ppu) {
 	}
 
 	uint8_t color_id = ppu->palette_table[(palette << 2) | pixel];
-	screen_pixel(ppu->screen, ppu->cycle - 1, ppu->scanline, color_id);
+	screen_pixel(ppu->screen, ppu->cycle, ppu->scanline, color_id);
 }
