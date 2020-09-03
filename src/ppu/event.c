@@ -66,7 +66,7 @@ static void (*event_map[max_events])(struct ppu *ppu) = {
 };
 
 static enum event visible_scanline[341] = {
-/* 000 */ ID,
+/* 000 */ RP,
 /* 001 */ RP|LS|LT|BS|FS|CO,
 /* 002 */ RP|BS|FS,
 /* 003 */ RP|LP|BS|FS,
@@ -322,7 +322,7 @@ static enum event visible_scanline[341] = {
 /* 253 */ RP|LL|BS|FS,
 /* 254 */ RP|BS|FS,
 /* 255 */ RP|LH|BS|FS,
-/* 256 */ RP|IY|BS|FS,
+/* 256 */ IY|BS|FS,
 /* 257 */ LX|SS,
 /* 258 */ ID,
 /* 259 */ ID,
