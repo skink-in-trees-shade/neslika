@@ -19,6 +19,7 @@ struct ppu {
 	uint8_t control;
 	uint8_t mask;
 	uint8_t status;
+	uint8_t last_value;
 
 	bool nmi_occured;
 	bool write_toggle;

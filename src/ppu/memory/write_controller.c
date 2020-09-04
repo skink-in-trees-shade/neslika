@@ -7,4 +7,5 @@ void write_controller(void *device, uint16_t address, uint8_t value) {
 	struct ppu *ppu = device;
 	ppu->control = value;
 	ppu->temp_vram_address = (ppu->temp_vram_address & 0x73FF) | ((value & 0x03) << 10);
+	ppu->last_value = value;
 }

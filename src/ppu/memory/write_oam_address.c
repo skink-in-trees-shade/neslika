@@ -6,4 +6,5 @@ void write_oam_address(void *device, uint16_t address, uint8_t value) {
 
 	struct ppu *ppu = device;
 	ppu->oam_address = value;
+	ppu->last_value = value;
 }

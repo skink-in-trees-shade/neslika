@@ -6,4 +6,5 @@ void write_mask(void *device, uint16_t address, uint8_t value) {
 
 	struct ppu *ppu = device;
 	ppu->mask = value;
+	ppu->last_value = value;
 }
