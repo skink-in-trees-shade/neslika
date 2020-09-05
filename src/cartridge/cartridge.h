@@ -10,6 +10,7 @@ struct cartridge {
 	struct bus *ppu_bus;
 
 	bool vertical_mirroring;
+	bool irq_occured;
 	uint8_t prg_rom_count;
 	uint8_t *prg_rom;
 	uint8_t chr_rom_count;

@@ -44,6 +44,7 @@ void cpu_push(struct cpu *cpu, uint8_t value);
 uint8_t cpu_pull(struct cpu *cpu);
 void cpu_tick(struct cpu *cpu);
 void cpu_nmi(struct cpu *cpu);
+void cpu_irq(struct cpu *cpu);
 void cpu_destroy(struct cpu *cpu);
 
 #endif

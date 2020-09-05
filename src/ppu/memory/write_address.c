@@ -10,6 +10,7 @@ void write_address(void *device, uint16_t address, uint8_t value) {
 	} else {
 		ppu->temp_vram_address = (ppu->temp_vram_address & 0xFF00) | value;
 		ppu->vram_address = ppu->temp_vram_address;
+		bus_read(ppu->ppu_bus, ppu->vram_address);
 	}
 	ppu->write_toggle = !ppu->write_toggle;
 	ppu->last_value = value;

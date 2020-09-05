@@ -101,6 +101,23 @@ void cpu_nmi(struct cpu *cpu) {
 	cpu->cycle += 8;
 }
 
+void cpu_irq(struct cpu *cpu) {
+	uint8_t high = (cpu->program_counter >> 8) & 0xFF;
+	uint8_t low = cpu->program_counter & 0xFF;
+	cpu_push(cpu, high);
+	cpu_push(cpu, low);
+	
+	cpu->break_command = false;
+	cpu->interrupt_disable = true;
+	cpu_push(cpu, cpu_status(cpu));
+
+	low = cpu_peek(cpu, 0xFFFE);
+	high = cpu_peek(cpu, 0xFFFF);
+	cpu->program_counter = (high << 8) + low;
+
+	cpu->cycle += 7;
+}
+
 void cpu_destroy(struct cpu *cpu) {
 	free(cpu->memory);
 	free(cpu);

@@ -49,6 +49,9 @@ void load_sprite(struct ppu *ppu) {
 			ppu->sprite_shift_high[ppu->secondary_sprite] = sprite_high;
 			ppu->sprite_shift_x[ppu->secondary_sprite] = sprite_x;
 			ppu->sprite_shift_attribute[ppu->secondary_sprite] = sprite_attribute;
+		} else {
+			bus_read(ppu->ppu_bus, 0x1FFF);
+			bus_read(ppu->ppu_bus, 0x1FFF);
 		}
 	}
 }
