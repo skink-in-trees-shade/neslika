@@ -9,4 +9,5 @@ void triangle_timer_high(void *device, uint16_t address, uint8_t value) {
 	triangle->timer = triangle->reload;
 	triangle->step = -0x01;
 	triangle->volume = 0x0F;
+	length_reload(triangle->length, (value & 0xF8) >> 3);
 }

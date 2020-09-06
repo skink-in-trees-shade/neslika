@@ -7,6 +7,7 @@
 struct pulse *pulse_new(struct bus *bus, int channel) {
 	struct pulse *pulse = calloc(1, sizeof(struct pulse));
 	pulse->bus = bus;
+	pulse->length = length_new();
 
 	uint8_t offset = (channel - 1) << 2;
 	bus_register(pulse->bus, pulse, 0x4000 + offset, 0x4000 + offset, NULL, &pulse_status);
@@ -26,8 +27,12 @@ void pulse_tick(struct pulse *pulse) {
 	}
 }
 
+void pulse_half_frame_tick(struct pulse *pulse) {
+	length_tick(pulse->length);
+}
+
 double pulse_sample(struct pulse *pulse) {
-	if (!pulse->enabled || (pulse->duty & 0x01) == 0x00) {
+	if (!pulse->enabled || (pulse->duty & 0x01) == 0x00 || pulse->length->counter == 0x00) {
 		return 0x00;
 	}
 
@@ -35,5 +40,6 @@ double pulse_sample(struct pulse *pulse) {
 }
 
 void pulse_destroy(struct pulse *pulse) {
+	length_destroy(pulse->length);
 	free(pulse);
 }

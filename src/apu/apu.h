@@ -1,6 +1,7 @@
 #ifndef APU_H
 #define APU_H
 
+#include <stdint.h>
 #include <stdbool.h>
 #include "platform/audio.h"
 #include "bus.h"
@@ -16,7 +17,7 @@ struct apu {
 	struct triangle *triangle;
 	struct noise *noise;
 
-	unsigned long cycle;
+	uint16_t cycle;
 	bool extra_frame_step;
 };
 

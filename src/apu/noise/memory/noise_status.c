@@ -6,4 +6,5 @@ void noise_status(void *device, uint16_t address, uint8_t value) {
 
 	struct noise *noise = device;
 	noise->volume = value & 0x0F;
+	noise->length->enabled = (value & 0x20) == 0x00;
 }
