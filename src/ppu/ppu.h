@@ -26,7 +26,6 @@ struct ppu {
 	bool frame_completed;
 	bool odd_frame;
 
-	uint8_t *name_table;
 	uint8_t *palette_table;
 	uint8_t *primary_oam;
 	uint8_t *secondary_oam;

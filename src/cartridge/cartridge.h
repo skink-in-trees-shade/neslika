@@ -5,18 +5,11 @@
 #include <stdbool.h>
 #include "bus.h"
 
-enum mirroring {
-	mirroring_horizontal,
-	mirroring_vertical,
-	mirroring_one_screen_lower,
-	mirroring_one_screen_upper
-};
-
 struct cartridge {
 	struct bus *cpu_bus;
 	struct bus *ppu_bus;
 
-	enum mirroring mirroring;
+	bool vertical_mirroring;
 	uint8_t prg_rom_count;
 	uint8_t *prg_rom;
 	uint8_t chr_rom_count;
