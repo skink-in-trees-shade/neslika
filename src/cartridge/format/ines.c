@@ -42,7 +42,7 @@ bool ines_load(struct cartridge *cartridge, const char *filename) {
 
 	if (is_ines(&header)) {
 		cartridge->mapper = (header.mapper_high << 8) + header.mapper_low;
-		cartridge->mirroring = header.vertical_mirroring ? mirroring_vertical : mirroring_horizontal;
+		cartridge->vertical_mirroring = header.vertical_mirroring;
 
 		cartridge->prg_rom_count = header.prg_rom_count;
 		cartridge->prg_rom = calloc(0x4000 * cartridge->prg_rom_count, sizeof(uint8_t));

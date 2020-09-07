@@ -5,6 +5,8 @@
 #include "cartridge/cartridge.h"
 
 struct cnrom {
+	uint8_t *name_table;
+
 	uint8_t chr_rom_bank;
 };
 

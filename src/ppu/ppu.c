@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "memory/read_data.h"
-#include "memory/read_name_table.h"
 #include "memory/read_oam_data.h"
 #include "memory/read_open_bus.h"
 #include "memory/read_palette_table.h"
@@ -9,7 +8,6 @@
 #include "memory/write_controller.h"
 #include "memory/write_data.h"
 #include "memory/write_mask.h"
-#include "memory/write_name_table.h"
 #include "memory/write_oam_address.h"
 #include "memory/write_oam_data.h"
 #include "memory/write_open_bus.h"
@@ -20,7 +18,6 @@
 
 struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus, struct screen *screen) {
 	struct ppu *ppu = calloc(1, sizeof(struct ppu));
-	ppu->name_table = calloc(0x800, sizeof(uint8_t));
 	ppu->palette_table = calloc(0x20, sizeof(uint8_t));
 	ppu->primary_oam = calloc(0x100, sizeof(uint8_t));
 	ppu->secondary_oam = calloc(0x20, sizeof(uint8_t));
@@ -41,7 +38,6 @@ struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus, struct screen *scr
 		bus_register(ppu->cpu_bus, ppu, i + 6, i + 6, &read_open_bus, &write_address);
 		bus_register(ppu->cpu_bus, ppu, i + 7, i + 7, &read_data, &write_data);
 	}
-	bus_register(ppu->ppu_bus, ppu, 0x2000, 0x3EFF, &read_name_table, &write_name_table);
 	bus_register(ppu->ppu_bus, ppu, 0x3F00, 0x3FFF, &read_palette_table, &write_palette_table);
 
 	return ppu;
@@ -64,6 +60,5 @@ void ppu_destroy(struct ppu *ppu) {
 	free(ppu->secondary_oam);
 	free(ppu->primary_oam);
 	free(ppu->palette_table);
-	free(ppu->name_table);
 	free(ppu);
 }
