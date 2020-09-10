@@ -9,6 +9,7 @@ void iiy(struct cpu *cpu) {
 	uint16_t page = cpu->operand & 0xFF00;
 	cpu->operand += cpu->y;
 	if ((cpu->operand & 0xFF00) != page) {
+		cpu_peek(cpu, page | (cpu->operand & 0x00FF));
 		cpu->extra_decode_cycle = true;
 	}
 }

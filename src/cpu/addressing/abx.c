@@ -7,7 +7,11 @@ void abx(struct cpu *cpu) {
 
 	uint16_t page = cpu->operand & 0xFF00;
 	cpu->operand += cpu->x;
+	if (cpu->instruction == 0x3E) {
+		cpu_peek(cpu, page | (cpu->operand & 0x00FF));
+	}
 	if ((cpu->operand & 0xFF00) != page) {
+		cpu_peek(cpu, page | (cpu->operand & 0x00FF));
 		cpu->extra_decode_cycle = true;
 	}
 }
