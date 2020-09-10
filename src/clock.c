@@ -39,6 +39,7 @@ void clock_tick(struct clock *clock) {
 
 	if (clock->ppu->nmi_occured) {
 		clock->ppu->nmi_occured = false;
+		cpu_tick(clock->cpu);
 		cpu_nmi(clock->cpu);
 	}
 
