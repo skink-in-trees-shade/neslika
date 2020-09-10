@@ -10,6 +10,7 @@ struct handler {
 
 struct bus {
 	struct handler *handlers;
+	uint8_t last_value;
 };
 
 struct bus *bus_new(uint32_t size) {
@@ -37,7 +38,7 @@ uint8_t bus_read(struct bus *bus, uint16_t address) {
 	if (handler->read) {
 		return handler->read(handler->read_device, address);
 	}
-	return 0x00;
+	return bus->last_value;
 }
 
 void bus_write(struct bus *bus, uint16_t address, uint8_t value) {
@@ -45,6 +46,7 @@ void bus_write(struct bus *bus, uint16_t address, uint8_t value) {
 	if (handler->write) {
 		handler->write(handler->write_device, address, value);
 	}
+	bus->last_value = value;
 }
 
 void bus_destroy(struct bus *bus) {
