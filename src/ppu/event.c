@@ -411,8 +411,8 @@ static enum event visible_scanline[341] = {
 
 static enum event pre_render_scanline[341] = {
 /* 000 */ ID,
-/* 001 */ CV|LS|LT|BS|FS,
-/* 002 */ BS|FS,
+/* 001 */ LS|LT|BS|FS,
+/* 002 */ CV|BS|FS,
 /* 003 */ LP|BS|FS,
 /* 004 */ BS|FS,
 /* 005 */ LL|BS|FS,
