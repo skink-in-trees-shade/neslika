@@ -9,6 +9,7 @@ uint8_t read_oam_data(void *device, uint16_t address) {
 	ppu->last_value = value;
 
 	if ((ppu->oam_address & 0x03) == 0x02) {
+		ppu->last_value_decay = 0;
 		return value & 0xE3;
 	}
 

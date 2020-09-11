@@ -54,6 +54,12 @@ void ppu_tick(struct ppu *ppu) {
 			ppu->scanline = 0;
 		}
 	}
+
+	if (ppu->last_value_decay == 0) {
+		ppu->last_value = 0x00;
+		ppu->last_value_decay = 5369318;
+	}
+	ppu->last_value_decay--;
 }
 
 void ppu_destroy(struct ppu *ppu) {

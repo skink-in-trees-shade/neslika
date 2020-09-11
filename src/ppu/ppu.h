@@ -20,6 +20,7 @@ struct ppu {
 	uint8_t mask;
 	uint8_t status;
 	uint8_t last_value;
+	uint32_t last_value_decay;
 
 	bool nmi_occured;
 	bool write_toggle;
