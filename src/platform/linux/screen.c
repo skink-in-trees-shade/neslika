@@ -5,17 +5,6 @@
 #include <stdlib.h>
 #include "platform/screen.h"
 
-static uint32_t palette[0x40] = {
-	0xFF545454, 0xFF741E00, 0xFF901008, 0xFF880030, 0xFF640044, 0xFF30005C, 0xFF000454, 0xFF00183C,
-	0xFF002A20, 0xFF003A08, 0xFF004000, 0xFF003C00, 0xFF3C3200, 0xFF000000, 0xFF000000, 0xFF000000,
-	0xFF989698, 0xFFC44C08, 0xFFEC3230, 0xFFE41E5C, 0xFFB01488, 0xFF6414A0, 0xFF202298, 0xFF003C78,
-	0xFF005A54, 0xFF007228, 0xFF007C08, 0xFF287600, 0xFF786600, 0xFF000000, 0xFF000000, 0xFF000000,
-	0xFFECEEEC, 0xFFEC9A4C, 0xFFEC7C78, 0xFFEC62B0, 0xFFEC54E4, 0xFFB458EC, 0xFF646AEC, 0xFF2088D4,
-	0xFF00AAA0, 0xFF00C474, 0xFF20D04C, 0xFF6CCC38, 0xFFCCB438, 0xFF3C3C3C, 0xFF000000, 0xFF000000,
-	0xFFECEEEC, 0xFFECCCA8, 0xFFECBCBC, 0xFFECB2D4, 0xFFECAEEC, 0xFFD4AEEC, 0xFFB0B4EC, 0xFF90C4E4,
-	0xFF78D2CC, 0xFF78DEB4, 0xFF90E2A8, 0xFFB4E298, 0xFFE4D6A0, 0xFFA0A2A0, 0xFF000000, 0xFF000000
-};
-
 struct screen {
 	int width;
 	int height;
@@ -57,8 +46,8 @@ struct screen *screen_new(char *title, int width, int height) {
 	return screen;
 }
 
-void screen_pixel(struct screen *screen, uint8_t x, uint8_t y, uint8_t color_id) {
-	screen->pixels[screen->width * y + x] = palette[color_id];
+void screen_pixel(struct screen *screen, uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b) {
+	screen->pixels[screen->width * y + x] = 0xFF000000 | (r << 16) | (g << 8) | b;
 }
 
 void screen_update(struct screen *screen) {
