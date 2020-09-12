@@ -1,4 +1,5 @@
 #include "platform/screen.h"
+#include "ppu/palette.h"
 #include "render_pixel.h"
 
 void render_pixel(struct ppu *ppu) {
@@ -44,16 +45,18 @@ void render_pixel(struct ppu *ppu) {
 		}
 	}
 
-	uint8_t palette = 0x00;
-	uint8_t pixel = 0x00;
+	uint8_t mix_palette = 0x00;
+	uint8_t mix_pixel = 0x00;
 	if ((bg_pixel == 0x00 && fg_pixel > 0x00) || (bg_pixel > 0x00 && fg_pixel > 0x00 && fg_priority)) {
-		palette = fg_palette;
-		pixel = fg_pixel;
+		mix_palette = fg_palette;
+		mix_pixel = fg_pixel;
 	} else if ((bg_pixel > 0x00 && fg_pixel == 0x00) || (bg_pixel > 0x00 && fg_pixel > 0x00 && !fg_priority)) {
-		palette = bg_palette;
-		pixel = bg_pixel;
+		mix_palette = bg_palette;
+		mix_pixel = bg_pixel;
 	}
 
-	uint8_t color_id = ppu->palette_table[(palette << 2) | pixel];
-	screen_pixel(ppu->screen, ppu->cycle, ppu->scanline, color_id);
+	uint8_t color_id = bus_read(ppu->ppu_bus, 0x3F00 | (mix_palette << 2) | mix_pixel);
+	uint8_t palette_id = (ppu->mask & 0xE0) >> 5;
+	uint8_t *color = &palette[(palette_id * 192) + color_id * 3];
+	screen_pixel(ppu->screen, ppu->cycle, ppu->scanline, color[2], color[1], color[0]);
 }
