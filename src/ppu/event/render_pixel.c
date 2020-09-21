@@ -3,6 +3,8 @@
 #include "render_pixel.h"
 
 void render_pixel(struct ppu *ppu) {
+	uint8_t x = ppu->cycle - 1;
+
 	uint8_t bg_palette = 0x00;
 	uint8_t bg_pixel = 0x00;
 	if ((ppu->mask & 0x08) == 0x08) {
@@ -35,8 +37,8 @@ void render_pixel(struct ppu *ppu) {
 					fg_palette = (ppu->sprite_shift_attribute[i] & 0x03) + 0x04;
 					fg_priority = (ppu->sprite_shift_attribute[i] & 0x20) == 0x00;
 
-					if (ppu->sprite_zero_evaluated && i == 0 && bg_pixel > 0x00 && (ppu->cycle > 8 || (ppu->mask & 0x06) == 0x06)) {
-						ppu->status |= 0x40;
+					if (ppu->sprite_zero_hit_possible && i == 0 && bg_pixel > 0x00 && x != 255 && (x >= 8 || (ppu->mask & 0x06) == 0x06)) {
+						ppu->sprite_zero_hit_delay = true;
 					}
 
 					break;
@@ -58,5 +60,5 @@ void render_pixel(struct ppu *ppu) {
 	uint8_t color_id = bus_read(ppu->ppu_bus, 0x3F00 | (mix_palette << 2) | mix_pixel);
 	uint8_t palette_id = (ppu->mask & 0xE0) >> 5;
 	uint8_t *color = &palette[(palette_id * 192) + color_id * 3];
-	screen_pixel(ppu->screen, ppu->cycle, ppu->scanline, color[2], color[1], color[0]);
+	screen_pixel(ppu->screen, x, ppu->scanline, color[2], color[1], color[0]);
 }

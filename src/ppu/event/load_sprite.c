@@ -12,10 +12,9 @@ static uint8_t invert(uint8_t byte) {
 
 void load_sprite(struct ppu *ppu) {
 	if ((ppu->mask & 0x10) == 0x10) {
-		if (ppu->secondary_sprite > 0x00 && ppu->secondary_sprite <= 0x08) {
-			ppu->secondary_sprite--;
-
-			uint8_t *sprite = &ppu->secondary_oam[(ppu->secondary_sprite) * 4];
+		uint8_t sprite_index = (ppu->cycle - 257) / 8;
+		if (sprite_index < ppu->secondary_oam_address / 4) {
+			uint8_t *sprite = &ppu->secondary_oam[sprite_index * 4];
 			uint8_t sprite_x = sprite[3];
 			uint8_t sprite_y = sprite[0];
 			uint8_t sprite_tile_id = sprite[1];
@@ -45,13 +44,24 @@ void load_sprite(struct ppu *ppu) {
 				sprite_high = invert(sprite_high);
 			}
 
-			ppu->sprite_shift_low[ppu->secondary_sprite] = sprite_low;
-			ppu->sprite_shift_high[ppu->secondary_sprite] = sprite_high;
-			ppu->sprite_shift_x[ppu->secondary_sprite] = sprite_x;
-			ppu->sprite_shift_attribute[ppu->secondary_sprite] = sprite_attribute;
+			ppu->sprite_shift_low[sprite_index] = sprite_low;
+			ppu->sprite_shift_high[sprite_index] = sprite_high;
+			ppu->sprite_shift_x[sprite_index] = sprite_x;
+			ppu->sprite_shift_attribute[sprite_index] = sprite_attribute;
+			ppu->sprite_zero_hit_possible = ppu->sprite_zero_evaluated;
 		} else {
 			bus_read(ppu->ppu_bus, 0x1FFF);
 			bus_read(ppu->ppu_bus, 0x1FFF);
+
+			ppu->sprite_shift_low[sprite_index] = 0x00;
+			ppu->sprite_shift_high[sprite_index] = 0x00;
+			ppu->sprite_shift_x[sprite_index] = 0x00;
+			ppu->sprite_shift_attribute[sprite_index] = 0x00;
 		}
+	}
+
+	if (ppu->cycle == 313) {
+		ppu->primary_oam_address = 0x00;
+		ppu->secondary_oam_address = 0x00;
 	}
 }

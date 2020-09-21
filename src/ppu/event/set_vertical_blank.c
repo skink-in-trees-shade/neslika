@@ -6,5 +6,7 @@ void set_vertical_blank(struct ppu *ppu) {
 		ppu->nmi_occured = true;
 	}
 	ppu->frame_completed = true;
+	ppu->sprite_zero_hit_occured = false;
+	ppu->sprite_zero_hit_delay = false;
 	ppu->odd_frame = !ppu->odd_frame;
 }
