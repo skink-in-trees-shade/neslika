@@ -35,7 +35,6 @@ struct ppu {
 	uint16_t temp_vram_address;
 	uint8_t fine_x;
 	uint8_t read_buffer;
-	uint8_t oam_address;
 
 	uint8_t tile_id;
 	uint8_t tile_low;
@@ -47,13 +46,20 @@ struct ppu {
 	uint16_t palette_shift_low;
 	uint16_t palette_shift_high;
 
-	uint8_t primary_sprite;
-	uint8_t secondary_sprite;
+	uint8_t oam_address;
+	uint8_t oam_data;
+	uint8_t oam_counter;
+	uint16_t primary_oam_address;
+	uint8_t secondary_oam_address;
 	uint8_t sprite_shift_low[8];
 	uint8_t sprite_shift_high[8];
 	uint8_t sprite_shift_x[8];
 	uint8_t sprite_shift_attribute[8];
+
 	bool sprite_zero_evaluated;
+	bool sprite_zero_hit_possible;
+	bool sprite_zero_hit_occured;
+	bool sprite_zero_hit_delay;
 };
 
 struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus, struct screen *screen);
