@@ -21,8 +21,6 @@ struct ppu *ppu_new(struct bus *cpu_bus, struct bus *ppu_bus, struct screen *scr
 	ppu->palette_table = calloc(0x20, sizeof(uint8_t));
 	ppu->primary_oam = calloc(0x100, sizeof(uint8_t));
 	ppu->secondary_oam = calloc(0x20, sizeof(uint8_t));
-	ppu->status = 0xA0;
-	ppu->scanline = 261;
 
 	ppu->cpu_bus = cpu_bus;
 	ppu->ppu_bus = ppu_bus;

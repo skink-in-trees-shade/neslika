@@ -16,6 +16,7 @@ struct clock {
 
 	bool done;
 	struct timespec frame_time;
+	bool nmi_extra_tick;
 };
 
 struct clock *clock_new(struct cpu *cpu, struct ppu *ppu, struct apu *apu, struct dma *dma, struct cartridge *cartridge, struct controller *controller) {
@@ -40,6 +41,9 @@ void clock_tick(struct clock *clock) {
 	if (clock->ppu->nmi_occured) {
 		clock->ppu->nmi_occured = false;
 		cpu_tick(clock->cpu);
+		if (clock->nmi_extra_tick) {
+			cpu_tick(clock->cpu);
+		}
 		cpu_nmi(clock->cpu);
 	}
 
@@ -50,9 +54,14 @@ void clock_tick(struct clock *clock) {
 
 	unsigned long current_cycle = clock->cpu->cycle;
 
+	unsigned long nmi_occured_at = 0;
 	for (unsigned long i = 0; i < (current_cycle - old_cycle) * 3; i++) {
 		ppu_tick(clock->ppu);
+		if (clock->ppu->nmi_occured && nmi_occured_at == 0) {
+			nmi_occured_at = i;
+		}
 	}
+	clock->nmi_extra_tick = nmi_occured_at / 3 == current_cycle - old_cycle - 1;
 
 	for (unsigned long i = 0; i < current_cycle - old_cycle; i++) {
 		apu_tick(clock->apu);
