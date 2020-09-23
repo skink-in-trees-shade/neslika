@@ -13,6 +13,9 @@ uint8_t read_status(void *device, uint16_t address) {
 
 	if (ppu->scanline == 241 && ppu->cycle == 2) {
 		value &= 0x7F;
+	}
+
+	if (ppu->scanline == 241 && ppu->cycle >= 2 && ppu->cycle <= 4) {
 		ppu->nmi_occured = false;
 	}
 
