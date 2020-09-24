@@ -751,8 +751,8 @@ static enum event pre_render_scanline[341] = {
 /* 335 */ LH|BS,
 /* 336 */ IX|BS,
 /* 337 */ LS|LT,
-/* 338 */ SC,
-/* 339 */ LS|LT,
+/* 338 */ ID,
+/* 339 */ SC|LS|LT,
 /* 340 */ ID
 };
 
