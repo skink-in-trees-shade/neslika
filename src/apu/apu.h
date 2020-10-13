@@ -18,7 +18,11 @@ struct apu {
 	struct noise *noise;
 
 	uint16_t cycle;
+	uint8_t reset_cycle;
 	bool extra_frame_step;
+
+	bool irq_inhibit;
+	bool irq_occured;
 };
 
 struct apu *apu_new(struct bus *bus, struct audio *audio);
