@@ -28,12 +28,16 @@ void apu_tick(struct apu *apu) {
 	triangle_tick(apu->triangle);
 	noise_tick(apu->noise);
 
-	uint16_t frame_length = apu->extra_frame_step ? 18641 : 14915;
-	if (apu->cycle == 7457 || apu->cycle == frame_length) {
+	uint16_t frame_length = apu->extra_frame_step ? 37282 : 29830;
+	if (apu->cycle == 14914 || apu->cycle == frame_length) {
 		pulse_half_frame_tick(apu->pulse[0]);
 		pulse_half_frame_tick(apu->pulse[1]);
 		triangle_half_frame_tick(apu->triangle);
 		noise_half_frame_tick(apu->noise);
+	}
+
+	if (!apu->irq_inhibit && !apu->extra_frame_step && apu->cycle == frame_length) {
+		apu->irq_occured = true;
 	}
 
 	double pulse_output = 0.00752 * (pulse_sample(apu->pulse[0]) + pulse_sample(apu->pulse[1]));
@@ -44,6 +48,13 @@ void apu_tick(struct apu *apu) {
 	apu->cycle++;
 	if (apu->cycle == frame_length + 1) {
 		apu->cycle = 0;
+	}
+
+	if (apu->reset_cycle > 0) {
+		apu->reset_cycle--;
+		if (apu->reset_cycle == 0) {
+			apu->cycle = 0;
+		}
 	}
 }
 

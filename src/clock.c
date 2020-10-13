@@ -52,6 +52,11 @@ void clock_tick(struct clock *clock) {
 		cpu_irq(clock->cpu);
 	}
 
+	if (clock->apu->irq_occured && !clock->cpu->interrupt_disable) {
+		clock->apu->irq_occured = false;
+		cpu_irq(clock->cpu);
+	}
+
 	unsigned long current_cycle = clock->cpu->cycle;
 
 	unsigned long nmi_occured_at = 0;
