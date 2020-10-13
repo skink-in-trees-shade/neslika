@@ -1,4 +1,3 @@
-#include <stddef.h>
 #include "addressing/abj.h"
 #include "addressing/abo.h"
 #include "addressing/abx.h"
@@ -14,6 +13,7 @@
 #include "addressing/zpx.h"
 #include "addressing/zpy.h"
 #include "instruction/adc.h"
+#include "instruction/ahx.h"
 #include "instruction/alr.h"
 #include "instruction/anc.h"
 #include "instruction/and.h"
@@ -50,6 +50,7 @@
 #include "instruction/jmp.h"
 #include "instruction/jsr.h"
 #include "instruction/kil.h"
+#include "instruction/las.h"
 #include "instruction/lax.h"
 #include "instruction/lda.h"
 #include "instruction/ldx.h"
@@ -82,12 +83,14 @@
 #include "instruction/sta.h"
 #include "instruction/stx.h"
 #include "instruction/sty.h"
+#include "instruction/tas.h"
 #include "instruction/tax.h"
 #include "instruction/tay.h"
 #include "instruction/tsx.h"
 #include "instruction/txa.h"
 #include "instruction/txs.h"
 #include "instruction/tya.h"
+#include "instruction/xaa.h"
 #include "instruction.h"
 
 struct instruction instructions[0x100] = {
@@ -230,7 +233,7 @@ struct instruction instructions[0x100] = {
 /* 0x88 */ { "DEY", 0, imp,  dey, 2 },
 /* 0x89 */ { "NOP", 1, imm,  nop, 2 },
 /* 0x8A */ { "TXA", 0, imp,  txa, 2 },
-/* 0x8B */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x8B */ { "XAA", 1, imm,  xaa, 2 },
 /* 0x8C */ { "STY", 0, abo,  sty, 4 },
 /* 0x8D */ { "STA", 0, abo,  sta, 4 },
 /* 0x8E */ { "STX", 0, abo,  stx, 4 },
@@ -238,7 +241,7 @@ struct instruction instructions[0x100] = {
 /* 0x90 */ { "BCC", 0, rel,  bcc, 2 },
 /* 0x91 */ { "STA", 0, iiy,  sta, 6 },
 /* 0x92 */ { "KIL", 1, imp,  kil, 0 },
-/* 0x93 */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x93 */ { "AHX", 1, iiy,  ahx, 6 },
 /* 0x94 */ { "STY", 0, zpx,  sty, 4 },
 /* 0x95 */ { "STA", 0, zpx,  sta, 4 },
 /* 0x96 */ { "STX", 0, zpy,  stx, 4 },
@@ -246,11 +249,11 @@ struct instruction instructions[0x100] = {
 /* 0x98 */ { "TYA", 0, imp,  tya, 2 },
 /* 0x99 */ { "STA", 0, aby,  sta, 5 },
 /* 0x9A */ { "TXS", 0, imp,  txs, 2 },
-/* 0x9B */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x9B */ { "TAS", 1, aby,  tas, 5 },
 /* 0x9C */ { "SHY", 1, abx,  shy, 5 },
 /* 0x9D */ { "STA", 0, abx,  sta, 5 },
 /* 0x9E */ { "SHX", 1, aby,  shx, 5 },
-/* 0x9F */ {  NULL, 0, NULL, NULL, 0 },
+/* 0x9F */ { "AHX", 1, aby,  ahx, 5 },
 /* 0xA0 */ { "LDY", 0, imm,  ldy, 2 },
 /* 0xA1 */ { "LDA", 0, iix,  lda, 6 },
 /* 0xA2 */ { "LDX", 0, imm,  ldx, 2 },
@@ -262,7 +265,7 @@ struct instruction instructions[0x100] = {
 /* 0xA8 */ { "TAY", 0, imp,  tay, 2 },
 /* 0xA9 */ { "LDA", 0, imm,  lda, 2 },
 /* 0xAA */ { "TAX", 0, imp,  tax, 2 },
-/* 0xAB */ { "LAX", 1, imm,  lax, 0 },
+/* 0xAB */ { "LAX", 1, imm,  lax, 2 },
 /* 0xAC */ { "LDY", 0, abo,  ldy, 4 },
 /* 0xAD */ { "LDA", 0, abo,  lda, 4 },
 /* 0xAE */ { "LDX", 0, abo,  ldx, 4 },
@@ -278,7 +281,7 @@ struct instruction instructions[0x100] = {
 /* 0xB8 */ { "CLV", 0, imp,  clv, 2 },
 /* 0xB9 */ { "LDA", 0, aby,  lda, 4 },
 /* 0xBA */ { "TSX", 0, imp,  tsx, 2 },
-/* 0xBB */ {  NULL, 0, NULL, NULL, 0 },
+/* 0xBB */ { "LAS", 1, aby,  las, 4 },
 /* 0xBC */ { "LDY", 0, abx,  ldy, 4 },
 /* 0xBD */ { "LDA", 0, abx,  lda, 4 },
 /* 0xBE */ { "LDX", 0, aby,  ldx, 4 },
