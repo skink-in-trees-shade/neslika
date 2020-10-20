@@ -45,29 +45,6 @@ enum event {
 	SC = 1 << 18,
 };
 
-static void (*event_map[max_events])(struct ppu *ppu) = {
-	NULL,
-	&sprite_zero_hit,
-	&render_pixel,
-	&load_tile_id,
-	&load_palette_id,
-	&load_tile_high,
-	&load_tile_low,
-	&load_shifters,
-	&update_tile_shifters,
-	&load_vram_x,
-	&load_vram_y,
-	&increment_vram_x,
-	&increment_vram_y,
-	&clear_vertical_blank,
-	&set_vertical_blank,
-	&clear_oam,
-	&update_sprite_shifters,
-	&evaluate_sprite,
-	&load_sprite,
-	&skip_cycle,
-};
-
 static enum event visible_scanline[341] = {
 /* 000 */ ID,
 /* 001 */ RP|LS|LT|BS|FS|CO,
@@ -777,9 +754,23 @@ void event_execute(struct ppu *ppu) {
 		events = pre_render_scanline[ppu->cycle];
 	}
 
-	for (size_t i = 0; i < max_events; i++) {
-		if ((events >> i) & 1) {
-			event_map[i + 1](ppu);
-		}
-	}
+	if (events & SH) { sprite_zero_hit(ppu); }
+	if (events & RP) { render_pixel(ppu); }
+	if (events & LT) { load_tile_id(ppu); }
+	if (events & LP) { load_palette_id(ppu); }
+	if (events & LH) { load_tile_high(ppu); }
+	if (events & LL) { load_tile_low(ppu); }
+	if (events & LS) { load_shifters(ppu); }
+	if (events & BS) { update_tile_shifters(ppu); }
+	if (events & LX) { load_vram_x(ppu); }
+	if (events & LY) { load_vram_y(ppu); }
+	if (events & IX) { increment_vram_x(ppu); }
+	if (events & IY) { increment_vram_y(ppu); }
+	if (events & CV) { clear_vertical_blank(ppu); }
+	if (events & SV) { set_vertical_blank(ppu); }
+	if (events & CO) { clear_oam(ppu); }
+	if (events & FS) { update_sprite_shifters(ppu); }
+	if (events & ES) { evaluate_sprite(ppu); }
+	if (events & SS) { load_sprite(ppu); }
+	if (events & SC) { skip_cycle(ppu); }
 }

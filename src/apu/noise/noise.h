@@ -20,7 +20,7 @@ struct noise {
 struct noise *noise_new(struct bus *bus);
 void noise_tick(struct noise *noise);
 void noise_half_frame_tick(struct noise *noise);
-double noise_sample(struct noise *noise);
+uint8_t noise_sample(struct noise *noise);
 void noise_destroy(struct noise *noise);
 
 #endif

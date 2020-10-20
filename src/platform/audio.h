@@ -6,7 +6,7 @@
 struct audio;
 
 struct audio *audio_new(uint8_t channels, uint16_t rate);
-void audio_sample(struct audio *audio, double sample);
+void audio_sample(struct audio *audio, uint8_t sample);
 void audio_destroy(struct audio *audio);
 
 #endif

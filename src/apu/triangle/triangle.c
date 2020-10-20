@@ -38,7 +38,7 @@ void triangle_half_frame_tick(struct triangle *triangle) {
 	length_tick(triangle->length);
 }
 
-double triangle_sample(struct triangle *triangle) {
+uint8_t triangle_sample(struct triangle *triangle) {
 	if (!triangle->enabled || triangle->length->counter == 0x00) {
 		return 0x00;
 	}

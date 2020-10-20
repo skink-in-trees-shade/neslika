@@ -1,62 +1,44 @@
 #include <SDL.h>
 #include <stdlib.h>
-#include "buffer.h"
 #include "audio.h"
 
-const long apu_frequency = 1789773;
-
 struct audio {
-	SDL_AudioDeviceID dev;
-	struct buffer *buffer;
-	uint16_t rate;
-	unsigned long cycle;
+	SDL_AudioDeviceID device;
+	SDL_AudioStream *stream;
 };
 
-static void callback(void *userdata, Uint8 *stream, int length) {
+static void callback(void *userdata, Uint8* stream, int length) {
 	struct audio *audio = userdata;
-
-	size_t available = buffer_available(audio->buffer);
-	size_t required = length / sizeof(float);
-	if (available >= required) {
-		buffer_read(audio->buffer, (float *)stream, required);
-	}
+	SDL_AudioStreamGet(audio->stream, stream, length);
 }
 
 struct audio *audio_new(uint8_t channels, uint16_t rate) {
 	struct audio *audio = calloc(1, sizeof(struct audio));
-	audio->rate = rate;
-	audio->buffer = buffer_new(rate);
 
 	SDL_InitSubSystem(SDL_INIT_AUDIO);
 
-	SDL_AudioSpec spec = {0};
-	spec.freq = rate;
-	spec.format = AUDIO_F32SYS;
-	spec.channels = channels;
-	spec.samples = 1024;
-	spec.callback = callback;
-	spec.userdata = audio;
+	SDL_AudioSpec actual;
+	SDL_AudioSpec desired = {0};
+	desired.freq = rate;
+	desired.format = AUDIO_U8;
+	desired.channels = channels;
+	desired.callback = callback;
+	desired.userdata = audio;
 
-	audio->dev = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0);
-	SDL_PauseAudioDevice(audio->dev, 0);
+	audio->device = SDL_OpenAudioDevice(NULL, 0, &desired, &actual, 0);
+	audio->stream = SDL_NewAudioStream(desired.format, desired.channels, 1789773, actual.format, actual.channels, actual.freq);
+	SDL_PauseAudioDevice(audio->device, 0);
 
 	return audio;
 }
 
-void audio_sample(struct audio *audio, double sample) {
-	if (audio->cycle % (apu_frequency / audio->rate) == 0) {
-		SDL_LockAudioDevice(audio->dev);
-		float pls = sample * 5;
-		buffer_write(audio->buffer, &pls, 1);
-		SDL_UnlockAudioDevice(audio->dev);
-	}
-
-	audio->cycle++;
+void audio_sample(struct audio *audio, uint8_t sample) {
+	SDL_AudioStreamPut(audio->stream, &sample, sizeof(uint8_t));
 }
 
 void audio_destroy(struct audio *audio) {
-	SDL_CloseAudioDevice(audio->dev);
+	SDL_FreeAudioStream(audio->stream);
+	SDL_CloseAudioDevice(audio->device);
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
-	buffer_destroy(audio->buffer);
 	free(audio);
 }

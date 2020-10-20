@@ -19,7 +19,7 @@ struct triangle {
 struct triangle *triangle_new(struct bus *bus);
 void triangle_tick(struct triangle *triangle);
 void triangle_half_frame_tick(struct triangle *triangle);
-double triangle_sample(struct triangle *triangle);
+uint8_t triangle_sample(struct triangle *triangle);
 void triangle_destroy(struct triangle *triangle);
 
 #endif

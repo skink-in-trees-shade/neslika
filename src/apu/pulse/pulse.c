@@ -31,7 +31,7 @@ void pulse_half_frame_tick(struct pulse *pulse) {
 	length_tick(pulse->length);
 }
 
-double pulse_sample(struct pulse *pulse) {
+uint8_t pulse_sample(struct pulse *pulse) {
 	if (!pulse->enabled || (pulse->duty & 0x01) == 0x00 || pulse->length->counter == 0x00) {
 		return 0x00;
 	}

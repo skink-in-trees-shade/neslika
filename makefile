@@ -1,4 +1,4 @@
-CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -std=c99 -Isrc -pipe `sdl2-config --cflags`
+CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -std=c99 -Isrc -pipe `sdl2-config --cflags` -g -O0 -fno-omit-frame-pointer -gdwarf-2
 LDFLAGS = `sdl2-config --libs`
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))

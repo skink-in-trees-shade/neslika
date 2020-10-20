@@ -19,7 +19,7 @@ struct pulse {
 struct pulse *pulse_new(struct bus *bus, int channel);
 void pulse_tick(struct pulse *pulse);
 void pulse_half_frame_tick(struct pulse *pulse);
-double pulse_sample(struct pulse *pulse);
+uint8_t pulse_sample(struct pulse *pulse);
 void pulse_destroy(struct pulse *pulse);
 
 #endif

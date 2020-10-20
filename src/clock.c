@@ -68,7 +68,7 @@ void clock_tick(struct clock *clock) {
 	}
 	clock->nmi_extra_tick = nmi_occured_at / 3 == current_cycle - old_cycle - 1;
 
-	for (unsigned long i = 0; i < current_cycle - old_cycle; i++) {
+	for (unsigned long i = 0; i < current_cycle - old_cycle - 1; i++) {
 		apu_tick(clock->apu);
 	}
 	cartridge_tick(clock->cartridge);

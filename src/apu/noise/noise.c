@@ -32,7 +32,7 @@ void noise_half_frame_tick(struct noise *noise) {
 	length_tick(noise->length);
 }
 
-double noise_sample(struct noise *noise) {
+uint8_t noise_sample(struct noise *noise) {
 	if (!noise->enabled || (noise->shift & 0x01) == 0x01 || noise->length->counter == 0x00) {
 		return 0x00;
 	}
