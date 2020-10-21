@@ -26,7 +26,7 @@ struct audio *audio_new(uint8_t channels, uint16_t rate) {
 	desired.userdata = audio;
 
 	audio->device = SDL_OpenAudioDevice(NULL, 0, &desired, &actual, 0);
-	audio->stream = SDL_NewAudioStream(desired.format, desired.channels, 1789773, actual.format, actual.channels, actual.freq);
+	audio->stream = SDL_NewAudioStream(desired.format, desired.channels, 1792114, actual.format, actual.channels, actual.freq);
 	SDL_PauseAudioDevice(audio->device, 0);
 
 	return audio;

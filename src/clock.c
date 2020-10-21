@@ -1,10 +1,12 @@
-#define _XOPEN_SOURCE 600
+#include <SDL.h>
 #include <stdlib.h>
-#include <time.h>
 #include "clock.h"
 
-const long fps = 60;
-const long nsps = 1000000000;
+const uint64_t master_clock_hz = 21477272;
+const uint64_t cpu_clock_ns = 1000000000 / (master_clock_hz / 12.0);
+const uint64_t ppu_clock_ns = 1000000000 / (master_clock_hz / 4.0);
+const uint64_t apu_clock_ns = 1000000000 / (master_clock_hz / 12.0);
+const uint64_t seq_clock_ns = 1000000000 / (master_clock_hz / 89490.0);
 
 struct clock {
 	struct cpu *cpu;
@@ -15,23 +17,12 @@ struct clock {
 	struct controller *controller;
 
 	bool done;
-	struct timespec frame_time;
-	bool nmi_extra_tick;
 };
 
-struct clock *clock_new(struct cpu *cpu, struct ppu *ppu, struct apu *apu, struct dma *dma, struct cartridge *cartridge, struct controller *controller) {
-	struct clock *clock = calloc(1, sizeof(struct clock));
-	clock->cpu = cpu;
-	clock->ppu = ppu;
-	clock->apu = apu;
-	clock->dma = dma;
-	clock->cartridge = cartridge;
-	clock->controller = controller;
-	return clock;
-}
+static uint32_t _cpu_tick(uint32_t interval, void *param) {
+	struct clock *clock = param;
 
-void clock_tick(struct clock *clock) {
-	unsigned long old_cycle = clock->cpu->cycle;
+	uint32_t old_cycle = clock->cpu->cycle;
 
 	dma_tick(clock->dma);
 	if (!clock->dma->write_toggle) {
@@ -41,9 +32,6 @@ void clock_tick(struct clock *clock) {
 	if (clock->ppu->nmi_occured) {
 		clock->ppu->nmi_occured = false;
 		cpu_tick(clock->cpu);
-		if (clock->nmi_extra_tick) {
-			cpu_tick(clock->cpu);
-		}
 		cpu_nmi(clock->cpu);
 	}
 
@@ -57,37 +45,71 @@ void clock_tick(struct clock *clock) {
 		cpu_irq(clock->cpu);
 	}
 
-	unsigned long current_cycle = clock->cpu->cycle;
+	uint32_t current_cycle = clock->cpu->cycle;
 
-	unsigned long nmi_occured_at = 0;
-	for (unsigned long i = 0; i < (current_cycle - old_cycle) * 3; i++) {
-		ppu_tick(clock->ppu);
-		if (clock->ppu->nmi_occured && nmi_occured_at == 0) {
-			nmi_occured_at = i;
-		}
-	}
-	clock->nmi_extra_tick = nmi_occured_at / 3 == current_cycle - old_cycle - 1;
+	return interval * (current_cycle - old_cycle - 1);
+}
 
-	for (unsigned long i = 0; i < current_cycle - old_cycle - 1; i++) {
-		apu_tick(clock->apu);
-	}
-	cartridge_tick(clock->cartridge);
-	controller_tick(clock->controller);
+static uint32_t _ppu_tick(uint32_t interval, void *param) {
+	struct clock *clock = param;
+
+	ppu_tick(clock->ppu);
 
 	if (clock->ppu->frame_completed) {
 		clock->ppu->frame_completed = false;
 		screen_update(clock->ppu->screen);
 
 		clock->done = keyboard_pressed(clock->controller->keyboard, key_escape);
-
-		clock->frame_time.tv_nsec += nsps / fps;
-		if (clock->frame_time.tv_nsec > nsps) {
-			clock->frame_time.tv_nsec -= nsps;
-			clock->frame_time.tv_sec++;
-		}
-		clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &clock->frame_time, NULL);
-		clock_gettime(CLOCK_REALTIME, &clock->frame_time);
 	}
+
+	return interval;
+}
+
+static uint32_t _apu_tick(uint32_t interval, void *param) {
+	struct clock *clock = param;
+	apu_tick(clock->apu);
+	return interval;
+}
+
+static uint32_t _seq_tick(uint32_t interval, void *param) {
+	struct clock *clock = param;
+	(void)clock;
+	return interval;
+}
+
+static uint32_t kek(uint32_t interval, void *param) {
+	struct clock *clock = param;
+
+	for (int i = 0; i < 340500; i++) {
+		_cpu_tick(interval, clock);
+		_ppu_tick(interval, clock);
+		_ppu_tick(interval, clock);
+		_ppu_tick(interval, clock);
+		_apu_tick(interval, clock);
+		(void)_seq_tick;
+	}
+
+	return interval;
+}
+
+struct clock *clock_new(struct cpu *cpu, struct ppu *ppu, struct apu *apu, struct dma *dma, struct cartridge *cartridge, struct controller *controller) {
+	struct clock *clock = calloc(1, sizeof(struct clock));
+	clock->cpu = cpu;
+	clock->ppu = ppu;
+	clock->apu = apu;
+	clock->dma = dma;
+	clock->cartridge = cartridge;
+	clock->controller = controller;
+
+	SDL_InitSubSystem(SDL_INIT_TIMER);
+	SDL_AddTimer(190, &kek, clock);
+
+	return clock;
+}
+
+void clock_tick(struct clock *clock) {
+	(void)clock;
+	SDL_Delay(1);
 }
 
 bool clock_done(struct clock *clock) {
@@ -95,5 +117,6 @@ bool clock_done(struct clock *clock) {
 }
 
 void clock_destroy(struct clock *clock) {
+	SDL_QuitSubSystem(SDL_INIT_TIMER);
 	free(clock);
 }
