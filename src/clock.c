@@ -30,6 +30,14 @@ struct clock *clock_new(struct cpu *cpu, struct ppu *ppu, struct apu *apu, struc
 	return clock;
 }
 
+static const double time_per_system_sample = 1.0 / 48000.0;
+static const double time_per_nes_clock = 1.0 / 1789773.0;
+#define SAMPLES 4096
+static double audio_sync_time;
+static double audio_nes_time;
+static size_t sound_buffer_pos;
+static double sound_buffer[SAMPLES];
+
 void clock_tick(struct clock *clock) {
 	unsigned long old_cycle = clock->cpu->cycle;
 
@@ -70,6 +78,17 @@ void clock_tick(struct clock *clock) {
 
 	for (unsigned long i = 0; i < current_cycle - old_cycle; i++) {
 		apu_tick(clock->apu);
+
+		audio_sync_time += time_per_nes_clock;
+		audio_nes_time += time_per_nes_clock;
+		if (audio_sync_time >= time_per_system_sample) {
+			audio_sync_time -= time_per_system_sample;
+			sound_buffer[sound_buffer_pos++] = apu_sample(clock->apu, audio_nes_time);
+			if (sound_buffer_pos == SAMPLES) {
+				sound_buffer_pos = 0;
+				audio_samples(clock->apu->audio, sound_buffer, SAMPLES);
+			}
+		}
 	}
 	cartridge_tick(clock->cartridge);
 	controller_tick(clock->controller);

@@ -14,12 +14,13 @@ struct pulse {
 	uint16_t reload;
 	uint8_t volume;
 	uint8_t duty;
+	double dutycycle;
 };
 
 struct pulse *pulse_new(struct bus *bus, int channel);
 void pulse_tick(struct pulse *pulse);
 void pulse_half_frame_tick(struct pulse *pulse);
-double pulse_sample(struct pulse *pulse);
+double pulse_sample(struct pulse *pulse, double time);
 void pulse_destroy(struct pulse *pulse);
 
 #endif

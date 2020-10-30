@@ -27,6 +27,7 @@ struct apu {
 
 struct apu *apu_new(struct bus *bus, struct audio *audio);
 void apu_tick(struct apu *apu);
+double apu_sample(struct apu *apu, double time);
 void apu_destroy(struct apu *apu);
 
 #endif

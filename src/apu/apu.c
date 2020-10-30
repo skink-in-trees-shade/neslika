@@ -40,11 +40,6 @@ void apu_tick(struct apu *apu) {
 		apu->irq_occured = true;
 	}
 
-	double pulse_output = 0.00752 * (pulse_sample(apu->pulse[0]) + pulse_sample(apu->pulse[1]));
-	double tnd_output = 0.00851 * triangle_sample(apu->triangle) + 0.00494 * noise_sample(apu->noise);
-	double sample = pulse_output + tnd_output;
-	audio_sample(apu->audio, sample);
-
 	apu->cycle++;
 	if (apu->cycle == frame_length + 1) {
 		apu->cycle = 0;
@@ -56,6 +51,11 @@ void apu_tick(struct apu *apu) {
 			apu->cycle = 0;
 		}
 	}
+}
+
+double apu_sample(struct apu *apu, double time) {
+	double pulse_output = 0.25 * (pulse_sample(apu->pulse[0], time) + pulse_sample(apu->pulse[1], time));
+	return pulse_output;
 }
 
 void apu_destroy(struct apu *apu) {
