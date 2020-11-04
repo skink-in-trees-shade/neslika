@@ -85,8 +85,8 @@ void clock_tick(struct clock *clock) {
 			clock->frame_time.tv_nsec -= nsps;
 			clock->frame_time.tv_sec++;
 		}
-		clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &clock->frame_time, NULL);
-		clock_gettime(CLOCK_REALTIME, &clock->frame_time);
+		//clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &clock->frame_time, NULL);
+		//clock_gettime(CLOCK_REALTIME, &clock->frame_time);
 	}
 }
 

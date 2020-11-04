@@ -32,7 +32,8 @@ static bool is_ines(struct header *header) {
 }
 
 bool ines_load(struct cartridge *cartridge, const char *filename) {
-	FILE *file = fopen(filename, "rb");
+	FILE *file;
+	fopen_s(&file, filename, "rb");
 	if (!file) {
 		error("File not found.");
 	}

@@ -20,7 +20,7 @@ struct audio {
 	unsigned long cycle;
 };
 
-static DWORD callback(LPVOID param) {
+static DWORD WINAPI callback(LPVOID param) {
 	struct audio *audio = param;
 
 	long buffer_id = 0;

@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{66c51520-1777-416f-b589-8f3485d3ff69}</ProjectGuid>
+    <RootNamespace>neslika</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\apu\apu.c" />
+    <ClCompile Include="src\apu\length\length.c" />
+    <ClCompile Include="src\apu\memory\read_control.c" />
+    <ClCompile Include="src\apu\memory\write_control.c" />
+    <ClCompile Include="src\apu\memory\write_frame.c" />
+    <ClCompile Include="src\apu\noise\memory\noise_length.c" />
+    <ClCompile Include="src\apu\noise\memory\noise_status.c" />
+    <ClCompile Include="src\apu\noise\memory\noise_timer.c" />
+    <ClCompile Include="src\apu\noise\noise.c" />
+    <ClCompile Include="src\apu\pulse\memory\pulse_status.c" />
+    <ClCompile Include="src\apu\pulse\memory\pulse_timer_high.c" />
+    <ClCompile Include="src\apu\pulse\memory\pulse_timer_low.c" />
+    <ClCompile Include="src\apu\pulse\pulse.c" />
+    <ClCompile Include="src\apu\triangle\memory\triangle_status.c" />
+    <ClCompile Include="src\apu\triangle\memory\triangle_timer_high.c" />
+    <ClCompile Include="src\apu\triangle\memory\triangle_timer_low.c" />
+    <ClCompile Include="src\apu\triangle\triangle.c" />
+    <ClCompile Include="src\bus.c" />
+    <ClCompile Include="src\cartridge\cartridge.c" />
+    <ClCompile Include="src\cartridge\format\ines.c" />
+    <ClCompile Include="src\cartridge\mapper.c" />
+    <ClCompile Include="src\cartridge\mapper\axrom\axrom.c" />
+    <ClCompile Include="src\cartridge\mapper\axrom\memory\read_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\axrom\memory\read_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\axrom\memory\read_program_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\axrom\memory\select_bank.c" />
+    <ClCompile Include="src\cartridge\mapper\axrom\memory\write_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\axrom\memory\write_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\cnrom\cnrom.c" />
+    <ClCompile Include="src\cartridge\mapper\cnrom\memory\read_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\cnrom\memory\read_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\cnrom\memory\read_program_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\cnrom\memory\select_chr_rom_bank.c" />
+    <ClCompile Include="src\cartridge\mapper\cnrom\memory\write_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\cnrom\memory\write_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\nrom\memory\read_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\nrom\memory\read_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\nrom\memory\read_program_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\nrom\memory\write_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\nrom\memory\write_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\nrom\nrom.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\read_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\read_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\read_program_ram.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\read_program_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\select_chr_rom_bank.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\select_prg_rom_bank.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\write_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\write_control.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\write_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\memory\write_program_ram.c" />
+    <ClCompile Include="src\cartridge\mapper\sxrom\sxrom.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\read_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\read_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\read_program_ram.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\read_program_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\select_bank.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\write_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\write_control.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\write_irq_control.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\write_irq_counter.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\write_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\memory\write_program_ram.c" />
+    <ClCompile Include="src\cartridge\mapper\txrom\txrom.c" />
+    <ClCompile Include="src\cartridge\mapper\uxrom\memory\read_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\uxrom\memory\read_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\uxrom\memory\read_program_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\uxrom\memory\select_bank.c" />
+    <ClCompile Include="src\cartridge\mapper\uxrom\memory\write_character_rom.c" />
+    <ClCompile Include="src\cartridge\mapper\uxrom\memory\write_name_table.c" />
+    <ClCompile Include="src\cartridge\mapper\uxrom\uxrom.c" />
+    <ClCompile Include="src\clock.c" />
+    <ClCompile Include="src\controller\controller.c" />
+    <ClCompile Include="src\controller\memory\read_player_one.c" />
+    <ClCompile Include="src\controller\memory\read_player_two.c" />
+    <ClCompile Include="src\controller\memory\write_player.c" />
+    <ClCompile Include="src\cpu\addressing\abj.c" />
+    <ClCompile Include="src\cpu\addressing\abo.c" />
+    <ClCompile Include="src\cpu\addressing\abx.c" />
+    <ClCompile Include="src\cpu\addressing\aby.c" />
+    <ClCompile Include="src\cpu\addressing\acc.c" />
+    <ClCompile Include="src\cpu\addressing\iix.c" />
+    <ClCompile Include="src\cpu\addressing\iiy.c" />
+    <ClCompile Include="src\cpu\addressing\imm.c" />
+    <ClCompile Include="src\cpu\addressing\imp.c" />
+    <ClCompile Include="src\cpu\addressing\ind.c" />
+    <ClCompile Include="src\cpu\addressing\rel.c" />
+    <ClCompile Include="src\cpu\addressing\zpa.c" />
+    <ClCompile Include="src\cpu\addressing\zpx.c" />
+    <ClCompile Include="src\cpu\addressing\zpy.c" />
+    <ClCompile Include="src\cpu\cpu.c" />
+    <ClCompile Include="src\cpu\instruction.c" />
+    <ClCompile Include="src\cpu\instruction\adc.c" />
+    <ClCompile Include="src\cpu\instruction\ahx.c" />
+    <ClCompile Include="src\cpu\instruction\alr.c" />
+    <ClCompile Include="src\cpu\instruction\anc.c" />
+    <ClCompile Include="src\cpu\instruction\and.c" />
+    <ClCompile Include="src\cpu\instruction\arr.c" />
+    <ClCompile Include="src\cpu\instruction\asl.c" />
+    <ClCompile Include="src\cpu\instruction\asla.c" />
+    <ClCompile Include="src\cpu\instruction\axs.c" />
+    <ClCompile Include="src\cpu\instruction\bcc.c" />
+    <ClCompile Include="src\cpu\instruction\bcs.c" />
+    <ClCompile Include="src\cpu\instruction\beq.c" />
+    <ClCompile Include="src\cpu\instruction\bit.c" />
+    <ClCompile Include="src\cpu\instruction\bmi.c" />
+    <ClCompile Include="src\cpu\instruction\bne.c" />
+    <ClCompile Include="src\cpu\instruction\bpl.c" />
+    <ClCompile Include="src\cpu\instruction\brk.c" />
+    <ClCompile Include="src\cpu\instruction\bvc.c" />
+    <ClCompile Include="src\cpu\instruction\bvs.c" />
+    <ClCompile Include="src\cpu\instruction\clc.c" />
+    <ClCompile Include="src\cpu\instruction\cld.c" />
+    <ClCompile Include="src\cpu\instruction\cli.c" />
+    <ClCompile Include="src\cpu\instruction\clv.c" />
+    <ClCompile Include="src\cpu\instruction\cmp.c" />
+    <ClCompile Include="src\cpu\instruction\cpx.c" />
+    <ClCompile Include="src\cpu\instruction\cpy.c" />
+    <ClCompile Include="src\cpu\instruction\dcp.c" />
+    <ClCompile Include="src\cpu\instruction\dec.c" />
+    <ClCompile Include="src\cpu\instruction\dex.c" />
+    <ClCompile Include="src\cpu\instruction\dey.c" />
+    <ClCompile Include="src\cpu\instruction\eor.c" />
+    <ClCompile Include="src\cpu\instruction\inc.c" />
+    <ClCompile Include="src\cpu\instruction\inx.c" />
+    <ClCompile Include="src\cpu\instruction\iny.c" />
+    <ClCompile Include="src\cpu\instruction\isb.c" />
+    <ClCompile Include="src\cpu\instruction\jmp.c" />
+    <ClCompile Include="src\cpu\instruction\jsr.c" />
+    <ClCompile Include="src\cpu\instruction\kil.c" />
+    <ClCompile Include="src\cpu\instruction\las.c" />
+    <ClCompile Include="src\cpu\instruction\lax.c" />
+    <ClCompile Include="src\cpu\instruction\lda.c" />
+    <ClCompile Include="src\cpu\instruction\ldx.c" />
+    <ClCompile Include="src\cpu\instruction\ldy.c" />
+    <ClCompile Include="src\cpu\instruction\lsr.c" />
+    <ClCompile Include="src\cpu\instruction\lsra.c" />
+    <ClCompile Include="src\cpu\instruction\nop.c" />
+    <ClCompile Include="src\cpu\instruction\ora.c" />
+    <ClCompile Include="src\cpu\instruction\pha.c" />
+    <ClCompile Include="src\cpu\instruction\php.c" />
+    <ClCompile Include="src\cpu\instruction\pla.c" />
+    <ClCompile Include="src\cpu\instruction\plp.c" />
+    <ClCompile Include="src\cpu\instruction\rla.c" />
+    <ClCompile Include="src\cpu\instruction\rol.c" />
+    <ClCompile Include="src\cpu\instruction\rola.c" />
+    <ClCompile Include="src\cpu\instruction\ror.c" />
+    <ClCompile Include="src\cpu\instruction\rora.c" />
+    <ClCompile Include="src\cpu\instruction\rra.c" />
+    <ClCompile Include="src\cpu\instruction\rti.c" />
+    <ClCompile Include="src\cpu\instruction\rts.c" />
+    <ClCompile Include="src\cpu\instruction\sax.c" />
+    <ClCompile Include="src\cpu\instruction\sbc.c" />
+    <ClCompile Include="src\cpu\instruction\sec.c" />
+    <ClCompile Include="src\cpu\instruction\sed.c" />
+    <ClCompile Include="src\cpu\instruction\sei.c" />
+    <ClCompile Include="src\cpu\instruction\shx.c" />
+    <ClCompile Include="src\cpu\instruction\shy.c" />
+    <ClCompile Include="src\cpu\instruction\slo.c" />
+    <ClCompile Include="src\cpu\instruction\sre.c" />
+    <ClCompile Include="src\cpu\instruction\sta.c" />
+    <ClCompile Include="src\cpu\instruction\stx.c" />
+    <ClCompile Include="src\cpu\instruction\sty.c" />
+    <ClCompile Include="src\cpu\instruction\tas.c" />
+    <ClCompile Include="src\cpu\instruction\tax.c" />
+    <ClCompile Include="src\cpu\instruction\tay.c" />
+    <ClCompile Include="src\cpu\instruction\tsx.c" />
+    <ClCompile Include="src\cpu\instruction\txa.c" />
+    <ClCompile Include="src\cpu\instruction\txs.c" />
+    <ClCompile Include="src\cpu\instruction\tya.c" />
+    <ClCompile Include="src\cpu\instruction\xaa.c" />
+    <ClCompile Include="src\cpu\memory\read_memory.c" />
+    <ClCompile Include="src\cpu\memory\write_memory.c" />
+    <ClCompile Include="src\dma\dma.c" />
+    <ClCompile Include="src\dma\memory\write_oam_dma.c" />
+    <ClCompile Include="src\error.c" />
+    <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\neslika.c" />
+    <ClCompile Include="src\platform\windows\audio.c" />
+    <ClCompile Include="src\platform\windows\keyboard.c" />
+    <ClCompile Include="src\platform\windows\screen.c" />
+    <ClCompile Include="src\ppu\event.c" />
+    <ClCompile Include="src\ppu\event\clear_oam.c" />
+    <ClCompile Include="src\ppu\event\clear_vertical_blank.c" />
+    <ClCompile Include="src\ppu\event\evaluate_sprite.c" />
+    <ClCompile Include="src\ppu\event\increment_vram_x.c" />
+    <ClCompile Include="src\ppu\event\increment_vram_y.c" />
+    <ClCompile Include="src\ppu\event\load_palette_id.c" />
+    <ClCompile Include="src\ppu\event\load_shifters.c" />
+    <ClCompile Include="src\ppu\event\load_sprite.c" />
+    <ClCompile Include="src\ppu\event\load_tile_high.c" />
+    <ClCompile Include="src\ppu\event\load_tile_id.c" />
+    <ClCompile Include="src\ppu\event\load_tile_low.c" />
+    <ClCompile Include="src\ppu\event\load_vram_x.c" />
+    <ClCompile Include="src\ppu\event\load_vram_y.c" />
+    <ClCompile Include="src\ppu\event\render_pixel.c" />
+    <ClCompile Include="src\ppu\event\set_vertical_blank.c" />
+    <ClCompile Include="src\ppu\event\skip_cycle.c" />
+    <ClCompile Include="src\ppu\event\sprite_zero_hit.c" />
+    <ClCompile Include="src\ppu\event\update_sprite_shifters.c" />
+    <ClCompile Include="src\ppu\event\update_tile_shifters.c" />
+    <ClCompile Include="src\ppu\memory\read_data.c" />
+    <ClCompile Include="src\ppu\memory\read_oam_data.c" />
+    <ClCompile Include="src\ppu\memory\read_open_bus.c" />
+    <ClCompile Include="src\ppu\memory\read_palette_table.c" />
+    <ClCompile Include="src\ppu\memory\read_status.c" />
+    <ClCompile Include="src\ppu\memory\write_address.c" />
+    <ClCompile Include="src\ppu\memory\write_controller.c" />
+    <ClCompile Include="src\ppu\memory\write_data.c" />
+    <ClCompile Include="src\ppu\memory\write_mask.c" />
+    <ClCompile Include="src\ppu\memory\write_oam_address.c" />
+    <ClCompile Include="src\ppu\memory\write_oam_data.c" />
+    <ClCompile Include="src\ppu\memory\write_open_bus.c" />
+    <ClCompile Include="src\ppu\memory\write_palette_table.c" />
+    <ClCompile Include="src\ppu\memory\write_scroll.c" />
+    <ClCompile Include="src\ppu\palette.c" />
+    <ClCompile Include="src\ppu\ppu.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\apu\apu.h" />
+    <ClInclude Include="src\apu\length\length.h" />
+    <ClInclude Include="src\apu\memory\read_control.h" />
+    <ClInclude Include="src\apu\memory\write_control.h" />
+    <ClInclude Include="src\apu\memory\write_frame.h" />
+    <ClInclude Include="src\apu\noise\memory\noise_length.h" />
+    <ClInclude Include="src\apu\noise\memory\noise_status.h" />
+    <ClInclude Include="src\apu\noise\memory\noise_timer.h" />
+    <ClInclude Include="src\apu\noise\noise.h" />
+    <ClInclude Include="src\apu\pulse\memory\pulse_status.h" />
+    <ClInclude Include="src\apu\pulse\memory\pulse_timer_high.h" />
+    <ClInclude Include="src\apu\pulse\memory\pulse_timer_low.h" />
+    <ClInclude Include="src\apu\pulse\pulse.h" />
+    <ClInclude Include="src\apu\triangle\memory\triangle_status.h" />
+    <ClInclude Include="src\apu\triangle\memory\triangle_timer_high.h" />
+    <ClInclude Include="src\apu\triangle\memory\triangle_timer_low.h" />
+    <ClInclude Include="src\apu\triangle\triangle.h" />
+    <ClInclude Include="src\bus.h" />
+    <ClInclude Include="src\cartridge\cartridge.h" />
+    <ClInclude Include="src\cartridge\format\ines.h" />
+    <ClInclude Include="src\cartridge\mapper.h" />
+    <ClInclude Include="src\cartridge\mapper\axrom\axrom.h" />
+    <ClInclude Include="src\cartridge\mapper\axrom\memory\read_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\axrom\memory\read_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\axrom\memory\read_program_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\axrom\memory\select_bank.h" />
+    <ClInclude Include="src\cartridge\mapper\axrom\memory\write_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\axrom\memory\write_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\cnrom\cnrom.h" />
+    <ClInclude Include="src\cartridge\mapper\cnrom\memory\read_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\cnrom\memory\read_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\cnrom\memory\read_program_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\cnrom\memory\select_chr_rom_bank.h" />
+    <ClInclude Include="src\cartridge\mapper\cnrom\memory\write_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\cnrom\memory\write_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\nrom\memory\read_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\nrom\memory\read_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\nrom\memory\read_program_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\nrom\memory\write_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\nrom\memory\write_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\nrom\nrom.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\read_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\read_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\read_program_ram.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\read_program_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\select_chr_rom_bank.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\select_prg_rom_bank.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\write_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\write_control.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\write_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\memory\write_program_ram.h" />
+    <ClInclude Include="src\cartridge\mapper\sxrom\sxrom.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\read_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\read_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\read_program_ram.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\read_program_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\select_bank.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\write_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\write_control.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\write_irq_control.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\write_irq_counter.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\write_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\memory\write_program_ram.h" />
+    <ClInclude Include="src\cartridge\mapper\txrom\txrom.h" />
+    <ClInclude Include="src\cartridge\mapper\uxrom\memory\read_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\uxrom\memory\read_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\uxrom\memory\read_program_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\uxrom\memory\select_bank.h" />
+    <ClInclude Include="src\cartridge\mapper\uxrom\memory\write_character_rom.h" />
+    <ClInclude Include="src\cartridge\mapper\uxrom\memory\write_name_table.h" />
+    <ClInclude Include="src\cartridge\mapper\uxrom\uxrom.h" />
+    <ClInclude Include="src\clock.h" />
+    <ClInclude Include="src\controller\controller.h" />
+    <ClInclude Include="src\controller\memory\read_player_one.h" />
+    <ClInclude Include="src\controller\memory\read_player_two.h" />
+    <ClInclude Include="src\controller\memory\write_player.h" />
+    <ClInclude Include="src\cpu\addressing\abj.h" />
+    <ClInclude Include="src\cpu\addressing\abo.h" />
+    <ClInclude Include="src\cpu\addressing\abx.h" />
+    <ClInclude Include="src\cpu\addressing\aby.h" />
+    <ClInclude Include="src\cpu\addressing\acc.h" />
+    <ClInclude Include="src\cpu\addressing\iix.h" />
+    <ClInclude Include="src\cpu\addressing\iiy.h" />
+    <ClInclude Include="src\cpu\addressing\imm.h" />
+    <ClInclude Include="src\cpu\addressing\imp.h" />
+    <ClInclude Include="src\cpu\addressing\ind.h" />
+    <ClInclude Include="src\cpu\addressing\rel.h" />
+    <ClInclude Include="src\cpu\addressing\zpa.h" />
+    <ClInclude Include="src\cpu\addressing\zpx.h" />
+    <ClInclude Include="src\cpu\addressing\zpy.h" />
+    <ClInclude Include="src\cpu\cpu.h" />
+    <ClInclude Include="src\cpu\instruction.h" />
+    <ClInclude Include="src\cpu\instruction\adc.h" />
+    <ClInclude Include="src\cpu\instruction\ahx.h" />
+    <ClInclude Include="src\cpu\instruction\alr.h" />
+    <ClInclude Include="src\cpu\instruction\anc.h" />
+    <ClInclude Include="src\cpu\instruction\and.h" />
+    <ClInclude Include="src\cpu\instruction\arr.h" />
+    <ClInclude Include="src\cpu\instruction\asl.h" />
+    <ClInclude Include="src\cpu\instruction\asla.h" />
+    <ClInclude Include="src\cpu\instruction\axs.h" />
+    <ClInclude Include="src\cpu\instruction\bcc.h" />
+    <ClInclude Include="src\cpu\instruction\bcs.h" />
+    <ClInclude Include="src\cpu\instruction\beq.h" />
+    <ClInclude Include="src\cpu\instruction\bit.h" />
+    <ClInclude Include="src\cpu\instruction\bmi.h" />
+    <ClInclude Include="src\cpu\instruction\bne.h" />
+    <ClInclude Include="src\cpu\instruction\bpl.h" />
+    <ClInclude Include="src\cpu\instruction\brk.h" />
+    <ClInclude Include="src\cpu\instruction\bvc.h" />
+    <ClInclude Include="src\cpu\instruction\bvs.h" />
+    <ClInclude Include="src\cpu\instruction\clc.h" />
+    <ClInclude Include="src\cpu\instruction\cld.h" />
+    <ClInclude Include="src\cpu\instruction\cli.h" />
+    <ClInclude Include="src\cpu\instruction\clv.h" />
+    <ClInclude Include="src\cpu\instruction\cmp.h" />
+    <ClInclude Include="src\cpu\instruction\cpx.h" />
+    <ClInclude Include="src\cpu\instruction\cpy.h" />
+    <ClInclude Include="src\cpu\instruction\dcp.h" />
+    <ClInclude Include="src\cpu\instruction\dec.h" />
+    <ClInclude Include="src\cpu\instruction\dex.h" />
+    <ClInclude Include="src\cpu\instruction\dey.h" />
+    <ClInclude Include="src\cpu\instruction\eor.h" />
+    <ClInclude Include="src\cpu\instruction\inc.h" />
+    <ClInclude Include="src\cpu\instruction\inx.h" />
+    <ClInclude Include="src\cpu\instruction\iny.h" />
+    <ClInclude Include="src\cpu\instruction\isb.h" />
+    <ClInclude Include="src\cpu\instruction\jmp.h" />
+    <ClInclude Include="src\cpu\instruction\jsr.h" />
+    <ClInclude Include="src\cpu\instruction\kil.h" />
+    <ClInclude Include="src\cpu\instruction\las.h" />
+    <ClInclude Include="src\cpu\instruction\lax.h" />
+    <ClInclude Include="src\cpu\instruction\lda.h" />
+    <ClInclude Include="src\cpu\instruction\ldx.h" />
+    <ClInclude Include="src\cpu\instruction\ldy.h" />
+    <ClInclude Include="src\cpu\instruction\lsr.h" />
+    <ClInclude Include="src\cpu\instruction\lsra.h" />
+    <ClInclude Include="src\cpu\instruction\nop.h" />
+    <ClInclude Include="src\cpu\instruction\ora.h" />
+    <ClInclude Include="src\cpu\instruction\pha.h" />
+    <ClInclude Include="src\cpu\instruction\php.h" />
+    <ClInclude Include="src\cpu\instruction\pla.h" />
+    <ClInclude Include="src\cpu\instruction\plp.h" />
+    <ClInclude Include="src\cpu\instruction\rla.h" />
+    <ClInclude Include="src\cpu\instruction\rol.h" />
+    <ClInclude Include="src\cpu\instruction\rola.h" />
+    <ClInclude Include="src\cpu\instruction\ror.h" />
+    <ClInclude Include="src\cpu\instruction\rora.h" />
+    <ClInclude Include="src\cpu\instruction\rra.h" />
+    <ClInclude Include="src\cpu\instruction\rti.h" />
+    <ClInclude Include="src\cpu\instruction\rts.h" />
+    <ClInclude Include="src\cpu\instruction\sax.h" />
+    <ClInclude Include="src\cpu\instruction\sbc.h" />
+    <ClInclude Include="src\cpu\instruction\sec.h" />
+    <ClInclude Include="src\cpu\instruction\sed.h" />
+    <ClInclude Include="src\cpu\instruction\sei.h" />
+    <ClInclude Include="src\cpu\instruction\shx.h" />
+    <ClInclude Include="src\cpu\instruction\shy.h" />
+    <ClInclude Include="src\cpu\instruction\slo.h" />
+    <ClInclude Include="src\cpu\instruction\sre.h" />
+    <ClInclude Include="src\cpu\instruction\sta.h" />
+    <ClInclude Include="src\cpu\instruction\stx.h" />
+    <ClInclude Include="src\cpu\instruction\sty.h" />
+    <ClInclude Include="src\cpu\instruction\tas.h" />
+    <ClInclude Include="src\cpu\instruction\tax.h" />
+    <ClInclude Include="src\cpu\instruction\tay.h" />
+    <ClInclude Include="src\cpu\instruction\tsx.h" />
+    <ClInclude Include="src\cpu\instruction\txa.h" />
+    <ClInclude Include="src\cpu\instruction\txs.h" />
+    <ClInclude Include="src\cpu\instruction\tya.h" />
+    <ClInclude Include="src\cpu\instruction\xaa.h" />
+    <ClInclude Include="src\cpu\memory\read_memory.h" />
+    <ClInclude Include="src\cpu\memory\write_memory.h" />
+    <ClInclude Include="src\dma\dma.h" />
+    <ClInclude Include="src\dma\memory\write_oam_dma.h" />
+    <ClInclude Include="src\error.h" />
+    <ClInclude Include="src\neslika.h" />
+    <ClInclude Include="src\platform\audio.h" />
+    <ClInclude Include="src\platform\keyboard.h" />
+    <ClInclude Include="src\platform\screen.h" />
+    <ClInclude Include="src\ppu\event.h" />
+    <ClInclude Include="src\ppu\event\clear_oam.h" />
+    <ClInclude Include="src\ppu\event\clear_vertical_blank.h" />
+    <ClInclude Include="src\ppu\event\evaluate_sprite.h" />
+    <ClInclude Include="src\ppu\event\increment_vram_x.h" />
+    <ClInclude Include="src\ppu\event\increment_vram_y.h" />
+    <ClInclude Include="src\ppu\event\load_palette_id.h" />
+    <ClInclude Include="src\ppu\event\load_shifters.h" />
+    <ClInclude Include="src\ppu\event\load_sprite.h" />
+    <ClInclude Include="src\ppu\event\load_tile_high.h" />
+    <ClInclude Include="src\ppu\event\load_tile_id.h" />
+    <ClInclude Include="src\ppu\event\load_tile_low.h" />
+    <ClInclude Include="src\ppu\event\load_vram_x.h" />
+    <ClInclude Include="src\ppu\event\load_vram_y.h" />
+    <ClInclude Include="src\ppu\event\render_pixel.h" />
+    <ClInclude Include="src\ppu\event\set_vertical_blank.h" />
+    <ClInclude Include="src\ppu\event\skip_cycle.h" />
+    <ClInclude Include="src\ppu\event\sprite_zero_hit.h" />
+    <ClInclude Include="src\ppu\event\update_sprite_shifters.h" />
+    <ClInclude Include="src\ppu\event\update_tile_shifters.h" />
+    <ClInclude Include="src\ppu\memory\read_data.h" />
+    <ClInclude Include="src\ppu\memory\read_oam_data.h" />
+    <ClInclude Include="src\ppu\memory\read_open_bus.h" />
+    <ClInclude Include="src\ppu\memory\read_palette_table.h" />
+    <ClInclude Include="src\ppu\memory\read_status.h" />
+    <ClInclude Include="src\ppu\memory\write_address.h" />
+    <ClInclude Include="src\ppu\memory\write_controller.h" />
+    <ClInclude Include="src\ppu\memory\write_data.h" />
+    <ClInclude Include="src\ppu\memory\write_mask.h" />
+    <ClInclude Include="src\ppu\memory\write_oam_address.h" />
+    <ClInclude Include="src\ppu\memory\write_oam_data.h" />
+    <ClInclude Include="src\ppu\memory\write_open_bus.h" />
+    <ClInclude Include="src\ppu\memory\write_palette_table.h" />
+    <ClInclude Include="src\ppu\memory\write_scroll.h" />
+    <ClInclude Include="src\ppu\palette.h" />
+    <ClInclude Include="src\ppu\ppu.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

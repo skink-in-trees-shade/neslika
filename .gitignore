@@ -1,3 +1,6 @@
 **/*.o
 **/*.d
-neslika*
+**/*.user
+.vs/
+Debug/
+neslika.exe
