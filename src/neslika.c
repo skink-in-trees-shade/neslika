@@ -44,7 +44,6 @@ struct neslika *neslika_new(void) {
 	nes->cartridge = cartridge_new(nes->cpu_bus, nes->ppu_bus);
 
 	nes->ppu = ppu_new(nes->cpu_bus, nes->ppu_bus, nes->screen);
-	nes->ppu->cartridge = nes->cartridge;
 
 	nes->dma = dma_new(nes->cpu_bus);
 	nes->dma->cpu = nes->cpu;
