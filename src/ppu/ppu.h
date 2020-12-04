@@ -5,13 +5,11 @@
 #include <stdbool.h>
 #include "platform/screen.h"
 #include "bus.h"
-#include "cartridge/cartridge.h"
 
 struct ppu {
 	struct bus *cpu_bus;
 	struct bus *ppu_bus;
 	struct screen *screen;
-	struct cartridge *cartridge;
 
 	uint16_t scanline;
 	uint16_t cycle;
