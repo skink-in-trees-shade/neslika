@@ -33,8 +33,10 @@ struct clock *clock_new(struct cpu *cpu, struct ppu *ppu, struct apu *apu, struc
 void clock_tick(struct clock *clock) {
 	unsigned long old_cycle = clock->cpu->cycle;
 
-	dma_tick(clock->dma);
-	if (!clock->dma->write_toggle) {
+	if (clock->dma->write_toggle) {
+		dma_tick(clock->dma);
+		clock->cpu->cycle++;
+	} else {
 		cpu_tick(clock->cpu);
 	}
 

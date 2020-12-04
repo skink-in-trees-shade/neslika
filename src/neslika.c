@@ -38,16 +38,10 @@ struct neslika *neslika_new(void) {
 	nes->ppu_bus = bus_new(0x4000);
 
 	nes->cpu = cpu_new(nes->cpu_bus);
-
 	nes->apu = apu_new(nes->cpu_bus, nes->audio);
-
 	nes->cartridge = cartridge_new(nes->cpu_bus, nes->ppu_bus);
-
 	nes->ppu = ppu_new(nes->cpu_bus, nes->ppu_bus, nes->screen);
-
 	nes->dma = dma_new(nes->cpu_bus);
-	nes->dma->cpu = nes->cpu;
-
 	nes->controller = controller_new(nes->cpu_bus, nes->keyboard);
 
 	nes->clock = clock_new(nes->cpu, nes->ppu, nes->apu, nes->dma, nes->cartridge, nes->controller);

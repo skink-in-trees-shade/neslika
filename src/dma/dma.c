@@ -12,19 +12,16 @@ struct dma *dma_new(struct bus *bus) {
 }
 
 void dma_tick(struct dma *dma) {
-	if (dma->write_toggle) {
-		if (dma->cycle % 2 == 0) {
-			dma->value = bus_read(dma->bus, dma->address++);
-		} else {
-			bus_write(dma->bus, 0x2004, dma->value);
-		}
+	if (dma->cycle % 2 == 0) {
+		dma->value = bus_read(dma->bus, dma->address++);
+	} else {
+		bus_write(dma->bus, 0x2004, dma->value);
+	}
 
-		dma->cycle++;
-		dma->cpu->cycle++;
+	dma->cycle++;
 
-		if (dma->cycle == 0x201) {
-			dma->write_toggle = false;
-		}
+	if (dma->cycle == 0x201) {
+		dma->write_toggle = false;
 	}
 }
 

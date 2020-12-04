@@ -3,12 +3,10 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "cpu/cpu.h"
 #include "bus.h"
 
 struct dma {
 	struct bus *bus;
-	struct cpu *cpu;
 
 	uint16_t cycle;
 	uint16_t address;
