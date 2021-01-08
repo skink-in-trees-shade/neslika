@@ -5,7 +5,7 @@ ifeq ($(OS),Windows_NT)
 	LDFLAGS = -lgdi32 -lwinmm
 else
 	PLATFORM = linux
-	LDFLAGS = -lX11 -lGL -lasound -lpthread
+	LDFLAGS = -lX11 -lGL -lasound
 endif
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
