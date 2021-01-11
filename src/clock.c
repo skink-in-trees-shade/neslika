@@ -76,8 +76,8 @@ void clock_tick(struct clock *clock) {
 	cartridge_tick(clock->cartridge);
 	controller_tick(clock->controller);
 
-	if (clock->ppu->frame_completed) {
-		clock->ppu->frame_completed = false;
+	if (audio_frame_ended(clock->apu->audio)) {
+		//clock->ppu->frame_completed = false;
 		screen_update(clock->ppu->screen);
 		audio_update(clock->apu->audio);
 
