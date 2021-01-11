@@ -1,11 +1,11 @@
-CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -std=c99 -Isrc -pipe -O2
+CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -std=c99 -Isrc -pipe -O2 `sdl2-config --cflags`
 
 ifeq ($(OS),Windows_NT)
 	PLATFORM = windows
 	LDFLAGS = -lgdi32 -lwinmm
 else
 	PLATFORM = linux
-	LDFLAGS = -lX11 -lGL -lasound -lpthread
+	LDFLAGS = -lX11 -lGL `sdl2-config --libs`
 endif
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))

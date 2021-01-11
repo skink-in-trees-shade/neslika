@@ -1,76 +1,75 @@
-#define _POSIX_C_SOURCE 200809L
 #include <stdlib.h>
-#include <alsa/asoundlib.h>
-#include <pthread.h>
+#include <SDL2/SDL.h>
 #include "platform/audio.h"
 
-const long apu_frequency = 1789773;
+const long apu_frequency = 1786840; // 1789773
+
+#define BUF_SIZE 256*16*2
 
 struct audio {
-	snd_pcm_t *handle;
+	SDL_AudioDeviceID device;
 	uint16_t rate;
-	pthread_t thread;
-	pthread_mutex_t mutex;
-	double *samples;
-	size_t samples_size;
-	size_t read_position;
-	size_t write_position;
-	unsigned long cycle;
+	float *samples;
+	size_t samples_count;
+	float dt;
+	float acc;
+	int started;
 };
 
-static void *callback(void *arg) {
-	struct audio *audio = arg;
+#include <stdio.h>
+static void callback(void *userdata, Uint8 *stream, int len) {
+	struct audio *audio = userdata;
 
-	while (1) {
-		if (snd_pcm_wait(audio->handle, 1000) == 1) {
-			snd_pcm_sframes_t frames = snd_pcm_avail_update(audio->handle);
-			if (frames > 0) {
-				pthread_mutex_lock(&audio->mutex);
-				int error = snd_pcm_writei(audio->handle, &audio->samples[audio->read_position], frames);
-				pthread_mutex_unlock(&audio->mutex);
-
-				if (error < 0) {
-					snd_pcm_recover(audio->handle, error, 0);
-				} else {
-					audio->read_position = (audio->read_position + error) % audio->samples_size;
-				}
-			}
-		}
+	size_t samples_count = len / sizeof(float);
+	printf("HAVE %4ld  WANT %4ld", audio->samples_count, samples_count);
+	if (samples_count <= audio->samples_count) {
+		memcpy(stream, audio->samples, samples_count * sizeof(float));
+		memmove(audio->samples, &audio->samples[samples_count], (audio->samples_count - samples_count) * sizeof(float));
+		audio->samples_count -= samples_count;
+		printf("  LEFT %4ld\n", audio->samples_count);
+	} else {
+		memcpy(stream, audio->samples, audio->samples_count * sizeof(float));
+		memset(&stream[audio->samples_count], 0, (samples_count - audio->samples_count) * sizeof(float));
+		printf("  MUTE %4ld\n", samples_count - audio->samples_count);
+		audio->samples_count = 0;
 	}
-
-	return NULL;
 }
 
 struct audio *audio_new(uint8_t channels, uint16_t rate) {
 	struct audio *audio = calloc(1, sizeof(struct audio));
 	audio->rate = rate;
-	audio->samples_size = audio->rate;
-	audio->samples = calloc(audio->samples_size, sizeof(double));
+	audio->dt = apu_frequency / audio->rate;
+	audio->samples = calloc(BUF_SIZE * 32, sizeof(float));
 
-	snd_pcm_open(&audio->handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
-	snd_pcm_set_params(audio->handle, SND_PCM_FORMAT_FLOAT64, SND_PCM_ACCESS_RW_INTERLEAVED, channels, rate, 1, 100000);
+	SDL_Init(SDL_INIT_AUDIO);
 
-	pthread_create(&audio->thread, NULL, callback, (void *)audio);
+	SDL_AudioSpec spec = {0};
+	spec.freq = audio->rate;
+	spec.format = AUDIO_F32SYS;
+	spec.channels = channels;
+	spec.samples = BUF_SIZE;
+	spec.callback = &callback;
+	spec.userdata = audio;
+	audio->device = SDL_OpenAudioDevice(NULL, 0, &spec, NULL, 0);
 
 	return audio;
 }
 
 void audio_sample(struct audio *audio, double sample) {
-	if (audio->cycle % (apu_frequency / audio->rate) == 0) {
-		pthread_mutex_lock(&audio->mutex);
-		audio->samples[audio->write_position] = sample;
-		pthread_mutex_unlock(&audio->mutex);
-
-		audio->write_position = (audio->write_position + 1) % audio->samples_size;
+	audio->acc += 1.0;
+	if (audio->acc >= audio->dt) {
+		audio->samples[audio->samples_count++] = (float)sample;
+		audio->acc -= audio->dt;
+		if (!audio->started && audio->samples_count == BUF_SIZE) {
+			audio->started = 1;
+			SDL_PauseAudioDevice(audio->device, 0);
+		}
 	}
-
-	audio->cycle++;
 }
 
 void audio_destroy(struct audio *audio) {
-	pthread_cancel(audio->thread);
-	snd_pcm_drain(audio->handle);
-	snd_pcm_close(audio->handle);
+	SDL_CloseAudioDevice(audio->device);
+	SDL_Quit();
 	free(audio->samples);
 	free(audio);
 }
