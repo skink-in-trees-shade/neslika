@@ -29,7 +29,7 @@ struct clock *clock_new(struct cpu *cpu, struct ppu *ppu, struct apu *apu, struc
 	clock->controller = controller;
 	return clock;
 }
-
+#include <stdio.h>
 void clock_tick(struct clock *clock) {
 	unsigned long old_cycle = clock->cpu->cycle;
 
@@ -76,10 +76,23 @@ void clock_tick(struct clock *clock) {
 	cartridge_tick(clock->cartridge);
 	controller_tick(clock->controller);
 
-	if (clock->ppu->frame_completed) {
-		clock->ppu->frame_completed = false;
-		screen_update(clock->ppu->screen);
+	static int audio_frame_delta = 0;
+	if (audio_frame_ready(clock->apu->audio)) {
+		audio_frame_delta++;
+		audio_frame_commit(clock->apu->audio);
+		screen_commit(clock->ppu->screen);
+	}
 
+	static int video_frame_delta = 0;
+	if (clock->ppu->frame_completed) {
+		video_frame_delta++;
+		clock->ppu->frame_completed = false;
+		//screen_update(clock->ppu->screen);
+	}
+
+	if (audio_frame_delta > 0 && video_frame_delta > 0) {
+		video_frame_delta--;
+		audio_frame_delta--;
 		clock->done = keyboard_pressed(clock->controller->keyboard, key_escape);
 
 		clock->frame_time.tv_nsec += nsps / fps;

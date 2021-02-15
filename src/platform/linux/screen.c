@@ -48,6 +48,10 @@ struct screen *screen_new(char *title, int width, int height) {
 
 void screen_pixel(struct screen *screen, uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b) {
 	screen->pixels[screen->width * y + x] = 0xFF000000 | (r << 16) | (g << 8) | b;
+
+	if (x == screen->width - 1 && y == screen->height - 1) {
+		screen_update(screen);
+	}
 }
 
 void screen_update(struct screen *screen) {
@@ -67,7 +71,9 @@ void screen_update(struct screen *screen) {
 		glTexCoord2d(0.0, 1.0);
 		glVertex2d(-1.0, -1.0);
 	glEnd();
+}
 
+void screen_commit(struct screen *screen) {
 	glXSwapBuffers(screen->display, screen->window);
 }
 
