@@ -60,5 +60,5 @@ void render_pixel(struct ppu *ppu) {
 	uint8_t color_id = bus_read(ppu->ppu_bus, 0x3F00 | (mix_palette << 2) | mix_pixel);
 	uint8_t palette_id = (ppu->mask & 0xE0) >> 5;
 	uint8_t *color = &palette[(palette_id * 192) + color_id * 3];
-	screen_pixel(ppu->screen, x, ppu->scanline, color[2], color[1], color[0]);
+	screen_pixel(ppu->screen, x, (uint8_t)ppu->scanline, color[2], color[1], color[0]);
 }

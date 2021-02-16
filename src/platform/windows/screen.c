@@ -1,3 +1,5 @@
+#define WIN32_LEAN_AND_MEAN
+#undef UNICODE
 #include <windows.h>
 #include <stdlib.h>
 #include "platform/screen.h"
@@ -49,9 +51,21 @@ struct screen *screen_new(char *title, int width, int height) {
 
 void screen_pixel(struct screen *screen, uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b) {
 	screen->pixels[screen->width * y + x] = (b << 16) | (g << 8) | r;
+
+	if (x == screen->width - 1 && y == screen->height - 1) {
+		screen_update(screen);
+	}
 }
 
 void screen_update(struct screen *screen) {
+	MSG msg;
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+}
+
+void screen_commit(struct screen *screen) {
 	HDC hDc = GetDC(screen->hWnd);
 	HDC hDcMem = CreateCompatibleDC(hDc);
 	HBITMAP hOldBitmap = SelectObject(hDcMem, screen->hBitmap);
@@ -61,12 +75,6 @@ void screen_update(struct screen *screen) {
 	SelectObject(hDcMem, hOldBitmap);
 	DeleteDC(hDcMem);
 	ReleaseDC(screen->hWnd, hDc);
-
-	MSG msg;
-	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
 }
 
 void screen_destroy(struct screen *screen) {

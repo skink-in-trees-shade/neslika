@@ -1,6 +1,6 @@
-#define _XOPEN_SOURCE 600
 #include <stdlib.h>
 #include <time.h>
+#include "sleep.h"
 #include "clock.h"
 
 const long fps = 60;
