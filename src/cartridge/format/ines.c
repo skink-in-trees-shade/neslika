@@ -32,8 +32,12 @@ static bool is_ines(struct header *header) {
 }
 
 bool ines_load(struct cartridge *cartridge, const char *filename) {
+#ifdef _MSC_VER
 	FILE *file;
 	fopen_s(&file, filename, "rb");
+#else
+	FILE *file = fopen(filename, "rb");
+#endif
 	if (!file) {
 		error("File not found.");
 	}

@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <time.h>
 #include "sleep.h"
 #include "clock.h"
 
@@ -29,7 +28,7 @@ struct clock *clock_new(struct cpu *cpu, struct ppu *ppu, struct apu *apu, struc
 	clock->controller = controller;
 	return clock;
 }
-#include <stdio.h>
+
 void clock_tick(struct clock *clock) {
 	unsigned long old_cycle = clock->cpu->cycle;
 
@@ -87,7 +86,6 @@ void clock_tick(struct clock *clock) {
 	if (clock->ppu->frame_completed) {
 		video_frame_delta++;
 		clock->ppu->frame_completed = false;
-		//screen_update(clock->ppu->screen);
 	}
 
 	if (audio_frame_delta > 0 && video_frame_delta > 0) {
