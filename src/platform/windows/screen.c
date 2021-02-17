@@ -24,16 +24,10 @@ struct screen *screen_new(char *title, int width, int height) {
 
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
-	WNDCLASS wc = {0};
-	wc.lpfnWndProc = &DefWindowProc;
-	wc.hInstance = hInstance;
-	wc.lpszClassName = title;
-	RegisterClass(&wc);
-
 	DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE;
 	RECT r = { 0, 0, screen->width * 2, screen->height * 2 };
 	AdjustWindowRect(&r, dwStyle, FALSE);
-	screen->hWnd = CreateWindow(title, title, dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, r.right - r.left, r.bottom - r.top, NULL, NULL, hInstance, NULL);
+	screen->hWnd = CreateWindow(WC_DIALOG, title, dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, r.right - r.left, r.bottom - r.top, NULL, NULL, hInstance, NULL);
 
 	screen->context = Direct3DCreate9(D3D_SDK_VERSION);
 
@@ -56,11 +50,6 @@ void screen_pixel(struct screen *screen, uint8_t x, uint8_t y, uint8_t r, uint8_
 }
 
 void screen_update(struct screen *screen) {
-	MSG msg;
-	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
 }
 
 void screen_commit(struct screen *screen) {
