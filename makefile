@@ -1,11 +1,17 @@
-CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -std=c99 -Isrc -pipe -O2
+CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -Wno-newline-eof -std=c99 -Isrc -pipe -O2
 
 ifeq ($(OS),Windows_NT)
 	PLATFORM = windows
 	LDFLAGS = -lgdi32 -lwinmm
 else
-	PLATFORM = linux
-	LDFLAGS = -lX11 -lGL -lasound -lpthread
+	SYSTEM = $(shell uname -s)
+	ifeq ($(SYSTEM),Darwin)
+		PLATFORM = mac
+		LDFLAGS = -framework Cocoa -framework Metal -framework AudioUnit
+	else ifeq ($(SYSTEM),Linux)
+		PLATFORM = linux
+		LDFLAGS = -lX11 -lGL -lasound -lpthread
+	endif
 endif
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
