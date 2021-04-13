@@ -1,4 +1,4 @@
-#define _XOPEN_SOURCE 600
+#define _POSIX_C_SOURCE 199309L
 #include <stdlib.h>
 #include <time.h>
 #include "clock.h"
@@ -87,7 +87,17 @@ void clock_tick(struct clock *clock) {
 			clock->frame_time.tv_nsec -= nsps;
 			clock->frame_time.tv_sec++;
 		}
-		clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &clock->frame_time, NULL);
+
+		struct timespec ts_delta;
+		clock_gettime(CLOCK_REALTIME, &ts_delta);
+		ts_delta.tv_sec = clock->frame_time.tv_sec - ts_delta.tv_sec;
+		ts_delta.tv_nsec = clock->frame_time.tv_nsec - ts_delta.tv_nsec;
+		if (ts_delta.tv_nsec < 0) {
+			ts_delta.tv_sec = ts_delta.tv_sec - 1;
+			ts_delta.tv_nsec = ts_delta.tv_nsec + 1000000000;
+		}
+		nanosleep(&ts_delta, NULL);
+
 		clock_gettime(CLOCK_REALTIME, &clock->frame_time);
 	}
 }
