@@ -4,6 +4,7 @@
 #include "platform/screen.h"
 #include "platform/audio.h"
 #include "platform/keyboard.h"
+#include "platform/thread.h"
 #include "cpu/cpu.h"
 #include "ppu/ppu.h"
 #include "apu/apu.h"
@@ -19,6 +20,7 @@ struct neslika {
 	struct screen *screen;
 	struct audio *audio;
 	struct keyboard *keyboard;
+	struct thread *thread;
 	struct cpu *cpu;
 	struct ppu *ppu;
 	struct apu *apu;
@@ -33,6 +35,7 @@ struct neslika *neslika_new(void) {
 	nes->screen = screen_new("Neslika", 256, 240);
 	nes->audio = audio_new(1, 48000);
 	nes->keyboard = keyboard_new();
+	nes->thread = thread_new(60);
 
 	nes->cpu_bus = bus_new(0x10000);
 	nes->ppu_bus = bus_new(0x4000);
@@ -44,7 +47,7 @@ struct neslika *neslika_new(void) {
 	nes->dma = dma_new(nes->cpu_bus);
 	nes->controller = controller_new(nes->cpu_bus, nes->keyboard);
 
-	nes->clock = clock_new(nes->cpu, nes->ppu, nes->apu, nes->dma, nes->cartridge, nes->controller);
+	nes->clock = clock_new(nes->thread, nes->cpu, nes->ppu, nes->apu, nes->dma, nes->cartridge, nes->controller);
 
 	return nes;
 }
@@ -69,6 +72,7 @@ void neslika_destroy(struct neslika *nes) {
 	apu_destroy(nes->apu);
 	ppu_destroy(nes->ppu);
 	cpu_destroy(nes->cpu);
+	thread_destroy(nes->thread);
 	keyboard_destroy(nes->keyboard);
 	audio_destroy(nes->audio);
 	screen_destroy(nes->screen);

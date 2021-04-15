@@ -1,12 +1,8 @@
-#define _POSIX_C_SOURCE 199309L
 #include <stdlib.h>
-#include <time.h>
 #include "clock.h"
 
-const long fps = 60;
-const long nsps = 1000000000;
-
 struct clock {
+	struct thread *thread;
 	struct cpu *cpu;
 	struct ppu *ppu;
 	struct apu *apu;
@@ -15,12 +11,12 @@ struct clock {
 	struct controller *controller;
 
 	bool done;
-	struct timespec frame_time;
 	bool nmi_extra_tick;
 };
 
-struct clock *clock_new(struct cpu *cpu, struct ppu *ppu, struct apu *apu, struct dma *dma, struct cartridge *cartridge, struct controller *controller) {
+struct clock *clock_new(struct thread *thread, struct cpu *cpu, struct ppu *ppu, struct apu *apu, struct dma *dma, struct cartridge *cartridge, struct controller *controller) {
 	struct clock *clock = calloc(1, sizeof(struct clock));
+	clock->thread = thread;
 	clock->cpu = cpu;
 	clock->ppu = ppu;
 	clock->apu = apu;
@@ -82,23 +78,7 @@ void clock_tick(struct clock *clock) {
 
 		clock->done = keyboard_pressed(clock->controller->keyboard, key_escape);
 
-		clock->frame_time.tv_nsec += nsps / fps;
-		if (clock->frame_time.tv_nsec > nsps) {
-			clock->frame_time.tv_nsec -= nsps;
-			clock->frame_time.tv_sec++;
-		}
-
-		struct timespec ts_delta;
-		clock_gettime(CLOCK_REALTIME, &ts_delta);
-		ts_delta.tv_sec = clock->frame_time.tv_sec - ts_delta.tv_sec;
-		ts_delta.tv_nsec = clock->frame_time.tv_nsec - ts_delta.tv_nsec;
-		if (ts_delta.tv_nsec < 0) {
-			ts_delta.tv_sec = ts_delta.tv_sec - 1;
-			ts_delta.tv_nsec = ts_delta.tv_nsec + 1000000000;
-		}
-		nanosleep(&ts_delta, NULL);
-
-		clock_gettime(CLOCK_REALTIME, &clock->frame_time);
+		thread_sleep(clock->thread);
 	}
 }
 
