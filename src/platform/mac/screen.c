@@ -89,7 +89,7 @@ const char *shader = "\n\
 #define MTLTexture_replaceRegion(id, region, mipmap, bytes, row) object_send(id, "replaceRegion:mipmapLevel:withBytes:bytesPerRow:", region, mipmap, bytes, row)
 #define MTLRenderPassDescriptor_renderPassDescriptor() class_senda("MTLRenderPassDescriptor", "renderPassDescriptor")
 #define MTLRenderPassDescriptor_colorAttachments(id) object_senda(id, "colorAttachments")
-#define MTLRenderPassDescriptor_release(id) object_senda(id, "release")
+#define MTLRenderPassDescriptor_autorelease(id) object_senda(id, "autorelease")
 #define MTLRenderPassColorAttachmentDescriptorArray_objectAtIndexedSubscript(id, n) object_send(id, "objectAtIndexedSubscript:", n)
 #define MTLRenderPassColorAttachmentDescriptor_setTexture(id, tex) object_send(id, "setTexture:", tex)
 #define MTLDrawable_texture(id) object_senda(id, "texture")
@@ -98,12 +98,10 @@ const char *shader = "\n\
 #define MTLCommandBuffer_renderCommandEncoderWithDescriptor(id, desc) object_send(id, "renderCommandEncoderWithDescriptor:", desc)
 #define MTLCommandBuffer_presentDrawable(id, drawable) object_send(id, "presentDrawable:", drawable)
 #define MTLCommandBuffer_commit(id) object_senda(id, "commit")
-#define MTLCommandBuffer_release(id) object_senda(id, "release")
 #define MTLRenderCommandEncoder_setRenderPipelineState(id, state) object_send(id, "setRenderPipelineState:", state)
 #define MTLRenderCommandEncoder_setFragmentTexture(id, tex, i) object_send(id, "setFragmentTexture:atIndex:", tex, i)
 #define MTLRenderCommandEncoder_drawPrimitives(id, mode, i, n) object_send(id, "drawPrimitives:vertexStart:vertexCount:", mode, i, n)
 #define MTLRenderCommandEncoder_endEncoding(id) object_senda(id, "endEncoding")
-#define MTLRenderCommandEncoder_release(id) object_senda(id, "release")
 
 #define NSApplicationActivationPolicyRegular (0)
 #define NSBackingStoreBuffered (2)
@@ -132,6 +130,7 @@ struct screen {
 	id queue;
 	id state;
 	id texture;
+	id pass;
 	uint32_t *pixels;
 };
 
@@ -186,6 +185,9 @@ struct screen *screen_new(char *title, int width, int height) {
 	screen->texture = MTLDevice_newTextureWithDescriptor(device, texture);
 	MTLTexture_autorelease(screen->texture);
 
+	screen->pass = MTLRenderPassDescriptor_renderPassDescriptor();
+	MTLRenderPassDescriptor_autorelease(screen->pass);
+
 	return screen;
 }
 
@@ -198,12 +200,10 @@ void screen_update(struct screen *screen) {
 	MTLTexture_replaceRegion(screen->texture, region, 0, screen->pixels, 4 * screen->width);
 
 	id drawable = CAMetalLayer_nextDrawable(screen->layer);
-	id pass = MTLRenderPassDescriptor_renderPassDescriptor();
-	MTLRenderPassColorAttachmentDescriptor_setTexture(MTLRenderPassColorAttachmentDescriptorArray_objectAtIndexedSubscript(MTLRenderPassDescriptor_colorAttachments(pass), 0), MTLDrawable_texture(drawable));
+	MTLRenderPassColorAttachmentDescriptor_setTexture(MTLRenderPassColorAttachmentDescriptorArray_objectAtIndexedSubscript(MTLRenderPassDescriptor_colorAttachments(screen->pass), 0), MTLDrawable_texture(drawable));
 
 	id buffer = MTLCommandQueue_commandBuffer(screen->queue);
-
-	id encoder = MTLCommandBuffer_renderCommandEncoderWithDescriptor(buffer, pass);
+	id encoder = MTLCommandBuffer_renderCommandEncoderWithDescriptor(buffer, screen->pass);
 	MTLRenderCommandEncoder_setRenderPipelineState(encoder, screen->state);
 	MTLRenderCommandEncoder_setFragmentTexture(encoder, screen->texture, 0);
 	MTLRenderCommandEncoder_drawPrimitives(encoder, triangleStrip, 0, 4);
@@ -211,10 +211,6 @@ void screen_update(struct screen *screen) {
 
 	MTLCommandBuffer_presentDrawable(buffer, drawable);
 	MTLCommandBuffer_commit(buffer);
-
-	MTLCommandBuffer_release(buffer);
-	MTLRenderCommandEncoder_release(encoder);
-	MTLRenderPassDescriptor_release(pass);
 
 	id event = NSApplication_nextEventMatchingMask(screen->app, NSEventMaskAny & ~NSEventMaskKeyDown, NSDate_distantPast(), NSDefaultRunLoopMode, YES);
 	if (event) {
