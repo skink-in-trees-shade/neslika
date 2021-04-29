@@ -13,4 +13,7 @@ void rti(struct cpu *cpu) {
 	uint8_t low = cpu_pull(cpu);
 	uint8_t high = cpu_pull(cpu);
 	cpu->program_counter = (high << 8) + low;
+
+	cpu->interrupt_disable_effective = cpu->interrupt_disable;
+	cpu->interrupt_disable_shifter = 0x00;
 }
