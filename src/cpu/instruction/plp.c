@@ -9,4 +9,5 @@ void plp(struct cpu *cpu) {
 	cpu->break_command = (status >> 4) & 0x01;
 	cpu->overflow = (status >> 6) & 0x01;
 	cpu->negative = (status >> 7) & 0x01;
+	cpu->interrupt_disable_shifter |= 0x04 | (cpu->interrupt_disable << 3);
 }

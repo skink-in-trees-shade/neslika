@@ -22,6 +22,8 @@ void cpu_reset(struct cpu *cpu) {
 	cpu->x = 0x00;
 	cpu->y = 0x00;
 	cpu->interrupt_disable = true;
+	cpu->interrupt_disable_effective = true;
+	cpu->interrupt_disable_shifter = 0x00;
 	cpu->cycle = 7;
 }
 
@@ -65,7 +67,7 @@ uint8_t cpu_pull(struct cpu *cpu) {
 	return cpu_peek(cpu, 0x0100 + ++cpu->stack_pointer);
 }
 
-void cpu_tick(struct cpu *cpu) {
+void cpu_instruction(struct cpu *cpu) {
 	cpu->instruction = cpu_read(cpu);
 
 	if (instructions[cpu->instruction].decode == NULL) {
@@ -84,6 +86,20 @@ void cpu_tick(struct cpu *cpu) {
 	}
 }
 
+void cpu_tick(struct cpu *cpu) {
+	if ((cpu->interrupt_disable_shifter & 0x01) == 0x01) {
+		cpu->interrupt_disable_effective = (cpu->interrupt_disable_shifter & 0x02) == 0x02;
+	}
+	cpu->interrupt_disable_shifter >>= 2;
+
+	if (cpu->irq_occured && !cpu->interrupt_disable_effective) {
+		cpu_irq(cpu);
+		return;
+	}
+
+	cpu_instruction(cpu);
+}
+
 void cpu_nmi(struct cpu *cpu) {
 	uint8_t high = (cpu->program_counter >> 8) & 0xFF;
 	uint8_t low = cpu->program_counter & 0xFF;
@@ -91,8 +107,10 @@ void cpu_nmi(struct cpu *cpu) {
 	cpu_push(cpu, low);
 	
 	cpu->break_command = false;
-	cpu->interrupt_disable = true;
 	cpu_push(cpu, cpu_status(cpu));
+	cpu->interrupt_disable = true;
+	cpu->interrupt_disable_effective = true;
+	cpu->interrupt_disable_shifter = 0x00;
 
 	low = cpu_peek(cpu, 0xFFFA);
 	high = cpu_peek(cpu, 0xFFFB);
@@ -108,8 +126,10 @@ void cpu_irq(struct cpu *cpu) {
 	cpu_push(cpu, low);
 	
 	cpu->break_command = false;
-	cpu->interrupt_disable = true;
 	cpu_push(cpu, cpu_status(cpu));
+	cpu->interrupt_disable = true;
+	cpu->interrupt_disable_effective = true;
+	cpu->interrupt_disable_shifter = 0x00;
 
 	low = cpu_peek(cpu, 0xFFFE);
 	high = cpu_peek(cpu, 0xFFFF);

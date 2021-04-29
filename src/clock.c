@@ -45,16 +45,6 @@ void clock_tick(struct clock *clock) {
 		cpu_nmi(clock->cpu);
 	}
 
-	if (clock->cartridge->irq_occured && !clock->cpu->interrupt_disable) {
-		clock->cartridge->irq_occured = false;
-		cpu_irq(clock->cpu);
-	}
-
-	if (clock->apu->irq_occured && !clock->cpu->interrupt_disable) {
-		clock->apu->irq_occured = false;
-		cpu_irq(clock->cpu);
-	}
-
 	unsigned long current_cycle = clock->cpu->cycle;
 
 	unsigned long nmi_occured_at = 0;
@@ -69,8 +59,13 @@ void clock_tick(struct clock *clock) {
 	for (unsigned long i = 0; i < current_cycle - old_cycle; i++) {
 		apu_tick(clock->apu);
 	}
+
 	cartridge_tick(clock->cartridge);
 	controller_tick(clock->controller);
+
+	if (clock->cartridge->irq_occured || clock->apu->irq_occured) {
+		clock->cpu->irq_occured = true;
+	}
 
 	if (clock->ppu->frame_completed) {
 		clock->ppu->frame_completed = false;

@@ -30,6 +30,10 @@ struct cpu {
 	uint16_t operand;
 
 	uint8_t *memory;
+
+	bool irq_occured;
+	uint8_t interrupt_disable_shifter;
+	bool interrupt_disable_effective;
 };
 
 struct cpu *cpu_new(struct bus *bus);
