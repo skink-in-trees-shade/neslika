@@ -136,6 +136,7 @@ void cpu_irq(struct cpu *cpu) {
 	cpu->program_counter = (high << 8) + low;
 
 	cpu->cycle += 7;
+	cpu->irq_occured = false;
 }
 
 void cpu_destroy(struct cpu *cpu) {
