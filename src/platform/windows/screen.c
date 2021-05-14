@@ -1,48 +1,47 @@
+#define WIN32_LEAN_AND_MEAN
+#define INITGUID
 #include <windows.h>
+#include <d2d1.h>
 #include <stdlib.h>
 #include "platform/screen.h"
 
 struct screen {
 	int width;
 	int height;
-	HWND hWnd;
-	HBITMAP hBitmap;
+	HWND window;
 	DWORD *pixels;
+	ID2D1Factory *factory;
+	ID2D1HwndRenderTarget *target;
+	ID2D1Bitmap *bitmap;
 };
 
 struct screen *screen_new(char *title, int width, int height) {
 	struct screen *screen = calloc(1, sizeof(struct screen));
 	screen->width = width;
 	screen->height = height;
+	screen->pixels = calloc(screen->width * screen->height, sizeof(DWORD));
 
 	HINSTANCE hInstance = GetModuleHandle(NULL);
-
-	WNDCLASS wc = {0};
-	wc.lpfnWndProc = &DefWindowProc;
-	wc.hInstance = hInstance;
-	wc.lpszClassName = title;
-	RegisterClass(&wc);
-
 	DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE;
-	RECT r = { 0, 0, screen->width * 2, screen->height * 2 };
-	AdjustWindowRect(&r, dwStyle, FALSE);
-	screen->hWnd = CreateWindow(title, title, dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, r.right - r.left, r.bottom - r.top, NULL, NULL, hInstance, NULL);
+	RECT rcWnd = { 0, 0, screen->width * 2, screen->height * 2 };
+	AdjustWindowRect(&rcWnd, dwStyle, FALSE);
+	screen->window = CreateWindow(WC_DIALOG, title, dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top, NULL, NULL, hInstance, NULL);
 
-	HDC hDc = GetDC(screen->hWnd);
-	HDC hDcMem = CreateCompatibleDC(hDc);
+	D2D1_FACTORY_OPTIONS opt = {0};
+	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &IID_ID2D1Factory, &opt, (void **)&screen->factory);
 
-	BITMAPINFO bmi;
-	ZeroMemory(&bmi,sizeof(BITMAPINFO));
-	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	bmi.bmiHeader.biWidth = screen->width;
-	bmi.bmiHeader.biHeight = -screen->height;
-	bmi.bmiHeader.biPlanes = 1;
-	bmi.bmiHeader.biBitCount = 32;
+	D2D1_PIXEL_FORMAT pf = { DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE };
+	D2D1_RENDER_TARGET_PROPERTIES rtProp = {0};
+	rtProp.pixelFormat = pf;
+	D2D1_HWND_RENDER_TARGET_PROPERTIES hrtProp = {0};
+	hrtProp.hwnd = screen->window;
+	hrtProp.pixelSize = (D2D1_SIZE_U){ screen->width * 2, screen->height * 2 };
+	ID2D1Factory_CreateHwndRenderTarget(screen->factory, &rtProp, &hrtProp, &screen->target);
 
-	screen->hBitmap = CreateDIBSection(hDc, &bmi, DIB_RGB_COLORS, (void **)&screen->pixels, NULL, 0);
-
-	DeleteDC(hDcMem);
-	ReleaseDC(screen->hWnd, hDc);
+	D2D1_SIZE_U bmpSize = { screen->width, screen->height };
+	D2D1_BITMAP_PROPERTIES bmpProp = {0};
+	bmpProp.pixelFormat = pf;
+	ID2D1HwndRenderTarget_CreateBitmap(screen->target, bmpSize, NULL, 0, &bmpProp, &screen->bitmap);
 
 	return screen;
 }
@@ -52,15 +51,14 @@ void screen_pixel(struct screen *screen, uint8_t x, uint8_t y, uint8_t r, uint8_
 }
 
 void screen_update(struct screen *screen) {
-	HDC hDc = GetDC(screen->hWnd);
-	HDC hDcMem = CreateCompatibleDC(hDc);
-	HBITMAP hOldBitmap = SelectObject(hDcMem, screen->hBitmap);
+	ID2D1Bitmap_CopyFromMemory(screen->bitmap, NULL, screen->pixels, screen->width * sizeof(DWORD));
 
-	StretchBlt(hDc, 0, 0, screen->width * 2, screen->height * 2, hDcMem, 0, 0, screen->width, screen->height, SRCCOPY);
+	ID2D1HwndRenderTarget_BeginDraw(screen->target);
 
-	SelectObject(hDcMem, hOldBitmap);
-	DeleteDC(hDcMem);
-	ReleaseDC(screen->hWnd, hDc);
+	D2D1_RECT_F rcDst = { 0, 0, screen->width * 2, screen->height * 2 };
+	ID2D1HwndRenderTarget_DrawBitmap(screen->target, screen->bitmap, &rcDst, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, NULL);
+
+	ID2D1HwndRenderTarget_EndDraw(screen->target, NULL, NULL);
 
 	MSG msg;
 	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -70,7 +68,10 @@ void screen_update(struct screen *screen) {
 }
 
 void screen_destroy(struct screen *screen) {
-	DeleteObject(screen->hBitmap);
-	DestroyWindow(screen->hWnd);
+	ID2D1Bitmap_Release(screen->bitmap);
+	ID2D1HwndRenderTarget_Release(screen->target);
+	ID2D1Factory_Release(screen->factory);
+	DestroyWindow(screen->window);
+	free(screen->pixels);
 	free(screen);
 }

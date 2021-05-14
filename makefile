@@ -2,7 +2,7 @@ CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -Wno-newline-eof -
 
 ifeq ($(OS),Windows_NT)
 	PLATFORM = windows
-	LDFLAGS = -lgdi32 -lwinmm
+	LDFLAGS = -ld2d1 -lwinmm
 else
 	SYSTEM = $(shell uname -s)
 	ifeq ($(SYSTEM),Darwin)
