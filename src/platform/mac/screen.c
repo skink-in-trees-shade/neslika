@@ -159,6 +159,7 @@ struct screen *screen_new(char *title, int width, int height) {
 	screen->layer = CAMetalLayer_layer();
 	CAMetalLayer_autorelease(screen->layer);
 	CAMetalLayer_setDevice(screen->layer, device);
+	object_send(screen->layer, "setDisplaySyncEnabled:", FALSE);
 	NSView_setLayer(NSWindow_contentView(window), screen->layer);
 
 	id library = MTLDevice_newLibraryWithSource(device, shader);

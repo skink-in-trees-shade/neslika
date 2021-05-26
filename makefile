@@ -1,4 +1,4 @@
-CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -Wno-newline-eof -std=c99 -Isrc -pipe -O2
+CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -Wno-newline-eof -std=c99 -Isrc -pipe -g
 
 ifeq ($(OS),Windows_NT)
 	PLATFORM = windows
@@ -10,7 +10,7 @@ else
 		LDFLAGS = -framework Cocoa -framework Metal -framework AudioUnit
 	else ifeq ($(SYSTEM),Linux)
 		PLATFORM = linux
-		LDFLAGS = -lX11 -lGL -lasound -lpthread
+		LDFLAGS = -lX11 -lGL -lasound
 	endif
 endif
 

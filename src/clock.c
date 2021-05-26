@@ -70,6 +70,7 @@ void clock_tick(struct clock *clock) {
 	if (clock->ppu->frame_completed) {
 		clock->ppu->frame_completed = false;
 		screen_update(clock->ppu->screen);
+		audio_update(clock->apu->audio);
 
 		clock->done = keyboard_pressed(clock->controller->keyboard, key_escape);
 
