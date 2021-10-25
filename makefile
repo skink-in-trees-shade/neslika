@@ -14,11 +14,11 @@ else
 	endif
 endif
 
-rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
-SOURCES = $(filter-out src/platform/%.c, $(call rwildcard,src/,*.c)) $(wildcard src/platform/$(PLATFORM)/*.c)
-OBJECTS = $(SOURCES:.c=.o)
-DEPENDS = $(SOURCES:.c=.d)
-TARGET  = neslika
+rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+SOURCES   = $(filter-out src/platform/%.c, $(call rwildcard,src/,*.c)) $(wildcard src/platform/$(PLATFORM)/*.c)
+OBJECTS   = $(SOURCES:.c=.o)
+DEPENDS   = $(SOURCES:.c=.d)
+TARGET    = neslika
 
 $(TARGET): $(OBJECTS)
 	$(CC) -o $@ $^ $(LDFLAGS)
