@@ -31,6 +31,10 @@ static bool is_ines(struct header *header) {
 	return strncmp(header->signature, "NES\x1A", sizeof(header->signature)) == 0 && header->version != 2;
 }
 
+static bool is_diskdude(struct header *header) {
+	return strncmp(&((char *)header)[7], "DiskDude!", 9) == 0;
+}
+
 bool ines_load(struct cartridge *cartridge, const char *filename) {
 	FILE *file = fopen(filename, "rb");
 	if (!file) {
@@ -41,6 +45,10 @@ bool ines_load(struct cartridge *cartridge, const char *filename) {
 	fread(&header, sizeof(header), 1, file);
 
 	if (is_ines(&header)) {
+		if (is_diskdude(&header)) {
+			header.mapper_high = 0x00;
+		}
+		
 		cartridge->mapper = (header.mapper_high << 4) | header.mapper_low;
 		cartridge->vertical_mirroring = header.vertical_mirroring;
 
