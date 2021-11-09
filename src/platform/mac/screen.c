@@ -186,7 +186,6 @@ struct screen *screen_new(char *title, int width, int height) {
 	MTLTexture_autorelease(screen->texture);
 
 	screen->pass = MTLRenderPassDescriptor_renderPassDescriptor();
-	MTLRenderPassDescriptor_autorelease(screen->pass);
 
 	return screen;
 }
