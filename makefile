@@ -1,4 +1,4 @@
-CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -Wno-newline-eof -std=c99 -Isrc -pipe -O2
+CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -Wno-newline-eof -std=c99 -Isrc -pipe -O0 -g
 
 ifeq ($(OS),Windows_NT)
 	PLATFORM = windows
