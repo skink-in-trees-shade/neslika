@@ -15,7 +15,7 @@ uint8_t read_data(void *device, uint16_t address) {
 		ppu->read_buffer = bus_read(ppu->ppu_bus, ppu->vram_address);
 	}
 
-	ppu->vram_address += (ppu->control & 0x04) == 0x04 ? 32 : 1;
+	ppu->vram_address = (ppu->vram_address + ((ppu->control & 0x04) == 0x04 ? 32 : 1)) & 0x3FFF;
 	bus_read(ppu->ppu_bus, ppu->vram_address);
 	ppu->last_value = value;
 	return value;
