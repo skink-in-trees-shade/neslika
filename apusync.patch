@@ -1,0 +1,1093 @@
+diff --git a/makefile b/makefile
+index dbb265e..a98b223 100644
+--- a/makefile
++++ b/makefile
+@@ -1,8 +1,8 @@
+-CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -Wno-newline-eof -std=c99 -Isrc -pipe -O0 -g
++CFLAGS  = -Wall -Wextra -Werror -Wpedantic -Wno-unused-result -Wno-newline-eof -std=c99 -Isrc -pipe -O2 -march=native
+ 
+ ifeq ($(OS),Windows_NT)
+ 	PLATFORM = windows
+-	LDFLAGS = -ld2d1 -lwinmm
++	LDFLAGS = -ld2d1 -lwinmm -luuid
+ else
+ 	SYSTEM = $(shell uname -s)
+ 	ifeq ($(SYSTEM),Darwin)
+diff --git a/src/platform/windows/audio.c b/src/platform/windows/audio.c
+index 640086a..33b048d 100644
+--- a/src/platform/windows/audio.c
++++ b/src/platform/windows/audio.c
+@@ -1,99 +1,107 @@
+ #include <windows.h>
+ #include <mmreg.h>
+ #include <stdlib.h>
++#include "cubic.h"
+ #include "platform/audio.h"
+ 
+ const long apu_frequency = 1789773;
+ 
+-#define NBUF 4
+-
+ struct audio {
+ 	HWAVEOUT hWaveOut;
+ 	uint16_t rate;
+-	HANDLE thread;
+-	HANDLE mutex;
+-	float *samples[NBUF];
+-	size_t samples_size;
+-	BOOL samples_full[NBUF];
+-	size_t write_position;
+-	size_t current_buffer;
+-	unsigned long cycle;
++	struct cubic *cubic;
++	LONG blockQueue;
++	UINT frameCount;
++	UINT blockCount;
++	UINT frameIndex;
++	UINT blockIndex;
++	WAVEHDR *hWaveHdrs;
+ };
+-
+-static DWORD WINAPI callback(LPVOID param) {
+-	struct audio *audio = param;
+-
+-	long buffer_id = 0;
+-	while (1) {
+-		if (audio->samples_full[buffer_id]) {
+-			WaitForSingleObject(audio->mutex, INFINITE);
+-
+-			WAVEHDR waveHdr = {0};
+-			waveHdr.lpData = (LPSTR)audio->samples[buffer_id];
+-			waveHdr.dwBufferLength = audio->samples_size * sizeof(float);
+-			waveOutPrepareHeader(audio->hWaveOut, &waveHdr, sizeof(WAVEHDR));
+-
+-			waveOutWrite(audio->hWaveOut, &waveHdr, sizeof(WAVEHDR));
+-
+-			audio->samples_full[buffer_id] = FALSE;
+-			buffer_id = (buffer_id + 1) % NBUF;
+-
+-			ReleaseMutex(audio->mutex);
+-		}
+-		Sleep(1);
++#include <stdio.h>
++static void CALLBACK waveOutCallback(HWAVEOUT hWaveOut, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
++	(void)hWaveOut;
++	(void)uMsg;
++	(void)dwParam1;
++	(void)dwParam2;
++	
++	struct audio *audio = (struct audio *)dwInstance;
++	if (audio->blockQueue > 0) {
++		InterlockedDecrement(&audio->blockQueue);
+ 	}
+-
+-	return 0;
+ }
+ 
+ struct audio *audio_new(uint8_t channels, uint16_t rate) {
+ 	struct audio *audio = calloc(1, sizeof(struct audio));
+ 	audio->rate = rate;
+-	audio->samples_size = audio->rate;
+-	for (size_t i = 0; i < NBUF; i++) {
+-		audio->samples[i] = calloc(audio->samples_size, sizeof(float));
+-	}
+ 
+ 	WAVEFORMATEX wfx = {0};
+-	wfx.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
+-	wfx.wBitsPerSample = 32;
++	wfx.wFormatTag = WAVE_FORMAT_PCM;
++	wfx.wBitsPerSample = 16;
+ 	wfx.nSamplesPerSec = rate;
+ 	wfx.nChannels = channels;
+ 	wfx.nBlockAlign = wfx.nChannels * wfx.wBitsPerSample / 8;
+ 	wfx.nAvgBytesPerSec = wfx.nSamplesPerSec * wfx.nBlockAlign;
+-	waveOutOpen(&audio->hWaveOut, WAVE_MAPPER, &wfx, 0, 0, CALLBACK_NULL);
+-
+-	timeBeginPeriod(1);
++	waveOutOpen(&audio->hWaveOut, WAVE_MAPPER, &wfx, (DWORD_PTR)&waveOutCallback, (DWORD_PTR)audio, CALLBACK_FUNCTION);
++
++	audio->cubic = cubic_new();
++	cubic_reset(audio->cubic, apu_frequency, audio->rate, audio->rate * 0.02);
++	audio->frameCount = 32;
++	audio->blockCount = 32;
++	audio->frameIndex = 0;
++	audio->blockIndex = 0;
++
++	audio->hWaveHdrs = calloc(audio->blockCount, sizeof(WAVEHDR));
++	for (size_t i = 0; i < audio->blockCount; i++) {
++		audio->hWaveHdrs[i].dwBufferLength = audio->frameCount * sizeof(uint16_t);
++		audio->hWaveHdrs[i].lpData = (LPSTR)calloc(audio->frameCount, sizeof(uint16_t));
++		waveOutPrepareHeader(audio->hWaveOut, &audio->hWaveHdrs[i], sizeof(WAVEHDR));
++	}
+ 
+-	audio->thread = CreateThread(NULL, 0, callback, audio, 0, NULL);
+-	audio->mutex = CreateMutex(NULL, FALSE, NULL);
++	waveOutSetVolume(audio->hWaveOut, 0xFFFFFFFF);
++	waveOutRestart(audio->hWaveOut);
+ 
+ 	return audio;
+ }
+ 
++double audio_fillLevel(struct audio *audio) {
++	return (double)((audio->blockQueue * audio->frameCount) + audio->frameIndex) / (audio->blockCount * audio->frameCount);
++}
++
+ void audio_sample(struct audio *audio, double sample) {
+-	if (audio->cycle % (apu_frequency / audio->rate) == 0) {
+-		WaitForSingleObject(audio->mutex, INFINITE);
+-		audio->samples[audio->current_buffer][audio->write_position++] = sample;
+-		if (audio->write_position == audio->samples_size) {
+-			audio->samples_full[audio->current_buffer] = TRUE;
+-			audio->current_buffer = (audio->current_buffer + 1) % NBUF;
+-			audio->write_position = 0;
++	double maxDelta = 0.005;
++	double fillLevel = audio_fillLevel(audio);
++	double dynamicFrequency = ((1.0 - maxDelta) + 2.0 * fillLevel * maxDelta) * apu_frequency;
++	cubic_setInputFrequency(audio->cubic, dynamicFrequency);
++	cubic_write(audio->cubic, sample);
++
++	while (cubic_pending(audio->cubic)) {
++		double resample = cubic_read(audio->cubic);
++
++		uint16_t ssample = (resample * 32767.0);
++
++		uint16_t *block = (uint16_t *)audio->hWaveHdrs[audio->blockIndex].lpData;
++		block[audio->frameIndex] = ssample;
++
++		if (++audio->frameIndex >= audio->frameCount) {
++			audio->frameIndex = 0;
++			while (waveOutWrite(audio->hWaveOut, &audio->hWaveHdrs[audio->blockIndex], sizeof(WAVEHDR)) == WAVERR_STILLPLAYING);
++			InterlockedIncrement(&audio->blockQueue);
++			if (++audio->blockIndex >= audio->blockCount) {
++				audio->blockIndex = 0;
++			}
+ 		}
+-		ReleaseMutex(audio->mutex);
+ 	}
+-
+-	audio->cycle++;
+ }
+ 
+ void audio_destroy(struct audio *audio) {
+-	CloseHandle(audio->mutex);
+-	CloseHandle(audio->thread);
+-	timeEndPeriod(1);
++	waveOutPause(audio->hWaveOut);
+ 	waveOutReset(audio->hWaveOut);
+-	waveOutClose(audio->hWaveOut);
+-	for (size_t i = 0; i < NBUF; i++) {
+-		free(audio->samples[i]);
++	for (size_t i = 0; i < audio->blockCount; i++) {
++		waveOutUnprepareHeader(audio->hWaveOut, &audio->hWaveHdrs[i], sizeof(WAVEHDR));
++		free(audio->hWaveHdrs[i].lpData);
+ 	}
++	waveOutClose(audio->hWaveOut);
++	free(audio->hWaveHdrs);
++	cubic_destroy(audio->cubic);
+ 	free(audio);
+ }
+\ No newline at end of file
+diff --git a/src/platform/windows/cmc_queue.h b/src/platform/windows/cmc_queue.h
+new file mode 100644
+index 0000000..ca6ef3f
+--- /dev/null
++++ b/src/platform/windows/cmc_queue.h
+@@ -0,0 +1,594 @@
++/**
++ * queue.h
++ *
++ * Creation Date: 15/02/2019
++ *
++ * Authors:
++ * Leonardo Vencovsky (https://github.com/LeoVen)
++ *
++ */
++
++/**
++ * Queue
++ *
++ * A Queue is a First-In First-out (or Last-in Last-out) data structure. It is
++ * a Dynamic Circular Array where elements are added from one end of the array
++ * and removed from the other end. The circular array here (also known as
++ * circular buffer or ring buffer) is very important so that both adding and
++ * removing elements from the Queue are done instantly. The array is linear but
++ * with the modulo operator it is treated as a circular sequence of elements.
++ *
++ * If the Queue was implemented as a regular Dynamic Array, when adding or
++ * removing an element at the front, it would be necessary to shift all elements
++ * currently present in the Queue and this would add up a lot of computing time.
++ * Shifting `100000` elements in memory by one position every time an element is
++ * added to the Queue is simply not efficient.
++ *
++ * The Queue has two ends. The `front` and `back`. In this implementation all
++ * elements are added to the back of the Queue and removed from the front, which
++ * is more or less how queues work in real life. Unlike a Stack that only has
++ * operations at one end of the buffer, the Queue needs to be implemented as a
++ * circular array in order to quickly add or remove elements.
++ *
++ * The Queue has three main functions: `enqueue` which adds an element to the
++ * Queue; `dequeue` which removes an element from the Queue; and `peek` which
++ * return the element at the front of the Queue, that is, the next element to
++ * be removed from it.
++ *
++ * The Queue is used in many applications where a resource is shared among
++ * multiple consumers and the Queue is responsible for scheduling the access to
++ * the resource.
++ */
++
++#ifndef CMC_QUEUE_H
++#define CMC_QUEUE_H
++
++#include <inttypes.h>
++#include <stdbool.h>
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++#include "cmc_string.h"
++
++/* to_string format */
++static const char *cmc_string_fmt_queue = "%s at %p { buffer:%p, capacity:%" PRIuMAX ", count:%" PRIuMAX ", front:%" PRIuMAX ", back:%" PRIuMAX " }";
++
++#define CMC_GENERATE_QUEUE(PFX, SNAME, V)    \
++    CMC_GENERATE_QUEUE_HEADER(PFX, SNAME, V) \
++    CMC_GENERATE_QUEUE_SOURCE(PFX, SNAME, V)
++
++#define CMC_WRAPGEN_QUEUE_HEADER(PFX, SNAME, K, V) \
++    CMC_GENERATE_QUEUE_HEADER(PFX, SNAME, V)
++
++#define CMC_WRAPGEN_QUEUE_SOURCE(PFX, SNAME, K, V) \
++    CMC_GENERATE_QUEUE_SOURCE(PFX, SNAME, V)
++
++/* HEADER ********************************************************************/
++#define CMC_GENERATE_QUEUE_HEADER(PFX, SNAME, V)                                                \
++                                                                                                \
++    /* Queue Structure */                                                                       \
++    struct SNAME                                                                                \
++    {                                                                                           \
++        /* Dynamic circular array of elements */                                                \
++        V *buffer;                                                                              \
++                                                                                                \
++        /* Current circular array capacity */                                                   \
++        size_t capacity;                                                                        \
++                                                                                                \
++        /* Current amount of elements */                                                        \
++        size_t count;                                                                           \
++                                                                                                \
++        /* Index representing the front of the queue */                                         \
++        size_t front;                                                                           \
++                                                                                                \
++        /* Index representing the back of the queue */                                          \
++        size_t back;                                                                            \
++                                                                                                \
++        /* Function that returns an iterator to the start of the queue */                       \
++        struct SNAME##_iter (*it_start)(struct SNAME *);                                        \
++                                                                                                \
++        /* Function that returns an iterator to the end of the queue */                         \
++        struct SNAME##_iter (*it_end)(struct SNAME *);                                          \
++    };                                                                                          \
++                                                                                                \
++    /* Queue Iterator */                                                                        \
++    struct SNAME##_iter                                                                         \
++    {                                                                                           \
++        /* Target queue */                                                                      \
++        struct SNAME *target;                                                                   \
++                                                                                                \
++        /* Cursor's position (index) */                                                         \
++        size_t cursor;                                                                          \
++                                                                                                \
++        /* Keeps track of relative index to the iteration of elements */                        \
++        size_t index;                                                                           \
++                                                                                                \
++        /* If the iterator has reached the start of the iteration */                            \
++        bool start;                                                                             \
++                                                                                                \
++        /* If the iterator has reached the end of the iteration */                              \
++        bool end;                                                                               \
++    };                                                                                          \
++                                                                                                \
++    /* Collection Functions */                                                                  \
++    /* Collection Allocation and Deallocation */                                                \
++    struct SNAME *PFX##_new(size_t capacity);                                                   \
++    void PFX##_clear(struct SNAME *_queue_, void (*deallocator)(V));                            \
++    void PFX##_free(struct SNAME *_queue_, void (*deallocator)(V));                             \
++    /* Collection Input and Output */                                                           \
++    bool PFX##_enqueue(struct SNAME *_queue_, V element);                                       \
++    bool PFX##_dequeue(struct SNAME *_queue_);                                                  \
++    /* Element Access */                                                                        \
++    V PFX##_peek(struct SNAME *_queue_);                                                        \
++    /* Collection State */                                                                      \
++    bool PFX##_contains(struct SNAME *_queue_, V element, int (*comparator)(V, V));             \
++    bool PFX##_empty(struct SNAME *_queue_);                                                    \
++    bool PFX##_full(struct SNAME *_queue_);                                                     \
++    size_t PFX##_count(struct SNAME *_queue_);                                                  \
++    size_t PFX##_capacity(struct SNAME *_queue_);                                               \
++    /* Collection Utility */                                                                    \
++    bool PFX##_resize(struct SNAME *_queue_, size_t capacity);                                  \
++    struct SNAME *PFX##_copy_of(struct SNAME *_queue_, V (*copy_func)(V));                      \
++    bool PFX##_equals(struct SNAME *_queue1_, struct SNAME *_queue2_, int (*comparator)(V, V)); \
++    struct cmc_string PFX##_to_string(struct SNAME *_queue_);                                   \
++                                                                                                \
++    /* Iterator Functions */                                                                    \
++    /* Iterator Allocation and Deallocation */                                                  \
++    struct SNAME##_iter *PFX##_iter_new(struct SNAME *target);                                  \
++    void PFX##_iter_free(struct SNAME##_iter *iter);                                            \
++    /* Iterator Initialization */                                                               \
++    void PFX##_iter_init(struct SNAME##_iter *iter, struct SNAME *target);                      \
++    /* Iterator State */                                                                        \
++    bool PFX##_iter_start(struct SNAME##_iter *iter);                                           \
++    bool PFX##_iter_end(struct SNAME##_iter *iter);                                             \
++    /* Iterator Movement */                                                                     \
++    void PFX##_iter_to_start(struct SNAME##_iter *iter);                                        \
++    void PFX##_iter_to_end(struct SNAME##_iter *iter);                                          \
++    bool PFX##_iter_next(struct SNAME##_iter *iter);                                            \
++    bool PFX##_iter_prev(struct SNAME##_iter *iter);                                            \
++    bool PFX##_iter_advance(struct SNAME##_iter *iter, size_t steps);                           \
++    bool PFX##_iter_rewind(struct SNAME##_iter *iter, size_t steps);                            \
++    bool PFX##_iter_go_to(struct SNAME##_iter *iter, size_t index);                             \
++    /* Iterator Access */                                                                       \
++    V PFX##_iter_value(struct SNAME##_iter *iter);                                              \
++    V *PFX##_iter_rvalue(struct SNAME##_iter *iter);                                            \
++    size_t PFX##_iter_index(struct SNAME##_iter *iter);                                         \
++                                                                                                \
++/* SOURCE ********************************************************************/
++#define CMC_GENERATE_QUEUE_SOURCE(PFX, SNAME, V)                                               \
++                                                                                               \
++    /* Implementation Detail Functions */                                                      \
++    static struct SNAME##_iter PFX##_impl_it_start(struct SNAME *_queue_);                     \
++    static struct SNAME##_iter PFX##_impl_it_end(struct SNAME *_queue_);                       \
++                                                                                               \
++    struct SNAME *PFX##_new(size_t capacity)                                                   \
++    {                                                                                          \
++        if (capacity < 1)                                                                      \
++            return NULL;                                                                       \
++                                                                                               \
++        struct SNAME *_queue_ = malloc(sizeof(struct SNAME));                                  \
++                                                                                               \
++        if (!_queue_)                                                                          \
++            return NULL;                                                                       \
++                                                                                               \
++        _queue_->buffer = calloc(capacity, sizeof(V));                                         \
++                                                                                               \
++        if (!_queue_->buffer)                                                                  \
++        {                                                                                      \
++            free(_queue_);                                                                     \
++            return NULL;                                                                       \
++        }                                                                                      \
++                                                                                               \
++        _queue_->capacity = capacity;                                                          \
++        _queue_->count = 0;                                                                    \
++        _queue_->front = 0;                                                                    \
++        _queue_->back = 0;                                                                     \
++                                                                                               \
++        _queue_->it_start = PFX##_impl_it_start;                                               \
++        _queue_->it_end = PFX##_impl_it_end;                                                   \
++                                                                                               \
++        return _queue_;                                                                        \
++    }                                                                                          \
++                                                                                               \
++    void PFX##_clear(struct SNAME *_queue_, void (*deallocator)(V))                            \
++    {                                                                                          \
++        if (deallocator)                                                                       \
++        {                                                                                      \
++            for (size_t i = _queue_->front, j = 0; j < _queue_->count; j++)                    \
++            {                                                                                  \
++                deallocator(_queue_->buffer[i]);                                               \
++                                                                                               \
++                i = (i + 1) % _queue_->capacity;                                               \
++            }                                                                                  \
++        }                                                                                      \
++                                                                                               \
++        memset(_queue_->buffer, 0, sizeof(V) * _queue_->capacity);                             \
++                                                                                               \
++        _queue_->count = 0;                                                                    \
++        _queue_->front = 0;                                                                    \
++        _queue_->back = 0;                                                                     \
++    }                                                                                          \
++                                                                                               \
++    void PFX##_free(struct SNAME *_queue_, void (*deallocator)(V))                             \
++    {                                                                                          \
++        if (deallocator)                                                                       \
++        {                                                                                      \
++            for (size_t i = _queue_->front, j = 0; j < _queue_->count; j++)                    \
++            {                                                                                  \
++                deallocator(_queue_->buffer[i]);                                               \
++                                                                                               \
++                i = (i + 1) % _queue_->capacity;                                               \
++            }                                                                                  \
++        }                                                                                      \
++                                                                                               \
++        free(_queue_->buffer);                                                                 \
++        free(_queue_);                                                                         \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_enqueue(struct SNAME *_queue_, V element)                                       \
++    {                                                                                          \
++        if (PFX##_full(_queue_))                                                               \
++        {                                                                                      \
++            if (!PFX##_resize(_queue_, PFX##_capacity(_queue_) * 2))                           \
++                return false;                                                                  \
++        }                                                                                      \
++                                                                                               \
++        _queue_->buffer[_queue_->back] = element;                                              \
++                                                                                               \
++        _queue_->back = (_queue_->back == _queue_->capacity - 1) ? 0 : _queue_->back + 1;      \
++        _queue_->count++;                                                                      \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_dequeue(struct SNAME *_queue_)                                                  \
++    {                                                                                          \
++        if (PFX##_empty(_queue_))                                                              \
++            return false;                                                                      \
++                                                                                               \
++        _queue_->buffer[_queue_->front] = (V){0};                                              \
++                                                                                               \
++        _queue_->front = (_queue_->front == _queue_->capacity - 1) ? 0 : _queue_->front + 1;   \
++        _queue_->count--;                                                                      \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    V PFX##_peek(struct SNAME *_queue_)                                                        \
++    {                                                                                          \
++        if (PFX##_empty(_queue_))                                                              \
++            return (V){0};                                                                     \
++                                                                                               \
++        return _queue_->buffer[_queue_->front];                                                \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_contains(struct SNAME *_queue_, V element, int (*comparator)(V, V))             \
++    {                                                                                          \
++        for (size_t i = _queue_->front, j = 0; j < _queue_->count; j++)                        \
++        {                                                                                      \
++            if (comparator(_queue_->buffer[i], element) == 0)                                  \
++                return true;                                                                   \
++                                                                                               \
++            i = (i + 1) % _queue_->capacity;                                                   \
++        }                                                                                      \
++                                                                                               \
++        return false;                                                                          \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_empty(struct SNAME *_queue_)                                                    \
++    {                                                                                          \
++        return _queue_->count == 0;                                                            \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_full(struct SNAME *_queue_)                                                     \
++    {                                                                                          \
++        return _queue_->count >= _queue_->capacity;                                            \
++    }                                                                                          \
++                                                                                               \
++    size_t PFX##_count(struct SNAME *_queue_)                                                  \
++    {                                                                                          \
++        return _queue_->count;                                                                 \
++    }                                                                                          \
++                                                                                               \
++    size_t PFX##_capacity(struct SNAME *_queue_)                                               \
++    {                                                                                          \
++        return _queue_->capacity;                                                              \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_resize(struct SNAME *_queue_, size_t capacity)                                  \
++    {                                                                                          \
++        if (PFX##_capacity(_queue_) == capacity)                                               \
++            return true;                                                                       \
++                                                                                               \
++        if (capacity < PFX##_count(_queue_))                                                   \
++            return false;                                                                      \
++                                                                                               \
++        V *new_buffer = malloc(sizeof(V) * capacity);                                          \
++                                                                                               \
++        if (!new_buffer)                                                                       \
++            return false;                                                                      \
++                                                                                               \
++        for (size_t i = _queue_->front, j = 0; j < _queue_->count; j++)                        \
++        {                                                                                      \
++            new_buffer[j] = _queue_->buffer[i];                                                \
++                                                                                               \
++            i = (i + 1) % PFX##_capacity(_queue_);                                             \
++        }                                                                                      \
++                                                                                               \
++        free(_queue_->buffer);                                                                 \
++                                                                                               \
++        _queue_->buffer = new_buffer;                                                          \
++        _queue_->capacity = capacity;                                                          \
++        _queue_->front = 0;                                                                    \
++        _queue_->back = _queue_->count;                                                        \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    struct SNAME *PFX##_copy_of(struct SNAME *_queue_, V (*copy_func)(V))                      \
++    {                                                                                          \
++        struct SNAME *result = PFX##_new(_queue_->capacity);                                   \
++                                                                                               \
++        if (!result)                                                                           \
++            return NULL;                                                                       \
++                                                                                               \
++        if (copy_func)                                                                         \
++        {                                                                                      \
++            for (size_t i = _queue_->front, j = 0; j < _queue_->count; j++)                    \
++            {                                                                                  \
++                result->buffer[j] = copy_func(_queue_->buffer[i]);                             \
++                                                                                               \
++                i = (i + 1) % _queue_->capacity;                                               \
++            }                                                                                  \
++        }                                                                                      \
++        else                                                                                   \
++        {                                                                                      \
++            for (size_t i = _queue_->front, j = 0; j < _queue_->count; j++)                    \
++            {                                                                                  \
++                result->buffer[j] = _queue_->buffer[i];                                        \
++                                                                                               \
++                i = (i + 1) % _queue_->capacity;                                               \
++            }                                                                                  \
++        }                                                                                      \
++                                                                                               \
++        result->count = _queue_->count;                                                        \
++                                                                                               \
++        return result;                                                                         \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_equals(struct SNAME *_queue1_, struct SNAME *_queue2_, int (*comparator)(V, V)) \
++    {                                                                                          \
++        if (PFX##_count(_queue1_) != PFX##_count(_queue2_))                                    \
++            return false;                                                                      \
++                                                                                               \
++        size_t i, j, k;                                                                        \
++        for (i = _queue1_->front, j = _queue2_->front, k = 0; k < PFX##_count(_queue1_); k++)  \
++        {                                                                                      \
++            if (comparator(_queue1_->buffer[i], _queue2_->buffer[j]) != 0)                     \
++                return false;                                                                  \
++                                                                                               \
++            i = (i + 1) % _queue1_->capacity;                                                  \
++            j = (j + 1) % _queue2_->capacity;                                                  \
++        }                                                                                      \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    struct cmc_string PFX##_to_string(struct SNAME *_queue_)                                   \
++    {                                                                                          \
++        struct cmc_string str;                                                                 \
++        struct SNAME *q_ = _queue_;                                                            \
++        const char *name = #SNAME;                                                             \
++                                                                                               \
++        snprintf(str.s, cmc_string_len, cmc_string_fmt_queue,                                  \
++                 name, q_, q_->buffer, q_->capacity, q_->count, q_->front, q_->back);          \
++                                                                                               \
++        return str;                                                                            \
++    }                                                                                          \
++                                                                                               \
++    struct SNAME##_iter *PFX##_iter_new(struct SNAME *target)                                  \
++    {                                                                                          \
++        struct SNAME##_iter *iter = malloc(sizeof(struct SNAME##_iter));                       \
++                                                                                               \
++        if (!iter)                                                                             \
++            return NULL;                                                                       \
++                                                                                               \
++        PFX##_iter_init(iter, target);                                                         \
++                                                                                               \
++        return iter;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    void PFX##_iter_free(struct SNAME##_iter *iter)                                            \
++    {                                                                                          \
++        free(iter);                                                                            \
++    }                                                                                          \
++                                                                                               \
++    void PFX##_iter_init(struct SNAME##_iter *iter, struct SNAME *target)                      \
++    {                                                                                          \
++        iter->target = target;                                                                 \
++        iter->cursor = target->front;                                                          \
++        iter->index = 0;                                                                       \
++        iter->start = true;                                                                    \
++        iter->end = PFX##_empty(target);                                                       \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_iter_start(struct SNAME##_iter *iter)                                           \
++    {                                                                                          \
++        return PFX##_empty(iter->target) || iter->start;                                       \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_iter_end(struct SNAME##_iter *iter)                                             \
++    {                                                                                          \
++        return PFX##_empty(iter->target) || iter->end;                                         \
++    }                                                                                          \
++                                                                                               \
++    void PFX##_iter_to_start(struct SNAME##_iter *iter)                                        \
++    {                                                                                          \
++        iter->cursor = iter->target->front;                                                    \
++        iter->index = 0;                                                                       \
++        iter->start = true;                                                                    \
++        iter->end = PFX##_empty(iter->target);                                                 \
++    }                                                                                          \
++                                                                                               \
++    void PFX##_iter_to_end(struct SNAME##_iter *iter)                                          \
++    {                                                                                          \
++        if (PFX##_empty(iter->target))                                                         \
++            iter->cursor = 0;                                                                  \
++        else                                                                                   \
++        {                                                                                      \
++            if (iter->target->back == 0)                                                       \
++                iter->cursor = iter->target->capacity - 1;                                     \
++            else                                                                               \
++                iter->cursor = iter->target->back - 1;                                         \
++        }                                                                                      \
++                                                                                               \
++        iter->index = iter->target->count - 1;                                                 \
++        iter->start = PFX##_empty(iter->target);                                               \
++        iter->end = true;                                                                      \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_iter_next(struct SNAME##_iter *iter)                                            \
++    {                                                                                          \
++        if (iter->end)                                                                         \
++            return false;                                                                      \
++                                                                                               \
++        if (iter->index + 1 == PFX##_count(iter->target))                                      \
++        {                                                                                      \
++            iter->end = true;                                                                  \
++            return false;                                                                      \
++        }                                                                                      \
++                                                                                               \
++        iter->start = PFX##_empty(iter->target);                                               \
++                                                                                               \
++        iter->cursor = (iter->cursor + 1) % (iter->target->capacity);                          \
++        iter->index++;                                                                         \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    bool PFX##_iter_prev(struct SNAME##_iter *iter)                                            \
++    {                                                                                          \
++        if (iter->start)                                                                       \
++            return false;                                                                      \
++                                                                                               \
++        if (iter->index == 0)                                                                  \
++        {                                                                                      \
++            iter->start = true;                                                                \
++            return false;                                                                      \
++        }                                                                                      \
++                                                                                               \
++        iter->end = PFX##_empty(iter->target);                                                 \
++                                                                                               \
++        iter->cursor = (iter->cursor == 0) ? iter->target->capacity - 1 : iter->cursor - 1;    \
++        iter->index--;                                                                         \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    /* Returns true only if the iterator moved */                                              \
++    bool PFX##_iter_advance(struct SNAME##_iter *iter, size_t steps)                           \
++    {                                                                                          \
++        if (iter->end)                                                                         \
++            return false;                                                                      \
++                                                                                               \
++        if (iter->index + 1 == PFX##_count(iter->target))                                      \
++        {                                                                                      \
++            iter->end = true;                                                                  \
++            return false;                                                                      \
++        }                                                                                      \
++                                                                                               \
++        if (steps == 0 || iter->index + steps >= PFX##_count(iter->target))                    \
++            return false;                                                                      \
++                                                                                               \
++        iter->start = PFX##_empty(iter->target);                                               \
++                                                                                               \
++        iter->index += steps;                                                                  \
++        iter->cursor = (iter->cursor + steps) % iter->target->capacity;                        \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    /* Returns true only if the iterator moved */                                              \
++    bool PFX##_iter_rewind(struct SNAME##_iter *iter, size_t steps)                            \
++    {                                                                                          \
++        if (iter->start)                                                                       \
++            return false;                                                                      \
++                                                                                               \
++        if (iter->index == 0)                                                                  \
++        {                                                                                      \
++            iter->start = true;                                                                \
++            return false;                                                                      \
++        }                                                                                      \
++                                                                                               \
++        if (steps == 0 || iter->index < steps)                                                 \
++            return false;                                                                      \
++                                                                                               \
++        iter->end = PFX##_empty(iter->target);                                                 \
++                                                                                               \
++        iter->index -= steps;                                                                  \
++                                                                                               \
++        /* Prevent underflow */                                                                \
++        if (iter->cursor < steps)                                                              \
++            iter->cursor += PFX##_capacity(iter->target);                                      \
++                                                                                               \
++        iter->cursor -= steps;                                                                 \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    /* Returns true only if the iterator was able to be positioned at the given index */       \
++    bool PFX##_iter_go_to(struct SNAME##_iter *iter, size_t index)                             \
++    {                                                                                          \
++        if (index >= PFX##_count(iter->target))                                                \
++            return false;                                                                      \
++                                                                                               \
++        if (iter->index > index)                                                               \
++            return PFX##_iter_rewind(iter, iter->index - index);                               \
++        else if (iter->index < index)                                                          \
++            return PFX##_iter_advance(iter, index - iter->index);                              \
++                                                                                               \
++        return true;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    V PFX##_iter_value(struct SNAME##_iter *iter)                                              \
++    {                                                                                          \
++        if (PFX##_empty(iter->target))                                                         \
++            return (V){0};                                                                     \
++                                                                                               \
++        return iter->target->buffer[iter->cursor];                                             \
++    }                                                                                          \
++                                                                                               \
++    V *PFX##_iter_rvalue(struct SNAME##_iter *iter)                                            \
++    {                                                                                          \
++        if (PFX##_empty(iter->target))                                                         \
++            return NULL;                                                                       \
++                                                                                               \
++        return &(iter->target->buffer[iter->cursor]);                                          \
++    }                                                                                          \
++                                                                                               \
++    size_t PFX##_iter_index(struct SNAME##_iter *iter)                                         \
++    {                                                                                          \
++        return iter->index;                                                                    \
++    }                                                                                          \
++                                                                                               \
++    static struct SNAME##_iter PFX##_impl_it_start(struct SNAME *_queue_)                      \
++    {                                                                                          \
++        struct SNAME##_iter iter;                                                              \
++                                                                                               \
++        PFX##_iter_init(&iter, _queue_);                                                       \
++        PFX##_iter_to_start(&iter);                                                            \
++                                                                                               \
++        return iter;                                                                           \
++    }                                                                                          \
++                                                                                               \
++    static struct SNAME##_iter PFX##_impl_it_end(struct SNAME *_queue_)                        \
++    {                                                                                          \
++        struct SNAME##_iter iter;                                                              \
++                                                                                               \
++        PFX##_iter_init(&iter, _queue_);                                                       \
++        PFX##_iter_to_end(&iter);                                                              \
++                                                                                               \
++        return iter;                                                                           \
++    }
++
++#endif /* CMC_QUEUE_H */
+\ No newline at end of file
+diff --git a/src/platform/windows/cmc_string.h b/src/platform/windows/cmc_string.h
+new file mode 100644
+index 0000000..d5a8288
+--- /dev/null
++++ b/src/platform/windows/cmc_string.h
+@@ -0,0 +1,26 @@
++/**
++ * cmc_string.h
++ *
++ * Creation Date: 17/07/2019
++ *
++ * Authors:
++ * Leonardo Vencovsky (https://github.com/LeoVen)
++ *
++ */
++
++/* A very simple fixed size string used by all collections' method to_string */
++
++#ifndef CMC_STRING_H
++#define CMC_STRING_H
++
++#include <inttypes.h>
++#include <stddef.h>
++
++static const size_t cmc_string_len = 200;
++
++struct cmc_string
++{
++    char s[200];
++};
++
++#endif /* CMC_STRING_H */
+\ No newline at end of file
+diff --git a/src/platform/windows/cubic.c b/src/platform/windows/cubic.c
+new file mode 100644
+index 0000000..5a99d61
+--- /dev/null
++++ b/src/platform/windows/cubic.c
+@@ -0,0 +1,76 @@
++#include <stdlib.h>
++#include <string.h>
++#include "cmc_queue.h"
++#include "cubic.h"
++
++CMC_GENERATE_QUEUE(q, queue, double)
++typedef struct queue queue;
++typedef struct queue_iter queue_iter;
++
++struct cubic {
++    queue *samples;
++    double history[4];
++    double inputFrequency;
++    double outputFrequency;
++    double ratio;
++    double fraction;
++};
++
++struct cubic *cubic_new(void) {
++    struct cubic *cubic = calloc(1, sizeof(struct cubic));
++    cubic->samples = q_new(1024);
++    return cubic;
++}
++
++void cubic_reset(struct cubic *cubic, double inputFrequency, double outputFrequency, unsigned int queueSize) {
++    cubic->inputFrequency = inputFrequency;
++    cubic->outputFrequency = outputFrequency ? outputFrequency : cubic->inputFrequency;
++
++    cubic->ratio =  cubic->inputFrequency /  cubic->outputFrequency;
++    cubic->fraction = 0.0;
++
++    cubic->history[0] = 0.0;
++    cubic->history[1] = 0.0;
++    cubic->history[2] = 0.0;
++    cubic->history[3] = 0.0;
++
++    q_resize(cubic->samples, queueSize);
++}
++
++void cubic_setInputFrequency(struct cubic *cubic, double inputFrequency) {
++    cubic->inputFrequency = inputFrequency;
++    cubic->ratio =  cubic->inputFrequency / cubic->outputFrequency;
++}
++
++int cubic_pending(struct cubic *cubic) {
++    return !q_empty(cubic->samples);
++}
++
++double cubic_read(struct cubic *cubic) {
++    double sample = q_peek(cubic->samples);
++    q_dequeue(cubic->samples);
++    return sample;
++}
++
++void cubic_write(struct cubic *cubic, double sample) {
++    cubic->history[0] = cubic->history[1];
++    cubic->history[1] = cubic->history[2];
++    cubic->history[2] = cubic->history[3];
++    cubic->history[3] = sample;
++
++    while (cubic->fraction <= 1.0) {
++        double A = cubic->history[3] - cubic->history[2] - cubic->history[0] + cubic->history[1];
++        double B = cubic->history[0] - cubic->history[1] - A;
++        double C = cubic->history[2] - cubic->history[0];
++        double D = cubic->history[1];
++        double resample = A * cubic->fraction * cubic->fraction * cubic->fraction + B * cubic->fraction * cubic->fraction + C * cubic->fraction + D;
++        q_enqueue(cubic->samples, resample);
++        cubic->fraction += cubic->ratio;
++    }
++    cubic->fraction -= 1.0;
++}
++
++void cubic_destroy(struct cubic *cubic) {
++    q_free(cubic->samples, NULL);
++    free(cubic);
++}
+\ No newline at end of file
+diff --git a/src/platform/windows/cubic.h b/src/platform/windows/cubic.h
+new file mode 100644
+index 0000000..fde412b
+--- /dev/null
++++ b/src/platform/windows/cubic.h
+@@ -0,0 +1,14 @@
++#ifndef CUBIC_H
++#define CUBIC_H
++
++struct cubic;
++
++struct cubic *cubic_new(void);
++void cubic_reset(struct cubic *cubic, double inputFrequency, double outputFrequency, unsigned int queueSize);
++void cubic_setInputFrequency(struct cubic *cubic, double inputFrequency);
++int cubic_pending(struct cubic *cubic);
++double cubic_read(struct cubic *cubic);
++void cubic_write(struct cubic *cubic, double sample);
++void cubic_destroy(struct cubic *cubic);
++
++#endif
+\ No newline at end of file
+diff --git a/src/platform/windows/screen.c b/src/platform/windows/screen.c
+index 54c2166..2f3bb3a 100644
+--- a/src/platform/windows/screen.c
++++ b/src/platform/windows/screen.c
+@@ -4,101 +4,6 @@
+ #include <stdlib.h>
+ #include "platform/screen.h"
+ 
+-#undef INTERFACE
+-#define INTERFACE ID2D1Factory
+-DECLARE_INTERFACE_(ID2D1Factory, IUnknown) {
+-BEGIN_INTERFACE
+-	STDMETHOD(dummy_QueryInterface)(void);
+-	STDMETHOD(dummy_AddRef)(void);
+-	STDMETHOD_(ULONG, Release)(THIS);
+-	STDMETHOD(dummy_ReloadSystemMetrics)(void);
+-	STDMETHOD(dummy_GetDesktopDpi)(void);
+-	STDMETHOD(dummy_CreateRectangleGeometry)(void);
+-	STDMETHOD(dummy_CreateRoundedRectangleGeometry)(void);
+-	STDMETHOD(dummy_CreateEllipseGeometry)(void);
+-	STDMETHOD(dummy_CreateGeometryGroup)(void);
+-	STDMETHOD(dummy_CreateTransformedGeometry)(void);
+-	STDMETHOD(dummy_CreatePathGeometry)(void);
+-	STDMETHOD(dummy_CreateStrokeStyle)(void);
+-	STDMETHOD(dummy_CreateDrawingStateBlock)(void);
+-	STDMETHOD(dummy_CreateWicBitmapRenderTarget)(void);
+-	STDMETHOD(CreateHwndRenderTarget)(THIS, const D2D1_RENDER_TARGET_PROPERTIES *, const D2D1_HWND_RENDER_TARGET_PROPERTIES *, ID2D1HwndRenderTarget **);
+-END_INTERFACE
+-};
+-#undef INTERFACE
+-#define INTERFACE ID2D1HwndRenderTarget
+-DECLARE_INTERFACE_(ID2D1HwndRenderTarget, ID2D1RenderTarget) {
+-BEGIN_INTERFACE
+-	STDMETHOD(dummy_QueryInterface)(void);
+-	STDMETHOD(dummy_AddRef)(void);
+-	STDMETHOD_(ULONG, Release)(THIS);
+-	STDMETHOD(dummy_GetFactory)(void);
+-	STDMETHOD(CreateBitmap)(THIS, D2D1_SIZE_U, const void *, UINT32, const D2D1_BITMAP_PROPERTIES *, ID2D1Bitmap **);
+-	STDMETHOD(dummy_CreateBitmapFromWicBitmap)(void);
+-	STDMETHOD(dummy_CreateSharedBitmap)(void);
+-	STDMETHOD(dummy_CreateBitmapBrush)(void);
+-	STDMETHOD(dummy_CreateSolidColorBrush)(void);
+-	STDMETHOD(dummy_CreateGradientStopCollection)(void);
+-	STDMETHOD(dummy_CreateLinearGradientBrush)(void);
+-	STDMETHOD(dummy_CreateRadialGradientBrush)(void);
+-	STDMETHOD(dummy_CreateCompatibleRenderTarget)(void);
+-	STDMETHOD(dummy_CreateLayer)(void);
+-	STDMETHOD(dummy_CreateMesh)(void);
+-	STDMETHOD(dummy_DrawLine)(void);
+-	STDMETHOD(dummy_DrawRectangle)(void);
+-	STDMETHOD(dummy_FillRectangle)(void);
+-	STDMETHOD(dummy_DrawRoundedRectangle)(void);
+-	STDMETHOD(dummy_FillRoundedRectangle)(void);
+-	STDMETHOD(dummy_DrawEllipse)(void);
+-	STDMETHOD(dummy_FillEllipse)(void);
+-	STDMETHOD(dummy_DrawGeometry)(void);
+-	STDMETHOD(dummy_FillGeometry)(void);
+-	STDMETHOD(dummy_FillMesh)(void);
+-	STDMETHOD(dummy_FillOpacityMask)(void);
+-	STDMETHOD_(void, DrawBitmap)(THIS, ID2D1Bitmap *, const D2D1_RECT_F *, FLOAT, D2D1_BITMAP_INTERPOLATION_MODE, const D2D1_RECT_F *);
+-	STDMETHOD(dummy_DrawText)(void);
+-	STDMETHOD(dummy_DrawTextLayout)(void);
+-	STDMETHOD(dummy_DrawGlyphRun)(void);
+-	STDMETHOD(dummy_SetTransform)(void);
+-	STDMETHOD(dummy_GetTransform)(void);
+-	STDMETHOD(dummy_SetAntialiasMode)(void);
+-	STDMETHOD(dummy_GetAntialiasMode)(void);
+-	STDMETHOD(dummy_SetTextAntialiasMode)(void);
+-	STDMETHOD(dummy_GetTextAntialiasMode)(void);
+-	STDMETHOD(dummy_SetTextRenderingParams)(void);
+-	STDMETHOD(dummy_GetTextRenderingParams)(void);
+-	STDMETHOD(dummy_SetTags)(void);
+-	STDMETHOD(dummy_GetTags)(void);
+-	STDMETHOD(dummy_PushLayer)(void);
+-	STDMETHOD(dummy_PopLayer)(void);
+-	STDMETHOD(dummy_Flush)(void);
+-	STDMETHOD(dummy_SaveDrawingState)(void);
+-	STDMETHOD(dummy_RestoreDrawingState)(void);
+-	STDMETHOD(dummy_PushAxisAlignedClip)(void);
+-	STDMETHOD(dummy_PopAxisAlignedClip)(void);
+-	STDMETHOD(dummy_Clear)(void);
+-	STDMETHOD_(void, BeginDraw)(THIS);
+-	STDMETHOD(EndDraw)(THIS, D2D1_TAG *, D2D1_TAG *);
+-END_INTERFACE
+-};
+-#undef INTERFACE
+-#define INTERFACE ID2D1Bitmap
+-DECLARE_INTERFACE_(ID2D1Bitmap, ID2D1Image) {
+-BEGIN_INTERFACE
+-	STDMETHOD(dummy_QueryInterface)(void);
+-	STDMETHOD(dummy_AddRef)(void);
+-	STDMETHOD_(ULONG, Release)(THIS);
+-	STDMETHOD(dummy_GetFactory)(void);
+-	STDMETHOD(dummy_GetSize)(void);
+-	STDMETHOD(dummy_GetPixelSize)(void);
+-	STDMETHOD(dummy_GetPixelFormat)(void);
+-	STDMETHOD(dummy_GetDpi)(void);
+-	STDMETHOD(dummy_CopyFromBitmap)(void);
+-	STDMETHOD(dummy_CopyFromRenderTarget)(void);
+-	STDMETHOD(CopyFromMemory)(THIS, const D2D1_RECT_U *, const void *, UINT32);
+-END_INTERFACE
+-};
+-
+ struct screen {
+ 	int width;
+ 	int height;
+@@ -130,12 +35,12 @@ struct screen *screen_new(char *title, int width, int height) {
+ 	D2D1_HWND_RENDER_TARGET_PROPERTIES hrtProp = {0};
+ 	hrtProp.hwnd = screen->window;
+ 	hrtProp.pixelSize = (D2D1_SIZE_U){ screen->width * 2, screen->height * 2 };
+-	screen->factory->lpVtbl->CreateHwndRenderTarget(screen->factory, &rtProp, &hrtProp, &screen->target);
++	ID2D1Factory_CreateHwndRenderTarget(screen->factory, &rtProp, &hrtProp, &screen->target);
+ 
+ 	D2D1_SIZE_U bmpSize = { screen->width, screen->height };
+ 	D2D1_BITMAP_PROPERTIES bmpProp = {0};
+ 	bmpProp.pixelFormat = pf;
+-	screen->target->lpVtbl->CreateBitmap(screen->target, bmpSize, NULL, 0, &bmpProp, &screen->bitmap);
++	ID2D1HwndRenderTarget_CreateBitmap(screen->target, bmpSize, NULL, 0, &bmpProp, &screen->bitmap);
+ 
+ 	return screen;
+ }
+@@ -145,14 +50,14 @@ void screen_pixel(struct screen *screen, uint8_t x, uint8_t y, uint8_t r, uint8_
+ }
+ 
+ void screen_update(struct screen *screen) {
+-	screen->bitmap->lpVtbl->CopyFromMemory(screen->bitmap, NULL, screen->pixels, screen->width * sizeof(DWORD));
++	ID2D1Bitmap_CopyFromMemory(screen->bitmap, NULL, screen->pixels, screen->width * sizeof(DWORD));
+ 
+-	screen->target->lpVtbl->BeginDraw(screen->target);
++	ID2D1HwndRenderTarget_BeginDraw(screen->target);
+ 
+ 	D2D1_RECT_F rcDst = { 0, 0, screen->width * 2, screen->height * 2 };
+-	screen->target->lpVtbl->DrawBitmap(screen->target, screen->bitmap, &rcDst, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, NULL);
++	ID2D1HwndRenderTarget_DrawBitmap(screen->target, screen->bitmap, &rcDst, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, NULL);
+ 
+-	screen->target->lpVtbl->EndDraw(screen->target, NULL, NULL);
++	ID2D1HwndRenderTarget_EndDraw(screen->target, NULL, NULL);
+ 
+ 	MSG msg;
+ 	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+@@ -162,9 +67,9 @@ void screen_update(struct screen *screen) {
+ }
+ 
+ void screen_destroy(struct screen *screen) {
+-	screen->bitmap->lpVtbl->Release(screen->bitmap);
+-	screen->target->lpVtbl->Release(screen->target);
+-	screen->factory->lpVtbl->Release(screen->factory);
++	ID2D1Bitmap_Release(screen->bitmap);
++	ID2D1HwndRenderTarget_Release(screen->target);
++	ID2D1Factory_Release(screen->factory);
+ 	DestroyWindow(screen->window);
+ 	free(screen->pixels);
+ 	free(screen);
+diff --git a/src/platform/windows/thread.c b/src/platform/windows/thread.c
+index c52e9fb..16ab0bc 100644
+--- a/src/platform/windows/thread.c
++++ b/src/platform/windows/thread.c
+@@ -23,7 +23,7 @@ void thread_sleep(struct thread *thread) {
+ 
+ 	LONGLONG delta_ms = (thread->time.QuadPart - time.QuadPart) * 1000 / thread->frequency.QuadPart + 1000 / thread->fps;
+ 	if (delta_ms > 0) {
+-		Sleep(delta_ms);
++		//Sleep(delta_ms);
+ 	}
+ 
+ 	QueryPerformanceCounter(&thread->time);
